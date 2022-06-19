@@ -4,7 +4,12 @@
   "description": "javascript server-side helper tools",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "prepare": "npm run build",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.2"
   },
   "author": "",
   "license": "MIT"
