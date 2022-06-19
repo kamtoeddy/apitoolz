@@ -1,5 +1,4 @@
 import { ApiError } from "./ApiError";
-import { looseObject } from "./interfaces";
 
 interface options {
   data: any;
@@ -9,15 +8,13 @@ interface options {
   postTasks: Function[];
 }
 
-async function useTasks(data: looseObject, tasks: Function[]) {
-  let result: looseObject = data;
+async function useTasks(data: any, tasks: Function[]) {
+  let result = data;
 
   for (let task of tasks) {
     if (typeof task !== "function") continue;
 
-    const update = await task(result);
-
-    result = { ...result, ...update };
+    result = await task(result);
   }
 
   return result;
@@ -34,11 +31,11 @@ export async function useController(
   }: options
 ) {
   try {
-    if (preTasks) data = { ...data, ...(await useTasks(data, preTasks)) };
+    if (preTasks) data = await useTasks(data, preTasks);
 
     let body = await controller(data);
 
-    if (postTasks) body = { ...body, ...(await useTasks(body, postTasks)) };
+    if (postTasks) body = await useTasks(body, postTasks);
 
     return { body, headers, statusCode: 200 };
   } catch (err: any) {
