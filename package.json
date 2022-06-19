@@ -1,5 +1,5 @@
 {
-  "name": "apitools",
+  "name": "apitoolz",
   "version": "0.0.1",
   "description": "javascript server-side helper tools",
   "main": "index.js",
