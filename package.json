@@ -1,8 +1,12 @@
 {
   "name": "apitoolz",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "javascript server-side helper tools",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
