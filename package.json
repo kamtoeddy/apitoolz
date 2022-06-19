@@ -1,6 +1,6 @@
 {
   "name": "apitoolz",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "javascript server-side helper tools",
   "main": "index.js",
   "scripts": {

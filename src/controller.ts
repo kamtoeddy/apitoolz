@@ -28,9 +28,7 @@ export async function useController(
   {
     data = {},
     errorHandlers = [],
-    headers = {
-      "Content-Type": "application/json",
-    },
+    headers = { "Content-Type": "application/json" },
     preTasks = [],
     postTasks = [],
   }: options
