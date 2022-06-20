@@ -8,16 +8,15 @@ interface options {
   postTasks: Function[];
 }
 
-async function useTasks(data: any, tasks: Function[]) {
-  let result = data;
+async function useTasks(data: any, tasks: Function[]): Promise<any> {
+  const task = tasks.shift();
 
-  for (let task of tasks) {
-    if (typeof task !== "function") continue;
-
-    result = await task(result);
+  if (typeof task === "function" && tasks.length) {
+    const result = await task(data);
+    return useTasks(result, tasks);
   }
 
-  return result;
+  return data;
 }
 
 export async function useController(
@@ -31,11 +30,11 @@ export async function useController(
   }: options
 ) {
   try {
-    if (preTasks) data = await useTasks(data, preTasks);
+    if (preTasks?.length) data = await useTasks(data, preTasks);
 
     let body = await controller(data);
 
-    if (postTasks) body = await useTasks(body, postTasks);
+    if (postTasks?.length) body = await useTasks(body, postTasks);
 
     return { body, headers, statusCode: 200 };
   } catch (err: any) {
