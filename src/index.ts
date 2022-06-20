@@ -1,4 +1,4 @@
 export * from "./ApiError";
-export * from "./loadCircular";
+export * from "./useCircularDependencies";
 export * from "./useController";
 export * from "./sanitize";
