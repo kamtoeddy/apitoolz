@@ -11,7 +11,7 @@ interface options {
 async function useTasks(data: any, tasks: Function[]): Promise<any> {
   const task = tasks.shift();
 
-  if (typeof task === "function" && tasks.length) {
+  if (typeof task === "function") {
     const result = await task(data);
     return useTasks(result, tasks);
   }

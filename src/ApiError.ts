@@ -1,7 +1,7 @@
 interface ApiErrorProps {
   message: string;
-  payload: object;
-  statusCode: number;
+  payload?: object;
+  statusCode?: number;
 }
 
 export class ApiError extends Error {
