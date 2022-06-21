@@ -1,7 +1,7 @@
 import { ApiError } from "./ApiError";
 import { looseObject } from "./interfaces";
 import { _getCallerFile } from "./utils/_getCallerFile.js";
-import { isAbsolute, join } from "path";
+import { join } from "path";
 
 const loader =
   (modules: looseObject, dirName: string) =>
