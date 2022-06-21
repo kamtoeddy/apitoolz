@@ -1,14 +1,18 @@
 import { ApiError } from "./ApiError";
 import { looseObject } from "./interfaces";
+import { _getCallerFile } from "./utils/_getCallerFile.js";
+import { isAbsolute, join } from "path";
 
-let _modules: looseObject = {};
+const loader =
+  (modules: looseObject, dirName: string) =>
+  (name: string = "") => {
+    const _module = modules?.[name];
 
-export const loadCircular = (name: string = "") => {
-  const _module = _modules?.[name];
+    if (!_module) throw new ApiError({ message: `${name} is not registered` });
 
-  if (!_module) throw new ApiError({ message: `${name} is not registered` });
+    return require(join(dirName, _module));
+  };
 
-  return require(_module);
+export const registerModules = (modules: looseObject) => {
+  return { loadCircular: loader(modules, _getCallerFile(2, true)) };
 };
-
-export const registerModules = (modules: looseObject) => (_modules = modules);
