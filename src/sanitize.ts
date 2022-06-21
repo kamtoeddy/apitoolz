@@ -9,7 +9,10 @@ const deepCopy = (dt: any) => JSON.parse(JSON.stringify(dt));
 
 const one = (
   data: looseObject,
-  { toReplace = {}, toRemove = ["_id"] }: sanitizeOneOptions
+  { toReplace = {}, toRemove = ["_id"] }: sanitizeOneOptions = {
+    toReplace: {},
+    toRemove: [],
+  }
 ) => {
   const keysToRepalce = Object.entries(toReplace ?? {});
 
