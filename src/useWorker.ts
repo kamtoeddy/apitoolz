@@ -17,6 +17,7 @@ export const useWorker = ({
     const worker = new Worker(path, {
       workerData: { event, data: JSON.stringify(data) },
     });
+
     worker.on("message", resolve);
     worker.on("error", reject);
     worker.on("exit", (code: number) => {
