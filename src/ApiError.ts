@@ -8,7 +8,7 @@ export class ApiError extends Error {
   payload: object;
   statusCode: number;
 
-  constructor({ message, payload = {}, statusCode = 500 }: ApiErrorProps) {
+  constructor({ message, payload = {}, statusCode = 400 }: ApiErrorProps) {
     super(message);
     this.payload = payload;
     this.statusCode = statusCode;
