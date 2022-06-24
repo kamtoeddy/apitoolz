@@ -1,20 +1,20 @@
 import { looseObject } from "./interfaces";
 
 type sanitizeOneOptions = {
-  toReplace?: { [key: string]: string };
-  toRemove?: string[];
+  replace?: { [key: string]: string };
+  remove?: string[];
 };
 
 const deepCopy = (dt: any) => JSON.parse(JSON.stringify(dt));
 
 const one = (
   data: looseObject,
-  { toReplace = {}, toRemove = ["_id"] }: sanitizeOneOptions = {
-    toReplace: {},
-    toRemove: [],
+  { replace = {}, remove = ["_id"] }: sanitizeOneOptions = {
+    replace: {},
+    remove: [],
   }
 ) => {
-  const keysToRepalce = Object.entries(toReplace ?? {});
+  const keysToRepalce = Object.entries(replace ?? {});
 
   for (let [oldKey, key] of keysToRepalce) {
     data[key] = deepCopy(data[oldKey]);
@@ -22,15 +22,15 @@ const one = (
     delete data[oldKey];
   }
 
-  toRemove?.forEach((key) => delete data?.[key]);
+  remove?.forEach((key) => delete data?.[key]);
 
   return data;
 };
 
-const many = (data: any[], { toReplace = {}, toRemove = ["_id"] }) => {
+const many = (data: any[], { replace = {}, remove = ["_id"] }) => {
   const _data = [];
 
-  for (let dt of data) _data.push(one(dt, { toReplace, toRemove }));
+  for (let dt of data) _data.push(one(dt, { replace, remove }));
 
   return _data;
 };
