@@ -14,6 +14,8 @@ const one = (
     remove: [],
   }
 ) => {
+  if (!data) return data;
+
   const keysToRepalce = Object.entries(replace ?? {});
 
   for (let [oldKey, key] of keysToRepalce) {
