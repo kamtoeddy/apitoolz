@@ -14,7 +14,7 @@ const getEnvVars = (vars: looseObject[] = [], defaults: looseObject = {}) => {
   return _vars;
 };
 
-export const LoadEnvVars = (
+export const loadEnvVars = (
   vars: looseObject[],
   defaults: looseObject = {}
 ) => {
