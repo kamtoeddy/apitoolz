@@ -1,6 +1,6 @@
 {
   "name": "apitoolz",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "javascript server-side helper tools",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -12,13 +12,13 @@
     "prepare": "npm run build",
     "watch": "tsc -w"
   },
+  "dependencies": {
+    "@types/node": "^18.0.0",
+    "callsite": "^1.0.0"
+  },
   "devDependencies": {
     "typescript": "^4.6.2"
   },
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "@types/node": "^18.0.0",
-    "callsite": "^1.0.0"
-  }
+  "license": "MIT"
 }
