@@ -1,10 +1,15 @@
+interface ErrorPayload {
+  [key: string]: string;
+}
+
 interface ApiErrorProps {
   message: string;
-  payload?: object;
+  payload?: ErrorPayload;
   statusCode?: number;
 }
 
 export class ApiError extends Error {
+  __isError__: boolean = true;
   payload: object;
   statusCode: number;
 
