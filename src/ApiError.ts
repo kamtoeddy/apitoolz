@@ -1,5 +1,5 @@
 interface ErrorPayload {
-  [key: string]: string;
+  [key: string]: string[];
 }
 
 interface ApiErrorProps {
@@ -10,12 +10,20 @@ interface ApiErrorProps {
 
 export class ApiError extends Error {
   __isError__: boolean = true;
-  payload: object;
+  payload: ErrorPayload;
   statusCode: number;
 
   constructor({ message, payload = {}, statusCode = 400 }: ApiErrorProps) {
     super(message);
     this.payload = payload;
     this.statusCode = statusCode;
+  }
+
+  add(field: string, value: string | string[]) {
+    const toAdd = Array.isArray(value) ? [...value] : [value];
+
+    if (!this.payload[field]) return (this.payload[field] = toAdd);
+
+    this.payload[field] = [...this.payload[field], ...toAdd];
   }
 }
