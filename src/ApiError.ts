@@ -9,7 +9,7 @@ interface ApiErrorProps {
 }
 
 export class ApiError extends Error {
-  __isError__: boolean = true;
+  _isError = true;
   payload: ErrorPayload;
   statusCode: number;
 
@@ -26,4 +26,8 @@ export class ApiError extends Error {
 
     this.payload[field] = [...this.payload[field], ...toAdd];
   }
+
+  clear = () => (this.payload = {});
+
+  remove = (field: string) => delete this.payload?.[field];
 }
