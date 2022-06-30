@@ -38,8 +38,10 @@ export async function useController(
 
     return { body, headers, statusCode: 200 };
   } catch (err: any) {
+    const body = new ApiError(err).getInfo();
+
     console.log("========== [ Log Start ] ==========");
-    console.log(err instanceof ApiError ? err.getInfo() : err);
+    console.log(body);
     console.log("=========== [ Log End ] ===========");
 
     for (let handler of errorHandlers) {
@@ -55,8 +57,6 @@ export async function useController(
         console.log("===================== [ Log End ] =====================");
       }
     }
-
-    const body = new ApiError(err).getInfo();
 
     return { body, headers, statusCode: body.statusCode };
   }
