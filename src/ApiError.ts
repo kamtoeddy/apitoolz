@@ -11,12 +11,14 @@ export class ApiError extends Error {
     this.statusCode = statusCode;
   }
 
+  private _has = (field: string) => this.payload.hasOwnProperty(field);
+
   add(field: string, value: string | string[]) {
     const toAdd = Array.isArray(value) ? [...value] : [value];
 
-    if (!this.payload[field]) return (this.payload[field] = toAdd);
-
-    this.payload[field] = [...this.payload[field], ...toAdd];
+    this.payload[field] = this._has(field)
+      ? [...this.payload[field], ...toAdd]
+      : toAdd;
 
     return this;
   }
