@@ -47,11 +47,11 @@ export async function useController(
 
       try {
         await handler(data);
-      } catch (handlerErr) {
+      } catch (err) {
         console.log(
           `========= [ Error Handler @${handler?.name} crashed ] =========`
         );
-        console.log(handlerErr);
+        console.log(err);
         console.log("===================== [ Log End ] =====================");
       }
     }
