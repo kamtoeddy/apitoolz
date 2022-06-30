@@ -39,7 +39,7 @@ export async function useController(
     return { body, headers, statusCode: 200 };
   } catch (err: any) {
     console.log("========== [ Log Start ] ==========");
-    console.log(err);
+    console.log(err instanceof ApiError ? err.getInfo() : err);
     console.log("=========== [ Log End ] ===========");
 
     for (let handler of errorHandlers) {
