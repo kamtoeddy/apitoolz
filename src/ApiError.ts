@@ -17,9 +17,14 @@ export class ApiError extends Error {
     if (!this.payload[field]) return (this.payload[field] = toAdd);
 
     this.payload[field] = [...this.payload[field], ...toAdd];
+
+    return this;
   }
 
-  clear = () => (this.payload = {});
+  clear = () => {
+    this.payload = {};
+    return this;
+  };
 
   getInfo = () => {
     return {
@@ -30,7 +35,13 @@ export class ApiError extends Error {
     };
   };
 
-  remove = (field: string) => delete this.payload?.[field];
+  remove = (field: string) => {
+    delete this.payload?.[field];
+    return this;
+  };
 
-  setMessage = (message: string) => (this.message = message);
+  setMessage = (message: string) => {
+    this.message = message;
+    return this;
+  };
 }
