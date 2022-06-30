@@ -1,3 +1,4 @@
+import { ApiError } from "./ApiError";
 import { looseObject } from "./interfaces";
 
 type ControllerType = (req: looseObject) => Promise<any>;
@@ -31,8 +32,11 @@ export const makeCallback = (controller: ControllerType) => {
 
         res.status(Res?.statusCode ?? 200).json(Res.body);
       })
-      .catch((err: Error) => {
-        res.status(500).send({ message: err.message, payload: {} });
+      .catch(({ message }: Error) => {
+        const statusCode = 500;
+        res
+          .status(statusCode)
+          .send(new ApiError({ message, statusCode }).getInfo());
       });
   };
 };

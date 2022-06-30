@@ -1,7 +1,6 @@
 import { ApiErrorProps, ErrorPayload } from "./interfaces";
 
 export class ApiError extends Error {
-  _isError = true;
   name = "ApiError";
   payload: ErrorPayload;
   statusCode: number;
@@ -21,6 +20,15 @@ export class ApiError extends Error {
   }
 
   clear = () => (this.payload = {});
+
+  getInfo = () => {
+    return {
+      _isError: true,
+      message: this.message,
+      payload: this.payload,
+      statusCode: this.statusCode,
+    };
+  };
 
   remove = (field: string) => delete this.payload?.[field];
 

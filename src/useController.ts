@@ -56,12 +56,8 @@ export async function useController(
       }
     }
 
-    const { _isError, message, payload, statusCode } = new ApiError(err);
+    const body = new ApiError(err).getInfo();
 
-    return {
-      body: { _isError, message, payload },
-      headers,
-      statusCode,
-    };
+    return { body, headers, statusCode: body.statusCode };
   }
 }
