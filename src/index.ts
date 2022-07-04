@@ -4,5 +4,6 @@ export * from "./loadEnvVars";
 export * from "./makeCallback";
 export * from "./sanitize";
 export * from "./useController";
+export * from "./useRoles";
 export * from "./useWorker";
 export * from "./utils/isOfType";
