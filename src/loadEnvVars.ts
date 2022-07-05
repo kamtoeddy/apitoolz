@@ -2,41 +2,43 @@ import { ApiError } from "./ApiError";
 import { looseObject } from "./interfaces";
 import { isOfType } from "./utils/isOfType";
 
-const getEnvVars = (vars: looseObject[] = [], defaults: looseObject = {}) => {
-  let _vars: looseObject = {};
+interface DefaultValues {
+  [name: string]: any;
+}
 
-  vars.forEach(({ name, parser }) => {
+interface VarDefinition {
+  name: string;
+  parser?: Function;
+}
+
+const getEnvVars = (
+  vars: VarDefinition[] = [],
+  defaults: DefaultValues = {}
+) => {
+  return vars.reduce((prev, { name, parser }) => {
     let val = process.env?.[name] ?? defaults?.[name];
 
-    _vars[name] = parser ? parser(val) : val;
-  });
+    prev[name] = parser ? parser(val) : val;
 
-  return _vars;
+    return prev;
+  }, {} as looseObject);
 };
 
 export const loadEnvVars = (
-  vars: looseObject[],
-  defaults: looseObject = {}
+  vars: VarDefinition[],
+  defaults: DefaultValues = {}
 ) => {
-  const payload: looseObject = {};
+  const error = new ApiError({ message: "Invalid env vars", statusCode: 500 });
 
   try {
     vars.forEach(({ name, parser }, i) => {
-      payload[i] = [];
-      if (!name?.trim()) payload[i].push("Invalid name");
+      if (!name?.trim()) error.add(i, "Invalid name");
 
       if (parser && !isOfType(parser, "function"))
-        payload[i].push("Invalid parser");
-
-      if (!payload[i].length) delete payload[i];
+        error.add(i, "Invalid parser");
     });
 
-    if (Object.keys(payload).length)
-      throw new ApiError({
-        message: "Invalid env vars",
-        payload,
-        statusCode: 500,
-      });
+    if (Object.keys(error.payload).length) throw error;
   } catch (err) {
     console.log(err);
     return {};

@@ -1,5 +1,7 @@
 import { ApiErrorProps, ErrorPayload } from "./interfaces";
 
+type PayloadKey = number | string;
+
 export class ApiError extends Error {
   name = "ApiError";
   payload: ErrorPayload;
@@ -11,9 +13,9 @@ export class ApiError extends Error {
     this.statusCode = statusCode;
   }
 
-  private _has = (field: string) => this.payload.hasOwnProperty(field);
+  private _has = (field: PayloadKey) => this.payload.hasOwnProperty(field);
 
-  add(field: string, value: string | string[]) {
+  add(field: PayloadKey, value: string | string[]) {
     const toAdd = Array.isArray(value) ? [...value] : [value];
 
     this.payload[field] = this._has(field)
@@ -37,7 +39,7 @@ export class ApiError extends Error {
     };
   };
 
-  remove = (field: string) => {
+  remove = (field: PayloadKey) => {
     delete this.payload?.[field];
     return this;
   };
