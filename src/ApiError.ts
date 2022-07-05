@@ -15,7 +15,9 @@ export class ApiError extends Error {
 
   private _has = (field: PayloadKey) => this.payload.hasOwnProperty(field);
 
-  add(field: PayloadKey, value: string | string[]) {
+  add(field: PayloadKey, value?: string | string[]) {
+    if (!value) return this;
+
     const toAdd = Array.isArray(value) ? [...value] : [value];
 
     this.payload[field] = this._has(field)
