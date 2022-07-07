@@ -42,6 +42,7 @@ export async function useController(
 
     console.log("========== [ Log Start ] ==========");
     console.log(body);
+    console.log(err);
     console.log("=========== [ Log End ] ===========");
 
     for (let handler of errorHandlers) {
