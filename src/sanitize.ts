@@ -9,7 +9,7 @@ const deepCopy = (dt: any) => JSON.parse(JSON.stringify(dt));
 
 const one = (
   data: looseObject,
-  { replace = {}, remove = ["_id"] }: sanitizeOneOptions = {
+  { replace = {}, remove = [] }: sanitizeOneOptions = {
     replace: {},
     remove: [],
   }
@@ -29,7 +29,7 @@ const one = (
   return data;
 };
 
-const many = (data: any[], { replace = {}, remove = ["_id"] }) => {
+const many = (data: any[], { replace = {}, remove = [] }) => {
   const _data = [];
 
   for (let dt of data) _data.push(one(dt, { replace, remove }));
