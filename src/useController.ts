@@ -2,10 +2,12 @@ import { ApiError } from "./ApiError";
 
 interface options {
   data: any;
+  errorCode?: number;
   errorHandlers: Function[];
   headers: object;
   preTasks: Function[];
   postTasks: Function[];
+  successCode?: number;
 }
 
 async function useTasks(data: any, tasks: Function[]): Promise<any> {
@@ -23,10 +25,12 @@ export async function useController(
   controller: Function,
   {
     data = {},
+    errorCode = 400,
     errorHandlers = [],
     headers = { "Content-Type": "application/json" },
     preTasks = [],
     postTasks = [],
+    successCode = 200,
   }: options
 ) {
   try {
@@ -36,7 +40,7 @@ export async function useController(
 
     if (postTasks?.length) body = await useTasks(body, postTasks);
 
-    return { body, headers, statusCode: 200 };
+    return { body, headers, statusCode: successCode ?? 200 };
   } catch (err: any) {
     const body = new ApiError(err).getInfo();
 
@@ -59,6 +63,6 @@ export async function useController(
       }
     }
 
-    return { body, headers, statusCode: body.statusCode };
+    return { body, headers, statusCode: errorCode ?? body.statusCode };
   }
 }
