@@ -1,7 +1,7 @@
 import { ApiError } from "../ApiError";
 import { looseObject } from "../interfaces";
 
-export const checkAuth =
+export const requireAuth =
   (authChecker: Function) =>
   async (req: looseObject, res: looseObject, next: Function) => {
     try {

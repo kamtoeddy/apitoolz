@@ -1,5 +1,5 @@
 import { allowRoles } from "./allowRoles";
-import { checkAuth } from "./checkAuth";
+import { requireAuth } from "./requireAuth";
 
 export const makeAuth = (
   authChecker: Function,
@@ -7,6 +7,6 @@ export const makeAuth = (
 ) => {
   return {
     allowRoles: allowRoles(roleExtractor),
-    isAuth: checkAuth(authChecker),
+    requireAuth: requireAuth(authChecker),
   };
 };
