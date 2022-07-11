@@ -8,10 +8,10 @@ interface MethodMap {
   [key: string]: Function;
 }
 
-export const useRoles =
+export const handleAs =
   (methods: MethodMap, errorMethod: Function = defaultErrorMethod) =>
-  (role: string, data: any) => {
-    const method = methods?.[role];
+  (key: string, data: any) => {
+    const method = methods?.[key];
 
     return method ? method(data) : errorMethod();
   };
