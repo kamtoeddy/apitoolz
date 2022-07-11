@@ -1,38 +1,44 @@
 import { looseObject } from "./interfaces";
+import {
+  assignDeep,
+  getDeepValue,
+  removeDeep,
+} from "./utils/_object-manipulations";
 
 type sanitizeOneOptions = {
-  replace?: { [key: string]: string };
   remove?: string[];
+  replace?: { [key: string]: string };
 };
-
-const deepCopy = (dt: any) => JSON.parse(JSON.stringify(dt));
 
 const one = (
   data: looseObject,
-  { replace = {}, remove = [] }: sanitizeOneOptions = {
-    replace: {},
+  { remove = [], replace = {} }: sanitizeOneOptions = {
     remove: [],
+    replace: {},
   }
 ) => {
   if (!data) return data;
 
   const keysToRepalce = Object.entries(replace ?? {});
 
-  for (let [oldKey, key] of keysToRepalce) {
-    data[key] = deepCopy(data[oldKey]);
+  for (let [key, newKey] of keysToRepalce) {
+    assignDeep(data, {
+      keys: newKey.split("."),
+      value: getDeepValue(data, { key }),
+    });
 
-    delete data[oldKey];
+    removeDeep(data, key);
   }
 
-  remove?.forEach((key) => delete data?.[key]);
+  remove?.forEach((key) => removeDeep(data, key));
 
   return data;
 };
 
-const many = (data: any[], { replace = {}, remove = [] }) => {
+const many = (data: any[], { remove = [], replace = {} }) => {
   const _data = [];
 
-  for (let dt of data) _data.push(one(dt, { replace, remove }));
+  for (let dt of data) _data.push(one(dt, { remove, replace }));
 
   return _data;
 };
