@@ -3,8 +3,8 @@ import { looseObject } from "../interfaces";
 const getKeys = (key: string | string[]) =>
   Array.isArray(key) ? key : key.split(".");
 
-const _has = (obj: looseObject | undefined = {}, key = "") =>
-  obj?.hasOwnProperty(key);
+const hasProp = (obj: looseObject | undefined = {}, prop = "") =>
+  obj?.hasOwnProperty(prop);
 
 export const deepCopy = (dt: any) => JSON.parse(JSON.stringify(dt));
 
@@ -27,10 +27,7 @@ export const assignDeep = (
   return { ...data, [_key]: assignDeep(data[_key], { key, value }) };
 };
 
-export const getDeepValue = (
-  data: looseObject,
-  { key }: { key: string }
-): any => {
+export const getDeepValue = (data: looseObject, key: string): any => {
   return key.split(".").reduce((prev, next) => prev?.[next], data);
 };
 
@@ -38,7 +35,7 @@ export const getSubObject = (obj: looseObject, sampleSub: looseObject) => {
   const _obj: looseObject = {},
     keys = Object.keys(sampleSub);
 
-  keys.forEach((key) => (_obj[key] = getDeepValue(obj, { key })));
+  keys.forEach((key) => (_obj[key] = getDeepValue(obj, key)));
 
   return _obj;
 };
@@ -53,7 +50,7 @@ export const hasDeepKey = (
 
   if (!_key || !obj) return false;
 
-  const keyFound = _has(obj, _key);
+  const keyFound = hasProp(obj, _key);
 
   if (!keyFound && key.length) return false;
 

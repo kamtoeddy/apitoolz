@@ -25,7 +25,7 @@ const one = (
   for (let [key, newKey] of keysToRepalce) {
     if (!hasDeepKey(data, key)) continue;
 
-    assignDeep(data, { key: newKey, value: getDeepValue(data, { key }) });
+    assignDeep(data, { key: newKey, value: getDeepValue(data, key) });
 
     removeDeep(data, key);
   }

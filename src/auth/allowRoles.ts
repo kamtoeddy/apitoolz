@@ -11,7 +11,7 @@ export const allowRoles =
     const role: string =
       typeof roleExtractor === "function"
         ? roleExtractor(req)
-        : getDeepValue(req, { key: roleExtractor });
+        : getDeepValue(req, roleExtractor);
 
     if (!roles.includes(role)) {
       return res
