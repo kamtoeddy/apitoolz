@@ -2,6 +2,7 @@ import { looseObject } from "./interfaces";
 import {
   assignDeep,
   getDeepValue,
+  hasDeepKey,
   removeDeep,
 } from "./utils/_object-manipulations";
 
@@ -22,10 +23,9 @@ const one = (
   const keysToRepalce = Object.entries(replace ?? {});
 
   for (let [key, newKey] of keysToRepalce) {
-    assignDeep(data, {
-      keys: newKey.split("."),
-      value: getDeepValue(data, { key }),
-    });
+    if (!hasDeepKey(data, key)) continue;
+
+    assignDeep(data, { key: newKey, value: getDeepValue(data, { key }) });
 
     removeDeep(data, key);
   }

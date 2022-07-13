@@ -9,3 +9,4 @@ export * from "./sanitize";
 export * from "./useController";
 export * from "./useWorker";
 export * from "./utils/isOfType";
+export { hasDeepKey } from "./utils/_object-manipulations";
