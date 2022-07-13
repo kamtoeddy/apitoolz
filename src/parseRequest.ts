@@ -14,6 +14,10 @@ interface ParseOptions {
   [key: string]: ParseOption;
 }
 
+interface ParsePropsConfig {
+  [key: string]: ParseOptions;
+}
+
 const getValByType = (value: any, type: "boolean" | "number") => {
   if (type === "number") return Number(value);
 
@@ -40,13 +44,17 @@ const parseKeys = (reqSubset: looseObject, options: ParseOptions) => {
 };
 
 export const parseRequestKeys =
-  (requestProp: string, options: ParseOptions = {}) =>
+  (propsConfig: ParsePropsConfig) =>
   (req: looseObject, res: looseObject, next: Function) => {
-    if (!hasDeepKey(req, requestProp)) return next();
+    const keys = Object.keys(propsConfig);
 
-    let sub = getDeepValue(req, requestProp);
+    for (let key of keys) {
+      if (!hasDeepKey(req, key)) continue;
 
-    assignDeep(req, { key: requestProp, value: parseKeys(sub, options) });
+      let sub = getDeepValue(req, key);
+
+      assignDeep(req, { key, value: parseKeys(sub, propsConfig[key]) });
+    }
 
     next();
   };
