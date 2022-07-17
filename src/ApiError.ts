@@ -13,6 +13,10 @@ export class ApiError extends Error {
     this.statusCode = statusCode;
   }
 
+  get isPayloadLoaded() {
+    return Object.keys(this.payload).length > 0;
+  }
+
   private _has = (field: PayloadKey) => this.payload.hasOwnProperty(field);
 
   add(field: PayloadKey, value?: string | string[]) {
