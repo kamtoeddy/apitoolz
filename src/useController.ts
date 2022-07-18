@@ -10,6 +10,8 @@ interface options {
   successCode?: number;
 }
 
+type OnResultHandler = (data: any, success: boolean) => any;
+
 async function useTasks(data: any, tasks: Function[]): Promise<any> {
   const task = tasks.shift();
 
@@ -31,7 +33,8 @@ export async function useController(
     preTasks = [],
     postTasks = [],
     successCode = 200,
-  }: options
+  }: options,
+  onResult?: OnResultHandler
 ) {
   try {
     if (preTasks?.length) data = await useTasks(data, preTasks);
@@ -40,9 +43,11 @@ export async function useController(
 
     if (postTasks?.length) body = await useTasks(body, postTasks);
 
+    if (onResult) body = onResult(body, true);
+
     return { body, headers, statusCode: successCode ?? 200 };
   } catch (err: any) {
-    const body = new ApiError(err).getInfo();
+    let body = new ApiError(err).getInfo();
 
     console.log("========== [ Log Start ] ==========");
     console.log(body);
@@ -62,6 +67,8 @@ export async function useController(
         console.log("===================== [ Log End ] =====================");
       }
     }
+
+    if (onResult) body = onResult(body, false);
 
     return { body, headers, statusCode: errorCode ?? body.statusCode };
   }
