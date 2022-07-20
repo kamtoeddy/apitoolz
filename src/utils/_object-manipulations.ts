@@ -1,17 +1,17 @@
-import { looseObject } from "../interfaces";
+import { ILooseObject } from "../interfaces";
 
 const getKeys = (key: string | string[]) =>
   Array.isArray(key) ? key : key.split(".");
 
-const hasProp = (obj: looseObject | undefined = {}, prop = "") =>
+const hasProp = (obj: ILooseObject | undefined = {}, prop = "") =>
   obj?.hasOwnProperty(prop);
 
 export const deepCopy = (dt: any) => JSON.parse(JSON.stringify(dt));
 
 export const assignDeep = (
-  data: looseObject,
+  data: ILooseObject,
   { key, value }: { key: string | string[]; value: any }
-): looseObject => {
+): ILooseObject => {
   key = getKeys(key);
 
   const _key = key.shift();
@@ -27,12 +27,12 @@ export const assignDeep = (
   return { ...data, [_key]: assignDeep(data[_key], { key, value }) };
 };
 
-export const getDeepValue = (data: looseObject, key: string): any => {
+export const getDeepValue = (data: ILooseObject, key: string): any => {
   return key.split(".").reduce((prev, next) => prev?.[next], data);
 };
 
-export const getSubObject = (obj: looseObject, sampleSub: looseObject) => {
-  const _obj: looseObject = {},
+export const getSubObject = (obj: ILooseObject, sampleSub: ILooseObject) => {
+  const _obj: ILooseObject = {},
     keys = Object.keys(sampleSub);
 
   keys.forEach((key) => (_obj[key] = getDeepValue(obj, key)));
@@ -41,7 +41,7 @@ export const getSubObject = (obj: looseObject, sampleSub: looseObject) => {
 };
 
 export const hasDeepKey = (
-  obj: looseObject,
+  obj: ILooseObject,
   key: string | string[]
 ): boolean => {
   key = getKeys(key);
@@ -60,9 +60,9 @@ export const hasDeepKey = (
 };
 
 export const removeDeep = (
-  obj: looseObject,
+  obj: ILooseObject,
   key: string | string[]
-): looseObject => {
+): ILooseObject => {
   key = getKeys(key);
 
   const _key = key.shift();
@@ -78,7 +78,7 @@ export const removeDeep = (
 };
 
 export const setDeepValue = (
-  data: looseObject,
+  data: ILooseObject,
   { key, value }: { key: string; value: any }
 ) => {
   return assignDeep(deepCopy(data), { key, value });

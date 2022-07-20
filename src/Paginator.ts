@@ -1,4 +1,4 @@
-import { looseObject } from "./interfaces";
+import { ILooseObject } from "./interfaces";
 
 interface PaginatorProps {
   limit: number;
@@ -31,7 +31,7 @@ export class Paginator {
   }
 
   paginate({ count, data }: PaginateProps) {
-    const paginated: looseObject = { data };
+    const paginated: ILooseObject = { data };
 
     const startIndex = this.getStartIndex(),
       stopIndex = this.getEndIndex();

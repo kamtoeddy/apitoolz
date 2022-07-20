@@ -1,10 +1,10 @@
 import { ApiError } from "./ApiError";
-import { looseObject } from "./interfaces";
+import { ILooseObject } from "./interfaces";
 import { _getCallerFile } from "./utils/_getCallerFile.js";
 import { join } from "path";
 
 const loader =
-  (modules: looseObject, dirName: string) =>
+  (modules: ILooseObject, dirName: string) =>
   (name: string = "") => {
     const _module = modules?.[name];
 
@@ -13,6 +13,6 @@ const loader =
     return require(join(dirName, _module));
   };
 
-export const registerModules = (modules: looseObject) => {
+export const registerModules = (modules: ILooseObject) => {
   return { loadCircular: loader(modules, _getCallerFile(2, true)) };
 };

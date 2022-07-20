@@ -1,6 +1,6 @@
 {
   "name": "apitoolz",
-  "version": "0.0.38",
+  "version": "0.0.39",
   "description": "javascript server-side helper tools",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "@types/node": "^18.0.0",
-    "callsite": "^1.0.0"
+    "callsite": "^1.0.0",
+    "formidable": "^2.0.1"
   },
   "devDependencies": {
+    "@types/formidable": "^2.0.5",
     "typescript": "^4.6.2"
   },
   "author": "",

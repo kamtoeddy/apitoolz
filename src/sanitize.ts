@@ -1,4 +1,4 @@
-import { looseObject } from "./interfaces";
+import { ILooseObject } from "./interfaces";
 import {
   assignDeep,
   getDeepValue,
@@ -12,7 +12,7 @@ type sanitizeOneOptions = {
 };
 
 const one = (
-  data: looseObject,
+  data: ILooseObject,
   { remove = [], replace = {} }: sanitizeOneOptions = {
     remove: [],
     replace: {},

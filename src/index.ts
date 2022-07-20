@@ -1,5 +1,6 @@
 export * from "./ApiError";
 export * from "./auth";
+export * from "./fileManager";
 export * from "./handleAs";
 export * from "./loadCircular";
 export * from "./loadEnvVars";

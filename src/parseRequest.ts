@@ -1,4 +1,4 @@
-import { looseObject } from "./interfaces";
+import { ILooseObject } from "./interfaces";
 import {
   assignDeep,
   getDeepValue,
@@ -24,7 +24,11 @@ const getValByType = (value: any, type: "boolean" | "number") => {
   return value === "false" ? false : true;
 };
 
-const parseKey = (reqSubset: looseObject, key: string, option: ParseOption) => {
+const parseKey = (
+  reqSubset: ILooseObject,
+  key: string,
+  option: ParseOption
+) => {
   const { parser, type } = option;
   if (!parser && !type) return reqSubset;
 
@@ -35,7 +39,7 @@ const parseKey = (reqSubset: looseObject, key: string, option: ParseOption) => {
   return assignDeep(reqSubset, { key, value });
 };
 
-const parseKeys = (reqSubset: looseObject, options: ParseOptions) => {
+const parseKeys = (reqSubset: ILooseObject, options: ParseOptions) => {
   const keys = Object.keys(options).filter((key) => hasDeepKey(reqSubset, key));
 
   keys.forEach((key) => parseKey(reqSubset, key, options[key]));
@@ -45,7 +49,7 @@ const parseKeys = (reqSubset: looseObject, options: ParseOptions) => {
 
 export const parseRequestKeys =
   (propsConfig: ParsePropsConfig) =>
-  (req: looseObject, res: looseObject, next: Function) => {
+  (req: ILooseObject, res: ILooseObject, next: Function) => {
     const keys = Object.keys(propsConfig);
 
     for (let key of keys) {

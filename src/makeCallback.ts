@@ -1,10 +1,10 @@
 import { ApiError } from "./ApiError";
-import { looseObject } from "./interfaces";
+import { ILooseObject } from "./interfaces";
 
-type ControllerType = (req: looseObject) => Promise<any>;
+type ControllerType = (req: ILooseObject) => Promise<any>;
 
 export const makeCallback = (controller: ControllerType) => {
-  return (req: looseObject, res: looseObject) => {
+  return (req: ILooseObject, res: ILooseObject) => {
     const Req = {
       body: req.body,
       ip: req.ip,
@@ -21,11 +21,11 @@ export const makeCallback = (controller: ControllerType) => {
     };
 
     controller(Req)
-      .then((Res: looseObject) => {
+      .then((Res: ILooseObject) => {
         if (Res.headers) res.set(Res.headers);
 
         if (Res.cookies) {
-          Res.cookies.forEach((cookie: looseObject) => {
+          Res.cookies.forEach((cookie: ILooseObject) => {
             res.cookie(cookie.key, cookie.value, cookie.options);
           });
         }

@@ -1,11 +1,11 @@
 import { ApiError } from "../ApiError";
-import { looseObject } from "../interfaces";
+import { ILooseObject } from "../interfaces";
 import { getDeepValue } from "../utils/_object-manipulations";
 
 export const allowRoles =
   (roleExtractor: Function | string = "user.role") =>
   (roles: string[] = [], _roleExtractor: Function | string) =>
-  (req: looseObject, res: looseObject, next: Function) => {
+  (req: ILooseObject, res: ILooseObject, next: Function) => {
     if (_roleExtractor) roleExtractor = _roleExtractor;
 
     const role: string =

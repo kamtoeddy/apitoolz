@@ -8,6 +8,6 @@ export interface ErrorPayload {
   [key: string]: string[];
 }
 
-export type looseObject = {
+export type ILooseObject = {
   [key: string]: any;
 };
