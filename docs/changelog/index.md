@@ -2,7 +2,7 @@
 
 # 0.0.39 / 20-07-2022
 
-- [Added] Module parseMultipartData to parse form data
+- [Added] Helper parseMultipartData to parse form data
 - [Added] Some file manager utility functions
 
 # 0.0.38 / 18-07-2022

@@ -41,12 +41,21 @@ export const parser =
     let { filesConfig, getFilesConfig, maxSize, uploadDir, validFormats } =
       config;
 
+    let error = new ApiError({
+      message: "Invalid Upload directory",
+      statusCode: 500,
+    });
+
+    if (!uploadDir) {
+      return res.status(error.statusCode).json(error.getInfo());
+    }
+
     // make specified upload directory if does not exixt
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
     const form = formidable({ uploadDir });
 
-    const error = new ApiError({
+    error = new ApiError({
       message: "File upload error",
       statusCode: 400,
     });
