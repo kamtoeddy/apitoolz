@@ -6,7 +6,7 @@ export * from "./loadCircular";
 export * from "./loadEnvVars";
 export * from "./makeCallback";
 export * from "./Paginator";
-export * from "./parseRequest";
+export * from "./parseRequestKeys";
 export * from "./sanitize";
 export * from "./useController";
 export * from "./useWorker";

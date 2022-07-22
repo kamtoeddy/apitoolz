@@ -1,8 +1,8 @@
 # What's new?
 
-- We now have the possibility to format pass a general formatter to our useController
-
 ## useController
+
+- We now have the possibility to access our data both on success and on error in the useController via the `onResult`. This could be useful if you wanted to format your responses in a particular way before they got to your api clients.
 
 ### onResult
 

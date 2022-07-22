@@ -1,10 +1,10 @@
 import { ApiError } from "./ApiError";
 
-interface options {
+interface IOptions {
   data: any;
   errorCode?: number;
   errorHandlers: Function[];
-  headers: object;
+  headers: Record<string, any>;
   preTasks: Function[];
   postTasks: Function[];
   successCode?: number;
@@ -33,7 +33,7 @@ export async function useController(
     preTasks = [],
     postTasks = [],
     successCode = 200,
-  }: options,
+  }: IOptions,
   onResult?: OnResultHandler
 ) {
   try {

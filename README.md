@@ -13,7 +13,7 @@
 - [loadEnvVars](./docs/loadEnvVars.md)
 - [makeCallback](./docs/makeCallback.md)
 - [Paginator](./docs/Paginator.md)
-- [parseRequest](./docs/parseRequest.md)
+- [parseRequestKeys](./docs/parseRequestKeys.md)
 - [sanitize](./docs/sanitize.md)
 - [useController](./docs/useController.md)
 - [useWorker](./docs/useWorker.md)

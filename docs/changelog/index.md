@@ -1,5 +1,9 @@
 # Changelog of apitoolz
 
+# 0.0.40 / 22-07-2022
+
+- [Docs] updated docs on ApiError, parseRequestKeys, sanitize, useController
+
 # 0.0.39 / 20-07-2022
 
 - [Added] Helper parseMultipartData to parse form data
