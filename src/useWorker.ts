@@ -1,6 +1,8 @@
 import { Worker } from "worker_threads";
+import { join } from "path";
 
 import { ApiError } from "./ApiError";
+import { _getCallerFile } from "./utils/_getCallerFile";
 
 interface useWorkerProps {
   data: any;
@@ -14,7 +16,7 @@ export const useWorker = ({
   data,
 }: useWorkerProps) => {
   return new Promise((resolve, reject) => {
-    const worker = new Worker(path, {
+    const worker = new Worker(join(_getCallerFile(1, true), path), {
       workerData: { event, data: JSON.stringify(data) },
     });
 

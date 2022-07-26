@@ -1,5 +1,9 @@
 # Changelog of apitoolz
 
+# 0.0.41 / 26-07-2022
+
+- [Change] Made path resolution of useWorker module to be relative to the caller file
+
 # 0.0.40 / 22-07-2022
 
 - [Docs] updated docs on ApiError, parseRequestKeys, sanitize, useController
