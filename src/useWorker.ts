@@ -15,8 +15,9 @@ export const useWorker = ({
   event = "handle-data",
   data,
 }: useWorkerProps) => {
+  const workerPath = join(_getCallerFile(2, true), path);
   return new Promise((resolve, reject) => {
-    const worker = new Worker(join(_getCallerFile(2, true), path), {
+    const worker = new Worker(workerPath, {
       workerData: { event, data: JSON.stringify(data) },
     });
 

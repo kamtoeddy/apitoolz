@@ -1,5 +1,9 @@
 # Changelog of apitoolz
 
+# 0.0.43 / 26-07-2022
+
+- [Fix] useWorker not resolving path properly
+
 # 0.0.42 / 26-07-2022
 
 - [Fix] useWorker not resolving path properly
