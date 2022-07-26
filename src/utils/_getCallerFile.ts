@@ -7,7 +7,5 @@ export const _getCallerFile = (depth: number = 2, dirOnly = false) => {
 
   const filePath = stack?.[depth]?.getFileName();
 
-  if (dirOnly) return path.dirname(filePath);
-
-  return filePath;
+  return dirOnly ? path.dirname(filePath) : filePath;
 };
