@@ -35,6 +35,8 @@ function makeFileConfig(
   return config;
 }
 
+export * from "./interfaces";
+
 export const parser =
   (config: IParseMultipartDataConfig = defaultConfig) =>
   (req: ILooseObject, res: ILooseObject, next: Function) => {

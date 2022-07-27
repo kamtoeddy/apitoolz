@@ -1,5 +1,9 @@
 # Changelog of apitoolz
 
+# 0.0.44 / 27-07-2022
+
+- [Docs] exported types for typescript support
+
 # 0.0.43 / 26-07-2022
 
 - [Fix] useWorker not resolving path properly

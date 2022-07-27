@@ -1,7 +1,7 @@
 import { ApiError } from "./ApiError";
 import { ILooseObject } from "./interfaces";
 
-type ControllerType = (req: ILooseObject) => Promise<any>;
+export type ControllerType = (req: ILooseObject) => Promise<any>;
 
 export const makeCallback = (controller: ControllerType) => {
   return (req: ILooseObject, res: ILooseObject) => {

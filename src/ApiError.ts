@@ -1,6 +1,14 @@
-import { ApiErrorProps, ErrorPayload } from "./interfaces";
+export interface ApiErrorProps {
+  message: string;
+  payload?: ErrorPayload;
+  statusCode?: number;
+}
 
-type PayloadKey = number | string;
+export interface ErrorPayload {
+  [key: string]: string[];
+}
+
+export type PayloadKey = number | string;
 
 export class ApiError extends Error {
   name = "ApiError";

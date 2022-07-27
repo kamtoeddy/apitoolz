@@ -6,7 +6,7 @@ import {
   removeDeep,
 } from "./utils/_object-manipulations";
 
-type sanitizeOneOptions = {
+export type sanitizeOneOptions = {
   remove?: string[];
   replace?: { [key: string]: string };
 };

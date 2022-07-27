@@ -5,16 +5,16 @@ import {
   hasDeepKey,
 } from "./utils/_object-manipulations";
 
-interface ParseOption {
+export interface ParseOption {
   parser?: (v: any) => any;
   type?: "boolean" | "number";
 }
 
-interface ParseOptions {
+export interface ParseOptions {
   [key: string]: ParseOption;
 }
 
-interface ParsePropsConfig {
+export interface ParsePropsConfig {
   [key: string]: ParseOptions;
 }
 

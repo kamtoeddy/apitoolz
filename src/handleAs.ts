@@ -4,7 +4,7 @@ const defaultErrorMethod = () => {
   throw new ApiError({ message: "Access denied" });
 };
 
-interface MethodMap {
+export interface MethodMap {
   [key: string]: Function;
 }
 

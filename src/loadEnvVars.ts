@@ -2,11 +2,11 @@ import { ApiError } from "./ApiError";
 import { ILooseObject } from "./interfaces";
 import { isOfType } from "./utils/isOfType";
 
-interface DefaultValues {
+export interface DefaultValues {
   [name: string]: any;
 }
 
-interface VarDefinition {
+export interface VarDefinition {
   name: string;
   parser?: Function;
 }

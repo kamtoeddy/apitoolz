@@ -1,11 +1,11 @@
 import { ILooseObject } from "./interfaces";
 
-interface PaginatorProps {
+export interface PaginatorProps {
   limit: number;
   page: number;
 }
 
-interface PaginateProps {
+export interface PaginateProps {
   count: number;
   data: any[];
 }

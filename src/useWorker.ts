@@ -4,7 +4,7 @@ import { join } from "path";
 import { ApiError } from "./ApiError";
 import { _getCallerFile } from "./utils/_getCallerFile";
 
-interface useWorkerProps {
+export interface useWorkerProps {
   data: any;
   event?: string;
   path: string;

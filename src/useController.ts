@@ -1,6 +1,6 @@
 import { ApiError } from "./ApiError";
 
-interface IOptions {
+export interface IOptions {
   data: any;
   errorCode?: number;
   errorHandlers: Function[];
@@ -10,7 +10,7 @@ interface IOptions {
   successCode?: number;
 }
 
-type OnResultHandler = (data: any, success: boolean) => any;
+export type OnResultHandler = (data: any, success: boolean) => any;
 
 async function useTasks(data: any, tasks: Function[]): Promise<any> {
   const task = tasks.shift();
