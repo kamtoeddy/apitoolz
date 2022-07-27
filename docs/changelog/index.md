@@ -1,5 +1,9 @@
 # Changelog of apitoolz
 
+# 0.0.46 / 27-07-2022
+
+- [Fix] multipartParser adding extra `/` between upload dir and file path
+
 # 0.0.45 / 27-07-2022
 
 - [Fix] multipartParser adding extra `/` between upload dir and file path
