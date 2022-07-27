@@ -52,6 +52,8 @@ export const parser =
       return res.status(error.statusCode).json(error.getInfo());
     }
 
+    if (!uploadDir.endsWith("/")) uploadDir += "/";
+
     // make specified upload directory if does not exixt
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -117,7 +119,7 @@ export const parser =
         // size validation check
         if (size > _maxSize!) error.add(key, "Maximum file size exceeded");
 
-        const newPath = `${uploadDir}/${newFilename}.${fileExtention}`;
+        const newPath = `${uploadDir}${newFilename}.${fileExtention}`;
         fs.renameSync(filepath, newPath);
 
         // add newPath in case of errors

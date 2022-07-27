@@ -33,8 +33,8 @@ export function deleteFilesAt(paths: string | string[] = []) {
 }
 
 export async function deleteFolder(filePath: string) {
-  return fs.rmdir(filePath, { recursive: true }, (err) =>
-    err ? console.error(err) : null
+  return fs.rm(filePath, { recursive: true }, (err) =>
+    err ? console.log(`error deleting folder, {${filePath}}:`, err) : null
   );
 }
 

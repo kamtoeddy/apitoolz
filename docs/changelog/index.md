@@ -1,5 +1,10 @@
 # Changelog of apitoolz
 
+# 0.0.45 / 27-07-2022
+
+- [Fix] multipartParser adding extra `/` between upload dir and file path
+- [Fix] deprecation warnings from nodejs when deleting folders
+
 # 0.0.44 / 27-07-2022
 
 - [Docs] exported types for typescript support
