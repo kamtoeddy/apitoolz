@@ -1,5 +1,9 @@
 # Changelog of apitoolz
 
+# 0.1.1 / 06-08-2022
+
+- [Fix] variables without defaults being loaded
+
 # 0.1.0 / 06-08-2022
 
 - [Changed] how loadEnvVars' default values are set

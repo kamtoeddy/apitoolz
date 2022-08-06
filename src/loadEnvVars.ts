@@ -17,9 +17,8 @@ const getEnvVars = (vars: VarDefinition[] = []) => {
     let val = process.env?.[name];
 
     if (val && parser) val = parser(val);
-    else val = _default;
 
-    prev[name] = val;
+    prev[name] = val ? val : _default;
 
     return prev;
   }, {} as ObjectType);
