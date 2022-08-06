@@ -1,3 +1,1 @@
-export type ILooseObject = {
-  [key: string]: any;
-};
+export type ObjectType = Record<number | string, any>;

@@ -5,7 +5,7 @@ import formidable from "formidable";
 
 import { deleteFilesAt, getFileExtention } from "..";
 import { ApiError } from "../../ApiError";
-import { ILooseObject } from "../../interfaces";
+import { ObjectType } from "../../interfaces";
 import { isJSON } from "../../utils/isJSON";
 import {
   assignDeep,
@@ -39,7 +39,7 @@ export * from "./interfaces";
 
 export const parser =
   (config: IParseMultipartDataConfig = defaultConfig) =>
-  (req: ILooseObject, res: ILooseObject, next: Function) => {
+  (req: ObjectType, res: ObjectType, next: Function) => {
     let { filesConfig, getFilesConfig, maxSize, uploadDir, validFormats } =
       config;
 

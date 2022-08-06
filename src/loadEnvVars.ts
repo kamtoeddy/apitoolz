@@ -1,5 +1,5 @@
 import { ApiError } from "./ApiError";
-import { ILooseObject } from "./interfaces";
+import { ObjectType } from "./interfaces";
 import { isOfType } from "./utils/isOfType";
 
 export interface DefaultValues {
@@ -21,7 +21,7 @@ const getEnvVars = (
     prev[name] = parser ? parser(val) : val;
 
     return prev;
-  }, {} as ILooseObject);
+  }, {} as ObjectType);
 };
 
 export const loadEnvVars = (

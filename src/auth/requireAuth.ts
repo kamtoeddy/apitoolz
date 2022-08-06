@@ -1,9 +1,9 @@
 import { ApiError } from "../ApiError";
-import { ILooseObject } from "../interfaces";
+import { ObjectType } from "../interfaces";
 
 export const requireAuth =
   (authChecker: Function) =>
-  async (req: ILooseObject, res: ILooseObject, next: Function) => {
+  async (req: ObjectType, res: ObjectType, next: Function) => {
     try {
       await authChecker(req);
     } catch (err: any) {

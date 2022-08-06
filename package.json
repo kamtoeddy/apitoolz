@@ -1,6 +1,6 @@
 {
   "name": "apitoolz",
-  "version": "0.0.46",
+  "version": "0.1.0",
   "description": "javascript server-side helper tools",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -9,8 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepare": "npm run build",
-    "watch": "tsc -w"
+    "prepare": "npm run build"
   },
   "dependencies": {
     "@types/node": "^18.0.0",

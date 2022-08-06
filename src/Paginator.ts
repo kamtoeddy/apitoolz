@@ -1,4 +1,4 @@
-import { ILooseObject } from "./interfaces";
+import { ObjectType } from "./interfaces";
 
 export interface PaginatorProps {
   limit: number;
@@ -31,7 +31,7 @@ export class Paginator {
   }
 
   paginate({ count, data }: PaginateProps) {
-    const paginated: ILooseObject = { data };
+    const paginated: ObjectType = { data };
 
     const startIndex = this.getStartIndex(),
       stopIndex = this.getEndIndex();

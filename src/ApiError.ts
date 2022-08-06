@@ -3,12 +3,9 @@ export interface ApiErrorProps {
   payload?: ErrorPayload;
   statusCode?: number;
 }
-
-export interface ErrorPayload {
-  [key: string]: string[];
-}
-
 export type PayloadKey = number | string;
+
+export type ErrorPayload = Record<number | string, string[]>;
 
 export class ApiError extends Error {
   name = "ApiError";

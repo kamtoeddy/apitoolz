@@ -1,5 +1,9 @@
 # Changelog of apitoolz
 
+# 0.1.0 / 06-08-2022
+
+- [Changed] how loadEnvVars' default values are set
+
 # 0.0.46 / 27-07-2022
 
 - [Fix] multipartParser adding extra `/` between upload dir and file path
