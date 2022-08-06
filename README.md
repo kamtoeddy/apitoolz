@@ -17,4 +17,4 @@
 - [sanitize](./docs/sanitize.md)
 - [useController](./docs/useController.md)
 - [useWorker](./docs/useWorker.md)
-- [Changelog](./docs/changelog/index.md#changelog-of-apitoolz)
+- [Changelog](./docs/CHANGELOG.md)

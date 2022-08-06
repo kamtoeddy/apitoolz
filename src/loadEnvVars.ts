@@ -7,27 +7,25 @@ export interface DefaultValues {
 }
 
 export interface VarDefinition {
+  default?: any;
   name: string;
   parser?: Function;
 }
 
-const getEnvVars = (
-  vars: VarDefinition[] = [],
-  defaults: DefaultValues = {}
-) => {
-  return vars.reduce((prev, { name, parser }) => {
-    let val = process.env?.[name] ?? defaults?.[name];
+const getEnvVars = (vars: VarDefinition[] = []) => {
+  return vars.reduce((prev, { default: _default, name, parser }) => {
+    let val = process.env?.[name];
 
-    prev[name] = parser ? parser(val) : val;
+    if (val && parser) val = parser(val);
+    else val = _default;
+
+    prev[name] = val;
 
     return prev;
   }, {} as ObjectType);
 };
 
-export const loadEnvVars = (
-  vars: VarDefinition[],
-  defaults: DefaultValues = {}
-) => {
+export const loadEnvVars = (vars: VarDefinition[]) => {
   const error = new ApiError({ message: "Invalid env vars", statusCode: 500 });
 
   try {
@@ -38,11 +36,11 @@ export const loadEnvVars = (
         error.add(i, "Invalid parser");
     });
 
-    if (Object.keys(error.payload).length) throw error;
+    if (error.isPayloadLoaded) throw error;
   } catch (err) {
     console.log(err);
     return {};
   }
 
-  return getEnvVars(vars, defaults);
+  return getEnvVars(vars);
 };
