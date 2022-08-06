@@ -1,6 +1,6 @@
 {
   "name": "apitoolz",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "javascript server-side helper tools",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
