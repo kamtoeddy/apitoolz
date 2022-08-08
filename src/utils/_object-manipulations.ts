@@ -24,6 +24,8 @@ export const assignDeep = (
     return data;
   }
 
+  if (!data?.[_key]) data[_key] = {};
+
   return { ...data, [_key]: assignDeep(data[_key], { key, value }) };
 };
 
@@ -70,7 +72,7 @@ export const removeDeep = (
   if (!_key) return obj;
 
   if (!key.length) {
-    delete obj[_key];
+    delete obj?.[_key];
     return obj;
   }
 

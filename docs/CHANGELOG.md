@@ -1,5 +1,11 @@
 # Changelog of apitoolz
 
+# 0.2.0 / 08-08-2022
+
+- [Changed] the sanitize object to a function
+- [Removed] sanitize.one & sanitize.many
+- [Added] `select` option to sanitize
+
 # 0.1.1 / 06-08-2022
 
 - [Fix] variables without defaults being loaded
