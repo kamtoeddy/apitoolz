@@ -6,7 +6,6 @@ This is a custom error class you can use to tell your api clients what exactly w
 
 ```ts
 interface ErrorSummary {
-  _isError: true;
   message: string;
   payload: Record<string, string[]>;
   statusCode: number;
@@ -14,12 +13,12 @@ interface ErrorSummary {
 
 interface ApiError {
   message: string;
-  payload: Record<string, string[]>;
+  payload: Record<number | string, string[]>;
   statusCode: number;
-  add: (field: string, value?: string | string[]) => ApiError;
+  add: (field: number | string, value?: string | string[]) => ApiError;
   clear: () => ApiError;
   getInfo: () => ErrorSummary;
-  remove: (field: string) => ApiError;
+  remove: (field: number | string) => ApiError;
   setMessage: (message: string) => ApiError;
 }
 ```

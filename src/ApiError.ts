@@ -1,3 +1,5 @@
+import { asArray } from "./utils/asArray";
+
 export interface ApiErrorProps {
   message: string;
   payload?: ErrorPayload;
@@ -5,7 +7,7 @@ export interface ApiErrorProps {
 }
 export type PayloadKey = number | string;
 
-export type ErrorPayload = Record<number | string, string[]>;
+export type ErrorPayload = Record<PayloadKey, string[]>;
 
 export class ApiError extends Error {
   name = "ApiError";
@@ -25,13 +27,13 @@ export class ApiError extends Error {
   private _has = (field: PayloadKey) => this.payload.hasOwnProperty(field);
 
   add(field: PayloadKey, value?: string | string[]) {
-    if (!value) return this;
+    if (value) {
+      value = asArray(value);
 
-    const toAdd = Array.isArray(value) ? [...value] : [value];
-
-    this.payload[field] = this._has(field)
-      ? [...this.payload[field], ...toAdd]
-      : toAdd;
+      this.payload[field] = this._has(field)
+        ? [...this.payload[field], ...value]
+        : value;
+    }
 
     return this;
   }
@@ -41,14 +43,11 @@ export class ApiError extends Error {
     return this;
   };
 
-  getInfo = () => {
-    return {
-      _isError: true,
-      message: this.message,
-      payload: this.payload,
-      statusCode: this.statusCode,
-    };
-  };
+  getInfo = () => ({
+    message: this.message,
+    payload: this.payload,
+    statusCode: this.statusCode,
+  });
 
   remove = (field: PayloadKey) => {
     delete this.payload?.[field];
