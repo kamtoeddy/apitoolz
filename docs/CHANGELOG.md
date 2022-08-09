@@ -1,5 +1,17 @@
 # Changelog of apitoolz
 
+# 0.2.1 / 09-08-2022
+
+- [Removed] removed \_isError from ApiError
+- [Changed] changed default structure of body property in response object returned by useController to:
+
+  ```ts
+  body: {
+    data: any;
+    sucess: boolean;
+  }
+  ```
+
 # 0.2.0 / 08-08-2022
 
 - [Changed] the sanitize object to a function

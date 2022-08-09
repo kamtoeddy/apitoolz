@@ -23,6 +23,14 @@ async function useTasks(data: any, tasks: Function[]): Promise<any> {
   return data;
 }
 
+const makeResult = (
+  data: any,
+  success: boolean,
+  onResult?: OnResultHandler
+) => {
+  return onResult ? onResult(data, success) : { data, success };
+};
+
 export async function useController(
   controller: Function,
   {
@@ -43,11 +51,11 @@ export async function useController(
 
     if (postTasks?.length) body = await useTasks(body, postTasks);
 
-    if (onResult) body = onResult(body, true);
+    body = makeResult(body, true, onResult);
 
     return { body, headers, statusCode: successCode ?? 200 };
   } catch (err: any) {
-    let body = new ApiError(err).getInfo();
+    let body: any = new ApiError(err).getInfo();
 
     console.log("========== [ Log Start ] ==========");
     console.log(body);
@@ -68,7 +76,7 @@ export async function useController(
       }
     }
 
-    if (onResult) body = onResult(body, false);
+    body = makeResult(body, false, onResult);
 
     return { body, headers, statusCode: errorCode ?? body.statusCode };
   }
