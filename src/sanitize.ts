@@ -60,8 +60,8 @@ const selectValues = <T extends ObjectType>(
 const sortKeys = <T extends ObjectType>(data: T) => {
   const keys = Object.keys(data).sort((a, b) => (a < b ? -1 : 1));
 
-  return keys.reduce((_data, next) => {
-    _data[next as keyof T] = data[next];
+  return keys.reduce((_data, next: keyof T) => {
+    _data[next] = data[next];
 
     return _data;
   }, {} as T);

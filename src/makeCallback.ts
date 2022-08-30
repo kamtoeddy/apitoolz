@@ -24,11 +24,10 @@ export const makeCallback = (controller: ControllerType) => {
       .then((Res: ObjectType) => {
         if (Res.headers) res.set(Res.headers);
 
-        if (Res.cookies) {
+        if (Res.cookies)
           Res.cookies.forEach((cookie: ObjectType) => {
             res.cookie(cookie.key, cookie.value, cookie.options);
           });
-        }
 
         res.status(Res?.statusCode ?? 200).json(Res.body);
       })

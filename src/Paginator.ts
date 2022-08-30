@@ -11,23 +11,23 @@ export interface PaginateProps {
 }
 
 export class Paginator {
-  private limit: number = 0;
-  private maxLimit: number;
-  private page: number = 0;
+  private _limit: number = 0;
+  private _maxLimit: number;
+  private _page: number = 0;
 
   constructor(maxLimit: number, { limit, page }: PaginatorProps) {
-    this.maxLimit = maxLimit;
+    this._maxLimit = maxLimit;
 
-    this.limit = limit > this.maxLimit ? this.maxLimit : limit;
-    this.page = page;
+    this._limit = limit > this._maxLimit ? this._maxLimit : limit;
+    this._page = page;
   }
 
-  getEndIndex = () => this.page * this.limit;
+  getEndIndex = () => this._page * this._limit;
 
   getStartIndex() {
-    if (!this.limit || !this.page) return 0;
+    if (!this._limit || !this._page) return 0;
 
-    return (this.page - 1) * this.limit;
+    return (this._page - 1) * this._limit;
   }
 
   paginate({ count, data }: PaginateProps) {
@@ -36,17 +36,14 @@ export class Paginator {
     const startIndex = this.getStartIndex(),
       stopIndex = this.getEndIndex();
 
-    if (startIndex > 0) {
-      paginated.previous = { limit: this.limit, page: this.page - 1 };
-    }
+    if (startIndex > 0)
+      paginated.previous = { limit: this._limit, page: this._page - 1 };
 
-    if (stopIndex < count) {
-      paginated.next = { limit: this.limit, page: this.page + 1 };
-    }
+    if (stopIndex < count)
+      paginated.next = { limit: this._limit, page: this._page + 1 };
 
-    if (data.length > stopIndex - startIndex) {
+    if (data.length > stopIndex - startIndex)
       paginated.data = data.slice(startIndex, stopIndex);
-    }
 
     return paginated;
   }
