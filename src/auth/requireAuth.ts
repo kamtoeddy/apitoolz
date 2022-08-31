@@ -1,13 +1,17 @@
 import { ApiError } from "../ApiError";
-import { ObjectType } from "../interfaces";
+import { ObjectType, ResponseAdapter } from "../interfaces";
 
 export const requireAuth =
-  (authChecker: Function) =>
+  (authChecker: Function, adaptResponse: ResponseAdapter) =>
   async (req: ObjectType, res: ObjectType, next: Function) => {
     try {
       await authChecker(req);
     } catch (err: any) {
-      return res.status(401).json(new ApiError(err).getInfo());
+      const statusCode = 401;
+
+      return adaptResponse(res)
+        .setStatusCode(statusCode)
+        .end(new ApiError({ ...err, statusCode }).getInfo());
     }
 
     next();

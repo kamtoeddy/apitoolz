@@ -1,12 +1,15 @@
+import { expressRequestAdapter } from "../adapters";
+import { ResponseAdapter } from "../interfaces";
 import { allowRoles } from "./allowRoles";
 import { requireAuth } from "./requireAuth";
 
 export const makeAuth = (
   authChecker: Function,
-  roleExtractor: Function | string
+  roleExtractor: Function | string,
+  adaptResponse: ResponseAdapter = expressRequestAdapter
 ) => {
   return {
-    allowRoles: allowRoles(roleExtractor),
-    requireAuth: requireAuth(authChecker),
+    allowRoles: allowRoles(roleExtractor, adaptResponse),
+    requireAuth: requireAuth(authChecker, adaptResponse),
   };
 };

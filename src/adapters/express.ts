@@ -3,7 +3,7 @@ import {
   CookieType,
   HeaderType,
   ObjectType,
-} from "../../interfaces";
+} from "../interfaces";
 
 class ExpressRequestAdapter implements AdaptedResponse {
   constructor(private response: ObjectType) {}

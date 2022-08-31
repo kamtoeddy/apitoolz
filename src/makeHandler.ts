@@ -1,5 +1,5 @@
 import { ApiError } from "./ApiError";
-import { expressRequestAdapter } from "./auth/adapters";
+import { expressRequestAdapter } from "./adapters";
 import { ControllerType, ObjectType, ResponseAdapter } from "./interfaces";
 
 const adaptRequest = (req: ObjectType) => ({
