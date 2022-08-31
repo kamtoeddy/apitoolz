@@ -2,10 +2,11 @@
 
 # latest / xx-xx-2022
 
-- [Changed] [loadEnvVars to loadVariables](./v1.0.0/loadVariables.md)
-
-- [Changed] [useController to makeController](./v1.0.0/makeController.md)
-- [Changed] [makeCallback to makeHandler](./v1.0.0/makeHandler.md)
+- [Changed] allowRoles to makeRoleAuth
+- [Changed] requireAuth to makeRequireAuth
+- [Changed] loadEnvVars to loadVariables
+- [Changed] useController to makeController
+- [Changed] makeCallback to makeHandler
 
 # 0.2.1 / 09-08-2022
 
@@ -69,5 +70,5 @@
 
 # 0.0.38 / 18-07-2022
 
-- [Added] onResult handler to useController so you could standardize your successful & unsuccessful responses from the useController. [Check it out](./v0.0.38/useController.md#onresult)
+- [Added] onResult handler to useController so you could standardize your successful & unsuccessful responses from the useController.
 - [Docs] Started work on documenting this package

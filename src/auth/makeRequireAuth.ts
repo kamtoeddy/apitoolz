@@ -1,8 +1,12 @@
+import { expressRequestAdapter } from "../adapters";
 import { ApiError } from "../ApiError";
 import { ObjectType, ResponseAdapter } from "../interfaces";
 
-export const requireAuth =
-  (authChecker: Function, adaptResponse: ResponseAdapter) =>
+export const makeRequireAuth =
+  (
+    authChecker: Function,
+    adaptResponse: ResponseAdapter = expressRequestAdapter
+  ) =>
   async (req: ObjectType, res: ObjectType, next: Function) => {
     try {
       await authChecker(req);
