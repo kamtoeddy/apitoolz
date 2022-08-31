@@ -31,7 +31,7 @@ const makeResult = (
   return onResult ? onResult(data, success) : { data, success };
 };
 
-export async function useController(
+export async function makeController(
   controller: Function,
   {
     data = {},

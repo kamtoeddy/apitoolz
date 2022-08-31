@@ -1,5 +1,5 @@
 import { ObjectType } from "./interfaces";
-import { asArray } from "./utils/asArray";
+import { toArray } from "./utils/toArray";
 import {
   assignDeep,
   getDeepValue,
@@ -19,7 +19,7 @@ const removeValues = <T extends ObjectType>(
   data: T,
   keysToRemove: string | string[]
 ) => {
-  keysToRemove = asArray(keysToRemove);
+  keysToRemove = toArray(keysToRemove);
 
   for (let key of keysToRemove) removeDeep(data, key);
 
@@ -45,7 +45,7 @@ const selectValues = <T extends ObjectType>(
   data: T,
   keysToSelect: string | string[]
 ) => {
-  keysToSelect = asArray(keysToSelect);
+  keysToSelect = toArray(keysToSelect);
 
   const _data = {} as T;
 

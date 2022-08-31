@@ -1,4 +1,4 @@
-import { asArray } from "./utils/asArray";
+import { toArray } from "./utils/toArray";
 
 export interface ApiErrorProps {
   message: string;
@@ -28,7 +28,7 @@ export class ApiError extends Error {
 
   add(field: PayloadKey, value?: string | string[]) {
     if (value) {
-      value = asArray(value);
+      value = toArray(value);
 
       this.payload[field] = this._has(field)
         ? [...this.payload[field], ...value]

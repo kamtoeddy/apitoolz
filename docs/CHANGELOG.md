@@ -1,5 +1,10 @@
 # Changelog of apitoolz
 
+# latest / xx-xx-2022
+
+- [Changed] [useController to makeController](./v1.0.0/makeController.md)
+- [Changed] [makeCallback to makeHandler](./v1.0.0/makeHandler.md)
+
 # 0.2.1 / 09-08-2022
 
 - [Removed] removed \_isError from ApiError

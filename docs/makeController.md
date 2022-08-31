@@ -1,7 +1,7 @@
-# useController
+# makeController
 
 ```ts
-import { useController } from "apitoolz";
+import { makeController } from "apitoolz";
 
 interface IOptions {
   data: any;
@@ -22,7 +22,7 @@ interface IControllerresponse {
 type OnResultHandler = (data: any, success: boolean) => any;
 
 interface I {
-  useController: (
+  makeController: (
     task: Function,
     options: IOptions,
     onResult?: OnResultHandler
