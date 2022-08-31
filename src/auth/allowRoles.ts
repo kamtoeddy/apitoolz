@@ -1,9 +1,13 @@
 import { ApiError } from "../ApiError";
-import { ObjectType } from "../interfaces";
+import { ObjectType, ResponseAdapter } from "../interfaces";
 import { getDeepValue } from "../utils/_object-manipulations";
+import { expressRequestAdapter } from "./adapters";
 
 export const allowRoles =
-  (roleExtractor: Function | string = "user.role") =>
+  (
+    adaptResponse: ResponseAdapter = expressRequestAdapter,
+    roleExtractor: Function | string = "user.role"
+  ) =>
   (roles: string[] = [], _roleExtractor: Function | string) =>
   (req: ObjectType, res: ObjectType, next: Function) => {
     if (_roleExtractor) roleExtractor = _roleExtractor;
@@ -14,9 +18,9 @@ export const allowRoles =
         : getDeepValue(req, roleExtractor);
 
     if (!roles.includes(role)) {
-      return res
-        .status(403)
-        .json(new ApiError({ message: "Access denied" }).getInfo());
+      adaptResponse(res)
+        .setStatusCode(403)
+        .end(new ApiError({ message: "Access denied" }).getInfo());
     }
 
     next();

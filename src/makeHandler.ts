@@ -1,31 +1,6 @@
 import { ApiError } from "./ApiError";
-import { ObjectType } from "./interfaces";
-
-export type HeaderType = Record<string, number | string>;
-
-export interface AdaptedResponse {
-  end: (body: any) => void;
-  setCookies: (cookies: any[]) => void;
-  setHeaders: (headers: HeaderType) => void;
-  setStatusCode: (statusCode: number) => void;
-}
-
-export interface AdaptedRequest {
-  body: ObjectType;
-  ip: string;
-  method: string;
-  path: string;
-  params: ObjectType;
-  query: ObjectType;
-  user: ObjectType | null;
-  headers: {
-    "Content-Type": string;
-    referer: string;
-    "User-Agent": string;
-  };
-}
-
-export type ControllerType = (req: AdaptedRequest) => Promise<any>;
+import { expressRequestAdapter } from "./auth/adapters";
+import { ControllerType, ObjectType, ResponseAdapter } from "./interfaces";
 
 const adaptRequest = (req: ObjectType) => ({
   body: req.body,
@@ -43,33 +18,25 @@ const adaptRequest = (req: ObjectType) => ({
 });
 
 export const makeHandler =
-  (res: AdaptedResponse) => (controller: ControllerType) => {
-    return (req: ObjectType) =>
+  (adaptResponse: ResponseAdapter = expressRequestAdapter) =>
+  (controller: ControllerType) => {
+    return (req: ObjectType, res: ObjectType) => {
+      const response = adaptResponse(res);
+
       controller(adaptRequest(req))
         .then(({ body, cookies, headers, statusCode }: ObjectType) => {
-          if (headers) res.setHeaders(headers);
-          // if (Res.headers) res.set(Res.headers);
+          if (headers) response.setHeaders(headers);
 
-          if (cookies) res.setCookies(cookies);
+          if (cookies) response.setCookies(cookies);
 
-          // if (Res.cookies)
-          //   Res.cookies.forEach((cookie: ObjectType) => {
-          //     res.cookie(cookie.key, cookie.value, cookie.options);
-          //   });
-
-          res.setStatusCode(statusCode ?? 200);
-          res.end(body);
-
-          // res.status(statusCode ?? 200).json(body);
+          response.setStatusCode(statusCode ?? 200).end(body) as never;
         })
         .catch(({ message }: Error) => {
           const statusCode = 500;
 
-          res.setStatusCode(statusCode);
-          res.end(new ApiError({ message, statusCode }).getInfo());
-
-          // res
-          //   .status(statusCode)
-          //   .send(new ApiError({ message, statusCode }).getInfo());
+          response
+            .setStatusCode(statusCode)
+            .end(new ApiError({ message, statusCode }).getInfo());
         });
+    };
   };

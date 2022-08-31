@@ -2,6 +2,8 @@
 
 # latest / xx-xx-2022
 
+- [Changed] [loadEnvVars to loadVariables](./v1.0.0/loadVariables.md)
+
 - [Changed] [useController to makeController](./v1.0.0/makeController.md)
 - [Changed] [makeCallback to makeHandler](./v1.0.0/makeHandler.md)
 
