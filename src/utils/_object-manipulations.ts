@@ -1,22 +1,40 @@
 import { ObjectType } from "../interfaces";
 
+export {
+  assignDeep,
+  deepCopy,
+  getDeepValue,
+  hasDeepKey,
+  removeDeep,
+  removeEmpty,
+};
+
+const getKey = (key: string | string[]) =>
+  Array.isArray(key) ? key.join(".") : key;
+
 const getKeys = (key: string | string[]) =>
   Array.isArray(key) ? key : key.split(".");
 
 const hasProp = (obj: ObjectType | undefined = {}, prop = "") =>
   obj?.hasOwnProperty(prop);
 
-export const deepCopy = (dt: any) => JSON.parse(JSON.stringify(dt));
+const isEmptyObject = (obj: ObjectType) =>
+  obj === undefined || !Object.keys(obj).length;
 
-export const assignDeep = (
+// methods
+function deepCopy(dt: any) {
+  return dt === undefined ? dt : JSON.parse(JSON.stringify(dt));
+}
+
+function assignDeep(
   data: ObjectType,
   { key, value }: { key: string | string[]; value: any }
-): ObjectType => {
+): ObjectType {
   key = getKeys(key);
 
-  const _key = key.shift();
+  if (!key.length) return data;
 
-  if (!_key) return data;
+  const _key = key.shift()!;
 
   if (!key.length) {
     data[_key] = value;
@@ -27,25 +45,13 @@ export const assignDeep = (
   if (!data?.[_key]) data[_key] = {};
 
   return { ...data, [_key]: assignDeep(data[_key], { key, value }) };
-};
+}
 
-export const getDeepValue = (data: ObjectType, key: string): any => {
+function getDeepValue(data: ObjectType, key: string): any {
   return key.split(".").reduce((prev, next) => prev?.[next], data);
-};
+}
 
-export const getSubObject = (obj: ObjectType, sampleSub: ObjectType) => {
-  const _obj: ObjectType = {},
-    keys = Object.keys(sampleSub);
-
-  keys.forEach((key) => (_obj[key] = getDeepValue(obj, key)));
-
-  return _obj;
-};
-
-export const hasDeepKey = (
-  obj: ObjectType,
-  key: string | string[]
-): boolean => {
+function hasDeepKey(obj: ObjectType, key: string | string[]): boolean {
   key = getKeys(key);
 
   const _key = key.shift();
@@ -59,17 +65,14 @@ export const hasDeepKey = (
   if (keyFound && !key.length) return true;
 
   return hasDeepKey(obj?.[_key], key);
-};
+}
 
-export const removeDeep = (
-  obj: ObjectType,
-  key: string | string[]
-): ObjectType => {
+function removeDeep(obj: ObjectType, key: string | string[]): ObjectType {
   key = getKeys(key);
 
-  const _key = key.shift();
+  if (!key.length) return obj;
 
-  if (!_key) return obj;
+  const _key = key.shift()!;
 
   if (!key.length) {
     delete obj?.[_key];
@@ -77,11 +80,22 @@ export const removeDeep = (
   }
 
   return { ...obj, [_key]: removeDeep(obj[_key], key) };
-};
+}
 
-export const setDeepValue = (
-  data: ObjectType,
-  { key, value }: { key: string; value: any }
-) => {
-  return assignDeep(deepCopy(data), { key, value });
-};
+function removeEmpty(obj: ObjectType, key: string | string[]): ObjectType {
+  const currentKey = getKey(key);
+
+  let deepValue = getDeepValue(obj, currentKey);
+
+  if (isEmptyObject(deepValue)) {
+    removeDeep(obj, currentKey);
+
+    const keys = getKeys(currentKey);
+
+    keys.pop();
+
+    if (keys.length) return removeEmpty(obj, keys);
+  }
+
+  return obj;
+}

@@ -38,12 +38,21 @@ export const sanitize_Tests = ({ sanitize }: { sanitize: Function }) => {
   });
 
   describe("sanitize", () => {
+    // to ignore
     it("should return same value if it is not an object or empty array", () => {
       const values = [null, undefined, false, true, "hey", []];
 
       for (const value of values) expect(sanitize(value)).toEqual(value);
     });
 
+    // default options
+    it("should return same value if no option is specified", () => {
+      const values = [users[0], users];
+
+      for (const value of values) expect(sanitize(value, {})).toEqual(value);
+    });
+
+    // remove
     it("should remove specified fields", () => {
       const getUser = (user: User) => ({
         bio: user.bio,
@@ -105,6 +114,7 @@ export const sanitize_Tests = ({ sanitize }: { sanitize: Function }) => {
       expect(sanitize(users, option)).toEqual(sanitizedUsers);
     });
 
+    // replace
     it("should replace specified fields", () => {
       const getUser = (user: User) => ({
         bio: user.bio,
@@ -173,6 +183,7 @@ export const sanitize_Tests = ({ sanitize }: { sanitize: Function }) => {
       expect(sanitize(users, option)).toEqual(sanitizedUsers);
     });
 
+    // remove & replace
     it("should remove & replace fields", () => {
       const getUser = (user: User) => ({
         bio: { twitter: { displayName: user.bio.twitter.displayName } },
@@ -190,6 +201,85 @@ export const sanitize_Tests = ({ sanitize }: { sanitize: Function }) => {
       const option = {
         remove: "password",
         replace: { "bio.twitter.link": "twitterLink", dob: "dateOfBirth" },
+      };
+
+      expect(sanitize(user, option)).toEqual(sanitizedUser);
+
+      expect(sanitize(users, option)).toEqual(sanitizedUsers);
+    });
+
+    // select
+    it("should select specified fields", () => {
+      const getUser = (user: User) => ({ name: user.name });
+
+      const user = users[0];
+      const sanitizedUser = getUser(user);
+
+      const sanitizedUsers = users.map((user) => getUser(user));
+
+      const option = { select: "name" };
+
+      expect(sanitize(user, option)).toEqual(sanitizedUser);
+
+      expect(sanitize(users, option)).toEqual(sanitizedUsers);
+    });
+
+    it("should select multiple fields", () => {
+      const getUser = (user: User) => ({
+        bio: user.bio,
+        dob: user.dob,
+        name: user.name,
+      });
+
+      const user = users[0];
+      const sanitizedUser = getUser(user);
+
+      const sanitizedUsers = users.map((user) => getUser(user));
+
+      const option = { select: ["bio", "dob", "name"] };
+
+      expect(sanitize(user, option)).toEqual(sanitizedUser);
+
+      expect(sanitize(users, option)).toEqual(sanitizedUsers);
+    });
+
+    it("should select nested fields", () => {
+      const getUser = (user: User) => ({
+        bio: { twitter: { link: user.bio.twitter.link } },
+        dob: user.dob,
+      });
+
+      const user = users[0];
+      const sanitizedUser = getUser(user);
+
+      const sanitizedUsers = users.map((user) => getUser(user));
+
+      const option = { select: ["bio.twitter.link", "dob"] };
+
+      expect(sanitize(user, option)).toEqual(sanitizedUser);
+
+      expect(sanitize(users, option)).toEqual(sanitizedUsers);
+    });
+
+    // select & replace
+    it("should select & replace fields", () => {
+      const getUser = (user: User) => ({
+        dob: user.dob,
+        twitterLink: user.bio.twitter.link,
+        twitterName: user.bio.twitter.displayName,
+      });
+
+      const user = users[0];
+      const sanitizedUser = getUser(user);
+
+      const sanitizedUsers = users.map((user) => getUser(user));
+
+      const option = {
+        select: ["bio.twitter", "dob"],
+        replace: {
+          "bio.twitter.link": "twitterLink",
+          "bio.twitter.displayName": "twitterName",
+        },
       };
 
       expect(sanitize(user, option)).toEqual(sanitizedUser);
