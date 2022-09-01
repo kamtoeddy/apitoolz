@@ -2,12 +2,12 @@ import { ObjectType } from "./interfaces";
 import { toArray } from "./utils/toArray";
 import {
   assignDeep,
-  deepCopy,
+  cloneDeep,
   getDeepValue,
   hasDeepKey,
   removeDeep,
   removeEmpty,
-} from "./utils/_object-manipulations";
+} from "./utils/_object-tools";
 
 export type SanitizeOptions = {
   remove?: string | string[];
@@ -99,7 +99,7 @@ export const sanitize = <T extends ObjectType>(
 
   if (!remove && !replace && !select) return data;
 
-  const _data = deepCopy(data);
+  const _data = cloneDeep(data);
 
   return Array.isArray(_data) ? many(_data, options) : one(_data, options);
 };

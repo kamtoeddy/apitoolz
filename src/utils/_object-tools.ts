@@ -2,7 +2,7 @@ import { ObjectType } from "../interfaces";
 
 export {
   assignDeep,
-  deepCopy,
+  cloneDeep,
   getDeepValue,
   hasDeepKey,
   removeDeep,
@@ -22,7 +22,7 @@ const isEmptyObject = (obj: ObjectType) =>
   obj === undefined || !Object.keys(obj).length;
 
 // methods
-function deepCopy(dt: any) {
+function cloneDeep(dt: any) {
   return dt === undefined ? dt : JSON.parse(JSON.stringify(dt));
 }
 
@@ -32,9 +32,9 @@ function assignDeep(
 ): ObjectType {
   key = getKeys(key);
 
-  if (!key.length) return data;
-
   const _key = key.shift()!;
+
+  if (!_key) return data;
 
   if (!key.length) {
     data[_key] = value;
@@ -70,9 +70,9 @@ function hasDeepKey(obj: ObjectType, key: string | string[]): boolean {
 function removeDeep(obj: ObjectType, key: string | string[]): ObjectType {
   key = getKeys(key);
 
-  if (!key.length) return obj;
-
   const _key = key.shift()!;
+
+  if (!_key) return obj;
 
   if (!key.length) {
     delete obj?.[_key];

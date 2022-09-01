@@ -11,7 +11,7 @@ import {
   assignDeep,
   getDeepValue,
   hasDeepKey,
-} from "../../utils/_object-manipulations";
+} from "../../utils/_object-tools";
 import { IFileConfig, IParseMultipartDataConfig } from "./interfaces";
 
 const defaultConfig: IParseMultipartDataConfig = {

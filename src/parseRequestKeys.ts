@@ -1,9 +1,5 @@
 import { ObjectType } from "./interfaces";
-import {
-  assignDeep,
-  getDeepValue,
-  hasDeepKey,
-} from "./utils/_object-manipulations";
+import { assignDeep, getDeepValue, hasDeepKey } from "./utils/_object-tools";
 
 export interface ParseOption {
   parser?: (v: any) => any;

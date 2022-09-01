@@ -13,7 +13,7 @@
 - [loadVariables](./docs/loadVariables.md)
 - [Paginator](./docs/Paginator.md)
 - [parseRequestKeys](./docs/parseRequestKeys.md)
-- Routes
+- Route Handling
   - [makeController](./docs/makeController.md)
   - [makeHandler](./docs/makeHandler.md)
 - [sanitize](./docs/sanitize.md)

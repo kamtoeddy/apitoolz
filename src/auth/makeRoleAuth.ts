@@ -2,7 +2,7 @@ import { expressRequestAdapter } from "../adapters";
 import { ApiError } from "../ApiError";
 import { ObjectType, ResponseAdapter } from "../interfaces";
 import { toArray } from "../utils/toArray";
-import { getDeepValue } from "../utils/_object-manipulations";
+import { getDeepValue } from "../utils/_object-tools";
 
 export const makeRoleAuth =
   (
