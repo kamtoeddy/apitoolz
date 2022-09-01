@@ -68,7 +68,7 @@ const sortKeys = <T extends ObjectType>(data: T) => {
 };
 
 const one = <T>(data: T, options: SanitizeOptions = defaultOptions) => {
-  if (!data) return data;
+  if (!data || typeof data != "object") return data;
 
   let _data = data;
 
@@ -80,7 +80,7 @@ const one = <T>(data: T, options: SanitizeOptions = defaultOptions) => {
 
   if (remove?.toLocaleString) _data = removeValues(_data, remove);
 
-  return sortKeys(_data);
+  return sortKeys(_data) as Partial<T>;
 };
 
 const many = <T extends ObjectType>(
