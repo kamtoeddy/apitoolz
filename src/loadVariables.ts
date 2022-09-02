@@ -65,7 +65,7 @@ export const loadVariables = <T extends VariableDefinitions>(vars: T) => {
 
     if (error.isPayloadLoaded) throw error;
   } catch (err: any) {
-    console.log(new ApiError(err).getInfo());
+    console.log(new ApiError(err).summary);
     return {} as MappedObjectType<T>;
   }
 

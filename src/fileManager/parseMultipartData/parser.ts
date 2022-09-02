@@ -49,7 +49,7 @@ export const parser =
     });
 
     if (!uploadDir) {
-      return res.status(error.statusCode).json(error.getInfo());
+      return res.status(error.statusCode).json(error.summary);
     }
 
     if (!uploadDir.endsWith("/")) uploadDir += "/";
@@ -68,7 +68,7 @@ export const parser =
       if (err) {
         return res
           .status(error.statusCode)
-          .json(error.setMessage(err.message).getInfo());
+          .json(error.setMessage(err.message).summary);
       }
 
       for (let prop in fields) {
@@ -132,7 +132,7 @@ export const parser =
       if (Object.keys(error.payload).length) {
         deleteFilesAt(paths);
 
-        return res.status(error.statusCode).json(error.getInfo());
+        return res.status(error.statusCode).json(error.summary);
       }
 
       deleteFilesAt(unWantedPaths);

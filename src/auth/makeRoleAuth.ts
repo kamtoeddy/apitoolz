@@ -24,7 +24,7 @@ export const makeRoleAuth =
 
       return adaptResponse(res)
         .setStatusCode(statusCode)
-        .end(new ApiError({ message, statusCode }).getInfo());
+        .end(new ApiError({ message, statusCode }).summary);
     }
 
     next();

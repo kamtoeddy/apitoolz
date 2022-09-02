@@ -15,7 +15,7 @@ export const makeRequireAuth =
 
       return adaptResponse(res)
         .setStatusCode(statusCode)
-        .end(new ApiError({ ...err, statusCode }).getInfo());
+        .end(new ApiError({ ...err, statusCode }).summary);
     }
 
     next();
