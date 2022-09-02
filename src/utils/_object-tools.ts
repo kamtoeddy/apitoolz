@@ -7,6 +7,7 @@ export {
   hasDeepKey,
   removeDeep,
   removeEmpty,
+  sortKeys,
 };
 
 const getKey = (key: string | string[]) =>
@@ -20,6 +21,8 @@ const hasProp = (obj: ObjectType | undefined = {}, prop = "") =>
 
 const isEmptyObject = (obj: ObjectType) =>
   obj === undefined || !Object.keys(obj).length;
+
+const _sort = (data: any[]): any[] => data.sort((a, b) => (a < b ? -1 : 1));
 
 // methods
 function cloneDeep(dt: any) {
@@ -98,4 +101,14 @@ function removeEmpty(obj: ObjectType, key: string | string[]): ObjectType {
   }
 
   return obj;
+}
+
+function sortKeys<T extends ObjectType>(obj: T): T {
+  const keys = _sort(Object.keys(obj));
+
+  return keys.reduce((prev, next) => {
+    prev[next] = obj[next];
+
+    return prev;
+  }, {});
 }

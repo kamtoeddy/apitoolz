@@ -36,7 +36,7 @@ export const makeHandler =
 
           response
             .setStatusCode(statusCode)
-            .end(new ApiError({ message, statusCode }).getInfo());
+            .end(new ApiError({ message, statusCode }).summary);
         });
     };
   };

@@ -1,22 +1,25 @@
+import { sortKeys } from "./utils/_object-tools";
 import { toArray } from "./utils/toArray";
 
-export interface ApiErrorProps {
-  message: string;
-  payload?: ErrorPayload;
-  statusCode?: number;
-}
 export type PayloadKey = number | string;
 
 export type ErrorPayload = Record<PayloadKey, string[]>;
+export type InputPayload = Record<PayloadKey, string | string[]>;
+
+export interface ApiErrorProps {
+  message: string;
+  payload?: InputPayload;
+  statusCode?: number;
+}
 
 export class ApiError extends Error {
   name = "ApiError";
-  payload: ErrorPayload;
+  payload: ErrorPayload = {};
   statusCode: number;
 
   constructor({ message, payload = {}, statusCode = 400 }: ApiErrorProps) {
     super(message);
-    this.payload = payload;
+    this._setPayload(payload);
     this.statusCode = statusCode;
   }
 
@@ -24,7 +27,23 @@ export class ApiError extends Error {
     return Object.keys(this.payload).length > 0;
   }
 
+  get summary() {
+    return {
+      message: this.message,
+      payload: sortKeys(this.payload),
+      statusCode: this.statusCode,
+    };
+  }
+
   private _has = (field: PayloadKey) => this.payload.hasOwnProperty(field);
+
+  private _setPayload = (payload: InputPayload) => {
+    Object.entries(payload).forEach(([key, value]) => {
+      this.add(key, value);
+    });
+
+    this.payload = sortKeys(this.payload);
+  };
 
   add(field: PayloadKey, value?: string | string[]) {
     if (value) {
@@ -42,12 +61,6 @@ export class ApiError extends Error {
     this.payload = {};
     return this;
   };
-
-  getInfo = () => ({
-    message: this.message,
-    payload: this.payload,
-    statusCode: this.statusCode,
-  });
 
   remove = (field: PayloadKey) => {
     delete this.payload?.[field];

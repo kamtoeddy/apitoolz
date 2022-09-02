@@ -55,7 +55,7 @@ export async function makeController(
 
     return { body, headers, statusCode: successCode ?? 200 };
   } catch (err: any) {
-    let body: any = new ApiError(err).getInfo();
+    let body: any = new ApiError(err).summary;
 
     console.log("========== [ Log Start ] ==========");
     console.log(body);

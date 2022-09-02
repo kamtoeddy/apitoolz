@@ -11,7 +11,7 @@ const loader =
     if (!_module)
       throw new ApiError({
         message: "Unknown Circular module",
-        payload: { [name]: ["This module may is not registered"] },
+        payload: { [name]: "This module may is not registered" },
       });
 
     return require(join(dirName, _module));
@@ -19,4 +19,24 @@ const loader =
 
 export function registerModules<T extends ObjectType>(modules: T) {
   return { loadCircular: loader(modules, _getCallerFile(2, true)) };
+}
+
+try {
+  console.time("apiError");
+  const error = new ApiError({
+    message: "Unknown Circular module",
+    payload: { name: "This module may is not registered", add: "No adder" },
+  });
+
+  const values = ["pineapple", "elephant", "apple", "zebra", "antelope"];
+
+  for (const value of values) error.add(value, "this is " + value);
+
+  console.timeEnd("apiError");
+
+  throw error;
+} catch (err: any) {
+  console.time("err.summary");
+  console.log(err.summary);
+  console.timeEnd("err.summary");
 }
