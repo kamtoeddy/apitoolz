@@ -4,18 +4,18 @@
 
 ## Docs
 
-- [ApiError](./docs/ApiError.md)
-- [Auth](./docs/auth/index.md)
-  - [allowRoles](./docs//auth/allowRoles.md)
-  - [requireAuth](./docs/auth/requireAuth.md)
-- [handleAs](./docs/handleAs.md)
-- [loadCircular](./docs/loadCircular.md)
-- [loadVariables](./docs/loadVariables.md)
-- [Paginator](./docs/Paginator.md)
-- [parseRequestKeys](./docs/parseRequestKeys.md)
+- [ApiError](./docs/v0.2.2/ApiError.md)
+- Auth
+  - [requireAuth](./docs/v0.2.2/auth/makeRequireAuth.md)
+  - [allowRoles](./docs/v0.2.2/auth/makeRoleAuth.md)
+- [handleAs](./docs/v0.2.2/handleAs.md)
+- [loadCircular](./docs/v0.2.2/loadCircular.md)
+- [loadVariables](./docs/v0.2.2/loadVariables.md)
+- [Paginator](./docs/v0.2.2/Paginator.md)
+- [parseRequestKeys](./docs/v0.2.2/parseRequestKeys.md)
 - Route Handling
-  - [makeController](./docs/makeController.md)
-  - [makeHandler](./docs/makeHandler.md)
-- [sanitize](./docs/sanitize.md)
-- [useWorker](./docs/useWorker.md)
-- [Changelog](./docs/CHANGELOG.md)
+  - [makeController](./docs/v0.2.2/makeController.md)
+  - [makeHandler](./docs/v0.2.2/makeHandler.md)
+- [sanitize](./docs/v0.2.2/sanitize.md)
+- [useWorker](./docs/v0.2.2/useWorker.md)
+- [Changelog](./docs/v0.2.2/CHANGELOG)

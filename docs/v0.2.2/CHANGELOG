@@ -1,6 +1,6 @@
 # Changelog of apitoolz
 
-# latest / xx-xx-2022
+# 0.2.2 / xx-xx-2022
 
 - [Changed] allowRoles to makeRoleAuth
 - [Changed] requireAuth to makeRequireAuth
