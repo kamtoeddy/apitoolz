@@ -1,4 +1,4 @@
-import { ObjectType } from "./interfaces";
+import { KeyOf, ObjectType } from "./interfaces";
 import { toArray } from "./utils/toArray";
 import {
   assignDeep,
@@ -9,17 +9,20 @@ import {
   removeEmpty,
 } from "./utils/_object-tools";
 
-export type SanitizeOptions = {
-  remove?: string | string[];
-  replace?: { [key: string]: string };
-  select?: string | string[];
+type KeyType<T> = KeyOf<T> | KeyOf<T>[] | string[];
+type ReplaceType<T> = { [K in KeyOf<T>]?: string };
+
+export type SanitizeOptions<T> = {
+  remove?: KeyType<T>;
+  replace?: ReplaceType<T>;
+  select?: KeyType<T>;
 };
 
 const defaultOptions = { remove: [], replace: {} };
 
 const removeValues = <T extends ObjectType>(
   data: T,
-  keysToRemove: string | string[]
+  keysToRemove: KeyType<T>
 ) => {
   keysToRemove = toArray(keysToRemove);
 
@@ -30,9 +33,11 @@ const removeValues = <T extends ObjectType>(
 
 const replaceValues = <T extends ObjectType>(
   data: T,
-  keysToReplace: ObjectType
+  keysToReplace: ReplaceType<T>
 ) => {
-  for (let [key, newKey] of Object.entries(keysToReplace)) {
+  const entries = Object.entries(keysToReplace) as [KeyOf<T>, string][];
+
+  for (let [key, newKey] of entries) {
     if (!hasDeepKey(data, key)) continue;
 
     assignDeep(data, { key: newKey, value: getDeepValue(data, key) });
@@ -46,7 +51,7 @@ const replaceValues = <T extends ObjectType>(
 
 const selectValues = <T extends ObjectType>(
   data: T,
-  keysToSelect: string | string[]
+  keysToSelect: KeyType<T>
 ) => {
   keysToSelect = toArray(keysToSelect);
 
@@ -70,10 +75,10 @@ const sortKeys = <T extends ObjectType>(data: T) => {
   }, {} as T);
 };
 
-const one = <T>(data: T, options: SanitizeOptions = defaultOptions) => {
+const one = <T>(data: T, options: SanitizeOptions<T> = defaultOptions) => {
   if (!data || typeof data != "object") return data;
 
-  let _data = data;
+  let _data: any = data;
 
   const { remove, replace, select } = options;
 
@@ -88,12 +93,12 @@ const one = <T>(data: T, options: SanitizeOptions = defaultOptions) => {
 
 const many = <T extends ObjectType>(
   data: T[],
-  options: SanitizeOptions = defaultOptions
+  options: SanitizeOptions<T> = defaultOptions
 ) => data.map((dt) => one(dt, options));
 
 export const sanitize = <T extends ObjectType>(
   data: T | T[],
-  options: SanitizeOptions = defaultOptions
+  options: SanitizeOptions<T> = defaultOptions
 ) => {
   const { remove, replace, select } = options;
 
