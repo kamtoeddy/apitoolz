@@ -1,4 +1,4 @@
-import { ObjectType } from "../interfaces";
+import { NestedKeyOf, ObjectType } from "../interfaces";
 
 export {
   assignDeep,
@@ -23,17 +23,18 @@ const isEmptyObject = (obj: ObjectType) =>
   obj === undefined || !Object.keys(obj).length;
 
 // methods
-function cloneDeep(dt: any) {
+function cloneDeep<T>(dt: T): T {
   return dt === undefined ? dt : JSON.parse(JSON.stringify(dt));
 }
 
-function assignDeep(
-  data: ObjectType,
-  { key, value }: { key: string | string[]; value: any }
+function _assignDeep<T extends ObjectType>(
+  data: T,
+  key: NestedKeyOf<T> | string[],
+  value: any
 ): ObjectType {
   key = getKeys(key);
 
-  const _key = key.shift()!;
+  const _key = key.shift()! as keyof T;
 
   if (!_key) return data;
 
@@ -43,16 +44,27 @@ function assignDeep(
     return data;
   }
 
-  if (!data?.[_key]) data[_key] = {};
+  if (!data?.[_key]) data[_key] = {} as any;
 
-  return { ...data, [_key]: assignDeep(data[_key], { key, value }) };
+  return { ...data, [_key]: _assignDeep(data[_key], key, value) };
 }
 
-function getDeepValue(data: ObjectType, key: string): any {
+function assignDeep<T extends ObjectType>(
+  data: T,
+  key: NestedKeyOf<T>,
+  value: any
+): ObjectType {
+  return _assignDeep(data, key, value);
+}
+
+function getDeepValue<T extends ObjectType>(data: T, key: NestedKeyOf<T>): any {
   return key.split(".").reduce((prev, next) => prev?.[next], data);
 }
 
-function hasDeepKey(obj: ObjectType, key: string | string[]): boolean {
+function _hasDeepKey<T extends ObjectType>(
+  obj: T,
+  key: NestedKeyOf<T> | string[]
+): boolean {
   key = getKeys(key);
 
   const _key = key.shift();
@@ -65,10 +77,17 @@ function hasDeepKey(obj: ObjectType, key: string | string[]): boolean {
 
   if (keyFound && !key.length) return true;
 
-  return hasDeepKey(obj?.[_key], key);
+  return _hasDeepKey(obj?.[_key], key);
 }
 
-function removeDeep(obj: ObjectType, key: string | string[]): ObjectType {
+function hasDeepKey<T extends ObjectType>(obj: T, key: NestedKeyOf<T>) {
+  return _hasDeepKey(obj, key);
+}
+
+function _removeDeep<T extends ObjectType>(
+  obj: T,
+  key: string | string[]
+): ObjectType {
   key = getKeys(key);
 
   const _key = key.shift()!;
@@ -80,7 +99,11 @@ function removeDeep(obj: ObjectType, key: string | string[]): ObjectType {
     return obj;
   }
 
-  return { ...obj, [_key]: removeDeep(obj[_key], key) };
+  return { ...obj, [_key]: _removeDeep(obj[_key], key) };
+}
+
+function removeDeep<T extends ObjectType>(obj: T, key: NestedKeyOf<T>) {
+  return _removeDeep(obj, key);
 }
 
 function removeEmpty(obj: ObjectType, key: string | string[]): ObjectType {

@@ -1,47 +1,15 @@
-// type StringNumber = string | number;
-// type Prev = [
-//   never,
-//   0,
-//   1,
-//   2,
-//   3,
-//   4,
-//   5,
-//   6,
-//   7,
-//   8,
-//   9,
-//   10,
-//   11,
-//   12,
-//   13,
-//   14,
-//   15,
-//   16,
-//   17,
-//   18,
-//   19,
-//   20,
-//   ...0[]
-// ];
+export type ObjectType = Record<number | string, any>;
+export type StringKey<T> = Extract<keyof T, string>;
 
-// type Join<K, P> = K extends StringNumber
-//   ? P extends StringNumber
-//     ? `${K}${"" extends P ? "" : "."}${P}`
-//     : never
-//   : never;
+export type KeyOf<T> = keyof T & (string | number);
 
-// type Paths<T, D extends number = 10> = [D] extends [never]
-//   ? never
-//   : T extends object
-//   ? {
-//       [K in keyof T]?: K extends StringNumber
-//         ? `${K}` | Join<K, Paths<T[K], Prev[D]>>
-//         : never;
-//     }[keyof T]
-//   : "";
-
-export type KeyOf<T> = Extract<keyof T, string> | string;
+export type NestedKeyOf<T> = T extends never
+  ? ""
+  : {
+      [Key in KeyOf<T>]: T[Key] extends ObjectType
+        ? `${Key}` | `${Key}.${NestedKeyOf<T[Key]>}`
+        : `${Key}`;
+    }[KeyOf<T>];
 
 // route handlers
 export interface AdaptedRequest {
@@ -75,7 +43,5 @@ export type CookieType = {
 };
 
 export type HeaderType = Record<string, number | string>;
-
-export type ObjectType = Record<number | string, any>;
 
 export type ResponseAdapter = (response: ObjectType) => AdaptedResponse;

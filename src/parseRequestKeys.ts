@@ -28,7 +28,7 @@ const parseKey = (reqSubset: ObjectType, key: string, option: ParseOption) => {
 
   value = parser ? parser(value) : type ? getValByType(value, type) : value;
 
-  return assignDeep(reqSubset, { key, value });
+  return assignDeep(reqSubset, key, value);
 };
 
 const parseKeys = (reqSubset: ObjectType, options: ParseOptions) => {
@@ -49,7 +49,7 @@ export const parseRequestKeys =
 
       let sub = getDeepValue(req, key);
 
-      assignDeep(req, { key, value: parseKeys(sub, propsConfig[key]) });
+      assignDeep(req, key, parseKeys(sub, propsConfig[key]));
     }
 
     next();

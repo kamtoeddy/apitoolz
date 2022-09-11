@@ -5,7 +5,7 @@ import formidable from "formidable";
 
 import { deleteFilesAt, getFileExtention } from "..";
 import { ApiError } from "../../ApiError";
-import { ObjectType } from "../../interfaces";
+import { NestedKeyOf, ObjectType } from "../../interfaces";
 import { isJSON } from "../../utils/isJSON";
 import {
   assignDeep,
@@ -29,8 +29,12 @@ function makeFileConfig(
   if (!config) return fallback;
 
   for (let key in fallback)
-    if (!hasDeepKey(config, key))
-      assignDeep(config, { key, value: getDeepValue(fallback, key) });
+    if (!hasDeepKey(config, key as NestedKeyOf<IFileConfig>))
+      assignDeep(
+        config,
+        key as NestedKeyOf<IFileConfig>,
+        getDeepValue(fallback, key as NestedKeyOf<IFileConfig>)
+      );
 
   return config;
 }
