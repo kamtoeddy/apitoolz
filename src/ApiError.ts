@@ -29,6 +29,7 @@ export class ErrorSummary extends Error {
     this.statusCode = statusCode;
   }
 }
+
 export class ApiError extends Error {
   name = "ApiError";
   payload: ErrorPayload = {};
