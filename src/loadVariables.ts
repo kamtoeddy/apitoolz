@@ -1,10 +1,5 @@
 import { ApiError } from "./ApiError";
-import { ObjectType } from "./interfaces";
-
-// to be removed
-export interface DefaultValues {
-  [name: string]: any;
-}
+import { ObjectType, StringKey } from "./interfaces";
 
 type ObjectDefinition = { default?: any; parser?: (v: any) => any };
 type PrimitiveDefinition = boolean | number | string | symbol;
@@ -20,7 +15,7 @@ type GetType<T> = T extends ObjectType
   : GetSimpleType<T>;
 
 type MappedObjectType<T> = {
-  [K in keyof T]: GetType<T[K]>;
+  [K in StringKey<T>]: GetType<T[K]>;
 };
 
 function getDefinition(
@@ -34,12 +29,16 @@ export const loadVariables = <T extends VariableDefinitions>(vars: T) => {
     message: "Invalid Environment Variables",
     statusCode: 500,
   });
+
   const parsedVars = {} as MappedObjectType<T>;
 
   try {
-    const nameDefinitionTuples = Object.entries(vars);
+    const nameDefinitionTuples = Object.entries(vars) as [
+      StringKey<T>,
+      ObjectDefinition | PrimitiveDefinition
+    ][];
 
-    for (let [name, definition] of nameDefinitionTuples) {
+    for (const [name, definition] of nameDefinitionTuples) {
       let isInValid = false;
 
       if (!name?.trim()) {
@@ -60,7 +59,7 @@ export const loadVariables = <T extends VariableDefinitions>(vars: T) => {
 
       if (val && parser) val = parser(val);
 
-      parsedVars[name as keyof T] = val ? val : _default;
+      parsedVars[name] = val ? val : _default;
     }
 
     if (error.isPayloadLoaded) throw error;
@@ -72,13 +71,13 @@ export const loadVariables = <T extends VariableDefinitions>(vars: T) => {
   return parsedVars;
 };
 
-const env = {
-  DB_NAME: "test-deb",
-  ETA: 20,
-  IS_DEBUG_OPEN: false,
-  MAX_TIME_TO_CANCEL: { parser: (v: any) => v, default: 25 },
-  TO_REJECT: { default: ["apple", "potato"] },
-};
+// const env = {
+//   DB_NAME: "test-deb",
+//   ETA: 20,
+//   IS_DEBUG_OPEN: false,
+//   MAX_TIME_TO_CANCEL: { parser: (v: any) => v, default: 25 },
+//   TO_REJECT: { default: ["apple", "potato"] },
+// };
 
-const { DB_NAME, ETA, IS_DEBUG_OPEN, MAX_TIME_TO_CANCEL, TO_REJECT } =
-  loadVariables(env);
+// const { DB_NAME, ETA, IS_DEBUG_OPEN, MAX_TIME_TO_CANCEL, TO_REJECT } =
+//   loadVariables(env);

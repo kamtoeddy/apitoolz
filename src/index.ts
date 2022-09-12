@@ -1,7 +1,6 @@
 export * from "./ApiError";
 export * from "./auth";
 export * as fileManager from "./fileManager";
-export * from "./handleAs";
 export * from "./loadCircular";
 export * from "./loadVariables";
 export * from "./makeController";

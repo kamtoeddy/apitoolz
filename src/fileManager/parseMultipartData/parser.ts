@@ -5,7 +5,7 @@ import formidable from "formidable";
 
 import { deleteFilesAt, getFileExtention } from "..";
 import { ApiError } from "../../ApiError";
-import { NestedKeyOf, ObjectType } from "../../interfaces";
+import { ObjectType, StringKey } from "../../interfaces";
 import { isJSON } from "../../utils/isJSON";
 import {
   assignDeep,
@@ -29,11 +29,11 @@ function makeFileConfig(
   if (!config) return fallback;
 
   for (let key in fallback)
-    if (!hasDeepKey(config, key as NestedKeyOf<IFileConfig>))
+    if (!hasDeepKey(config, key as StringKey<IFileConfig>))
       assignDeep(
         config,
-        key as NestedKeyOf<IFileConfig>,
-        getDeepValue(fallback, key as NestedKeyOf<IFileConfig>)
+        key as StringKey<IFileConfig>,
+        getDeepValue(fallback, key as StringKey<IFileConfig>)
       );
 
   return config;
@@ -52,9 +52,7 @@ export const parser =
       statusCode: 500,
     });
 
-    if (!uploadDir) {
-      return res.status(error.statusCode).json(error.summary);
-    }
+    if (!uploadDir) return res.status(error.statusCode).json(error.summary);
 
     if (!uploadDir.endsWith("/")) uploadDir += "/";
 
@@ -63,17 +61,10 @@ export const parser =
 
     const form = formidable({ uploadDir });
 
-    error = new ApiError({
-      message: "File upload error",
-      statusCode: 400,
-    });
+    error = new ApiError({ message: "File upload error", statusCode: 400 });
 
     form.parse(req as IncomingMessage, (err, fields, files) => {
-      if (err) {
-        return res
-          .status(error.statusCode)
-          .json(error.setMessage(err.message).summary);
-      }
+      if (err) return res.status(error.statusCode).json(error.summary);
 
       for (let prop in fields) {
         req.body[prop] = isJSON(fields[prop])
@@ -98,10 +89,7 @@ export const parser =
 
         const { maxSize: _maxSize, pathOnly } = makeFileConfig(
           filesConfig?.[key],
-          {
-            maxSize,
-            pathOnly: true,
-          }
+          { maxSize, pathOnly: true }
         );
 
         const { filepath, newFilename, size } = file;
@@ -116,9 +104,8 @@ export const parser =
         if (
           validFormats.length &&
           !validFormats.includes(fileExtention?.toLowerCase())
-        ) {
+        )
           error.add(key, "Invalid file format");
-        }
 
         // size validation check
         if (size > _maxSize!) error.add(key, "Maximum file size exceeded");
@@ -133,7 +120,7 @@ export const parser =
         req.body[key] = pathOnly ? newPath : { path: newPath, size };
       }
 
-      if (Object.keys(error.payload).length) {
+      if (error.isPayloadLoaded) {
         deleteFilesAt(paths);
 
         return res.status(error.statusCode).json(error.summary);

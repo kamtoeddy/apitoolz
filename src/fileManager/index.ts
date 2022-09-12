@@ -52,8 +52,8 @@ export function getFileType(mimetype: string) {
 
 export const makeFileSrc = (uploadDir: string) => (filePath: string) => {
   const uploadDirIndex = filePath.indexOf(uploadDir);
-  if (uploadDirIndex != -1) {
+  if (uploadDirIndex != -1)
     return filePath.substring(uploadDirIndex + uploadDir.length + 1);
-  }
+
   return filePath;
 };
