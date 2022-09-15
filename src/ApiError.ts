@@ -32,7 +32,7 @@ export class ErrorSummary extends Error {
 
 export class ApiError extends Error {
   name = "ApiError";
-  payload: ErrorPayload = {};
+  private _payload: ErrorPayload = {};
   statusCode: number;
   private _initMessage: string;
   private _initStatusCode: number;
@@ -45,31 +45,29 @@ export class ApiError extends Error {
   }
 
   get isPayloadLoaded() {
-    return Object.keys(this.payload).length > 0;
+    return Object.keys(this._payload).length > 0;
   }
 
   get summary() {
     return new ErrorSummary({
       message: this.message,
-      payload: sortKeys(this.payload),
+      payload: sortKeys(this._payload),
       statusCode: this.statusCode,
     });
   }
 
-  private _has = (field: PayloadKey) => this.payload.hasOwnProperty(field);
+  private _has = (field: PayloadKey) => this._payload.hasOwnProperty(field);
 
   private _setPayload = (payload: InputPayload) => {
-    Object.entries(payload).forEach(([key, value]) => {
-      this.add(key, value);
-    });
+    Object.entries(payload).forEach(([key, value]) => this.add(key, value));
   };
 
   add(field: PayloadKey, value?: string | string[]) {
     if (value) {
       value = toArray(value);
 
-      this.payload[field] = this._has(field)
-        ? [...this.payload[field], ...value]
+      this._payload[field] = this._has(field)
+        ? [...this._payload[field], ...value]
         : value;
     }
 
@@ -77,13 +75,13 @@ export class ApiError extends Error {
   }
 
   remove = (field: PayloadKey) => {
-    delete this.payload?.[field];
+    delete this._payload?.[field];
     return this;
   };
 
   reset = () => {
     this.message = this._initMessage;
-    this.payload = {};
+    this._payload = {};
     this.statusCode = this._initStatusCode;
 
     return this;
