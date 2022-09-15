@@ -1,5 +1,4 @@
 export * from "./ApiError";
-export * from "./auth";
 export * as fileManager from "./fileManager";
 export * from "./loadCircular";
 export * from "./loadVariables";
