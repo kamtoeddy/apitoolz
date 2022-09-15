@@ -2,8 +2,6 @@
 
 # 0.2.2 <small><sup>16-09-2022</sup></small>
 
-- [Changed] allowRoles to makeRoleAuth
-- [Changed] requireAuth to makeRequireAuth
 - [Changed] loadEnvVars to loadVariables
 - [Changed] useController to makeController
 - [Changed] makeCallback to makeHandler
