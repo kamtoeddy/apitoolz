@@ -32,8 +32,8 @@ export class ErrorSummary extends Error {
 
 export class ApiError extends Error {
   name = "ApiError";
-  private _payload: ErrorPayload = {};
   statusCode: number;
+  private _payload: ErrorPayload = {};
   private _initMessage: string;
   private _initStatusCode: number;
 
