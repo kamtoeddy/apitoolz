@@ -10,7 +10,6 @@
 - [Paginator](./docs/v0.2.2/Paginator.md#paginator)
 - [parseRequestKeys](./docs/v0.2.2/parseRequestKeys.md#parse-request-keys)
 - Route Handling
-  - [makeController](./docs/v0.2.2/makeController.md#makecontroller)
   - [makeHandler](./docs/v0.2.2/makeHandler.md#makehandler)
 - [sanitize](./docs/v0.2.2/sanitize.md#sanitize)
 - [useWorker](./docs/v0.2.2/useWorker.md#useworker)
