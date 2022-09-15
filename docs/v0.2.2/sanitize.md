@@ -1,4 +1,4 @@
-# Sanitize Tool
+# Sanitize
 
 A small tool to help you reshape the data to / from your clients.
 

@@ -1,4 +1,4 @@
-# Changelog of apitoolz
+# CHANGELOG
 
 # 0.2.2 <small><sup>16-09-2022</sup></small>
 
