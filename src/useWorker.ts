@@ -28,7 +28,7 @@ export const useWorker = ({
         reject(
           new ApiError({
             message: `Worker stopped executing ${event} with code ${code}`,
-          })
+          }).summary
         );
       }
     });
