@@ -19,7 +19,6 @@ export interface ErrorSummaryProps {
 }
 
 export class ErrorSummary extends Error {
-  name = "ErrorSummary";
   payload: ErrorPayload = {};
   statusCode: number;
 
@@ -31,7 +30,6 @@ export class ErrorSummary extends Error {
 }
 
 export class ApiError extends Error {
-  name = "ApiError";
   statusCode: number;
   private _payload: ErrorPayload = {};
   private _initMessage: string;
@@ -49,11 +47,11 @@ export class ApiError extends Error {
   }
 
   get summary() {
-    return new ErrorSummary({
+    return {
       message: this.message,
       payload: sortKeys(this._payload),
       statusCode: this.statusCode,
-    });
+    };
   }
 
   private _has = (field: PayloadKey) => this._payload.hasOwnProperty(field);
@@ -93,6 +91,6 @@ export class ApiError extends Error {
   };
 
   throw = () => {
-    throw this.summary;
+    throw new ErrorSummary(this.summary);
   };
 }

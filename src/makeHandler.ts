@@ -42,10 +42,7 @@ async function makeController(
 
     return { body, headers, statusCode: successCode ?? 200 };
   } catch (err: any) {
-    let body: any = new ApiError(err).summary;
-
     console.log("========== [ Log Start ] ==========");
-    console.log(body);
     console.log(err);
     console.log("=========== [ Log End ] ===========");
 
@@ -63,7 +60,7 @@ async function makeController(
       }
     }
 
-    body = makeResult(body, false, onResult);
+    const body = makeResult(new ApiError(err).summary, false, onResult);
 
     return { body, headers, statusCode: errorCode ?? body.statusCode };
   }

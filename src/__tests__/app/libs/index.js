@@ -1,7 +1,8 @@
 const {
   loadVariables,
+  makeHandler,
   registerModules,
   parseRequestKeys,
 } = require("../../../../dist");
 
-module.exports = { parseRequestKeys };
+module.exports = { makeHandler, parseRequestKeys };
