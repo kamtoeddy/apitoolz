@@ -1,5 +1,5 @@
 import { ApiError } from "./ApiError";
-import { ObjectType, StringKey } from "./interfaces";
+import { StringKey } from "./interfaces";
 
 type ObjectDefinition = { default?: any; parser?: (v: any) => any };
 type PrimitiveDefinition = boolean | number | string | symbol;
@@ -8,13 +8,15 @@ export interface VariableDefinitions {
   [key: string]: PrimitiveDefinition | ObjectDefinition;
 }
 
-type GetSimpleType<T> = T extends boolean ? boolean : T;
-type GetNestedType<T, K extends keyof T> = GetSimpleType<T[K]>;
-type GetType<T> = T extends ObjectType
-  ? GetNestedType<T, "default">
-  : GetSimpleType<T>;
+type GetType<T> = T extends { default: infer D }
+  ? D extends undefined
+    ? T
+    : D
+  : T extends { parser: () => infer R }
+  ? R
+  : T;
 
-type MappedObjectType<T> = {
+type ParsedVariables<T> = {
   [K in StringKey<T>]: GetType<T[K]>;
 };
 
@@ -30,7 +32,7 @@ const processVariables = <T extends VariableDefinitions>(vars: T) => {
     statusCode: 500,
   });
 
-  const parsedVars = {} as MappedObjectType<T>;
+  const parsedVars = {} as ParsedVariables<T>;
 
   const nameDefinitionTuples = Object.entries(vars) as [
     StringKey<T>,
@@ -69,14 +71,3 @@ const processVariables = <T extends VariableDefinitions>(vars: T) => {
 export const loadVariables = <T extends VariableDefinitions>(vars: T) => {
   return processVariables(vars);
 };
-
-const env = {
-  DB_NAME: "test-deb",
-  ETA: 20,
-  IS_DEBUG_OPEN: false,
-  MAX_TIME_TO_CANCEL: { parser: (v: any) => v, default: 25 },
-  TO_REJECT: { default: ["apple", "potato"] },
-};
-
-const { DB_NAME, ETA, IS_DEBUG_OPEN, MAX_TIME_TO_CANCEL, TO_REJECT } =
-  loadVariables(env);

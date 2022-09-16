@@ -5,4 +5,4 @@ const {
   parseRequestKeys,
 } = require("../../../../dist");
 
-module.exports = { makeHandler, parseRequestKeys };
+module.exports = { loadVariables, makeHandler, parseRequestKeys };
