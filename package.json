@@ -38,6 +38,10 @@
     ]
   },
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kamtoeddy/apitoolz.git"
+  },
   "scripts": {
     "build": "tsc",
     "clean-up": "rm -rf coverage dist",

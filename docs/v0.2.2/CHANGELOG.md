@@ -2,9 +2,9 @@
 
 # 0.2.2 <small><sup>16-09-2022</sup></small>
 
+- [Docs] updated docs
 - [Changed] loadEnvVars to loadVariables
-- [Changed] useController to makeController
-- [Changed] makeCallback to makeHandler
+- [Changed] makeCallback + makeController to makeHandler
 
 # 0.2.1 <small><sup>09-08-2022</sup></small>
 
