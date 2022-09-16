@@ -3,9 +3,9 @@ const router = require("express").Router();
 const { loadVariables } = require("../libs");
 
 const env = {
-  ENV_STRING_VAL: "",
-  ENV_NUMBER_VAL_PARSED: { parser: (v) => Number(v) },
   DB_NAME: "test-db",
+  ENV_NUMBER_VAL_PARSED: { parser: (v) => Number(v) },
+  ENV_STRING_VAL: "",
   ETA: 20,
   IS_DEBUG_OPEN: false,
   MAX_TIME_TO_CANCEL: { default: 25, parser: (v) => v },
