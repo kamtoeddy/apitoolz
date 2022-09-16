@@ -6,6 +6,8 @@ const app = express();
 
 const router = require("./routes");
 
+app.use(express.json());
+
 app.use(router);
 
 const server = app.listen(42042);

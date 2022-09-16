@@ -28,4 +28,22 @@ describe("makeHandler with express app", () => {
       });
     });
   });
+
+  describe("custom", () => {
+    const baseUrl = "/make-handler/custom";
+
+    it("should respect custom onResult for successful operations", async () => {
+      const res = await request(server).get(baseUrl);
+
+      expect(res.body).toEqual({ id: 1, name: "James" });
+    });
+
+    it("should user's controller should have access to full request object", async () => {
+      const res = await request(server)
+        .post(baseUrl)
+        .send({ id: 1, name: "James" });
+
+      expect(res.body).toEqual({ id: 1, name: "James" });
+    });
+  });
 });
