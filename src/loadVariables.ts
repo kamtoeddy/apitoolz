@@ -42,15 +42,17 @@ const processVariables = <T extends VariableDefinitions>(vars: T) => {
   for (const [name, definition] of nameDefinitionTuples) {
     let isInValid = false;
 
-    if (!name?.trim()) {
-      error.add(name, "Invalid name");
+    const _name = name?.trim();
+
+    if (!_name || name !== _name) {
+      error.add(name, "Should not be empty nor contain spaces");
       isInValid = true;
     }
 
     const { default: _default, parser } = getDefinition(definition);
 
-    if (parser && typeof parser != "function") {
-      error.add(name, "Invalid parser");
+    if (definition.hasOwnProperty("parser") && typeof parser != "function") {
+      error.add(name, "A parser must be a function");
       isInValid = true;
     }
 
