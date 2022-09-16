@@ -44,7 +44,7 @@ const error: ApiError = new ApiError({
 
 - ### summary
 
-  This property is an object comprised of the message, payload & statusCode.
+  This property is an error object comprised of the message, payload & statusCode.
 
 ```ts
 import { ApiError } from "apitoolz";
@@ -213,3 +213,7 @@ console.log(error.summary);
 //   statusCode: 400,
 // }
 ```
+
+- ### throw
+
+  This method throws the error's summary.
