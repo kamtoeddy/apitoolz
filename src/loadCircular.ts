@@ -6,7 +6,7 @@ import { join } from "path";
 const loader =
   <T extends ObjectType>(modules: T, dirName: string) =>
   (name: keyof T) => {
-    const _module = modules?.[name];
+    const _module = modules?.[name]!;
 
     if (!_module)
       new ApiError({
