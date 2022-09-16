@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { ApiError } from "./ApiError";
 import { expressAdapter } from "./adapters";
 import { ObjectType, ResponseAdapter } from "./interfaces";
@@ -9,6 +10,7 @@ export interface IOptions {
   successCode?: number;
 }
 
+export type ControllerType = (reqeust: Request) => any | Promise<any>;
 export type OnResultHandler = (data: any, success: boolean) => any;
 
 const makeResult = (
@@ -28,7 +30,7 @@ const defaultControllerOptions = {
 
 async function makeController(
   controller: Function,
-  req: ObjectType,
+  req: Request,
   {
     errorCode,
     errorHandlers,
@@ -68,8 +70,11 @@ async function makeController(
 
 export const makeHandler =
   (adapter: ResponseAdapter = expressAdapter, onResult?: OnResultHandler) =>
-  (controller: Function, options: IOptions = defaultControllerOptions) => {
-    return (req: ObjectType, res: ObjectType) => {
+  (
+    controller: ControllerType,
+    options: IOptions = defaultControllerOptions
+  ) => {
+    return (req: Request, res: ObjectType) => {
       const response = adapter(res);
 
       makeController(controller, req, options, onResult)
