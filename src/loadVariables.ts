@@ -24,7 +24,7 @@ function getDefinition(
   return typeof def != "object" ? { default: def } : def;
 }
 
-export const loadVariables = <T extends VariableDefinitions>(vars: T) => {
+const processVariables = <T extends VariableDefinitions>(vars: T) => {
   const error = new ApiError({
     message: "Invalid Environment Variables",
     statusCode: 500,
@@ -32,52 +32,51 @@ export const loadVariables = <T extends VariableDefinitions>(vars: T) => {
 
   const parsedVars = {} as MappedObjectType<T>;
 
-  try {
-    const nameDefinitionTuples = Object.entries(vars) as [
-      StringKey<T>,
-      ObjectDefinition | PrimitiveDefinition
-    ][];
+  const nameDefinitionTuples = Object.entries(vars) as [
+    StringKey<T>,
+    ObjectDefinition | PrimitiveDefinition
+  ][];
 
-    for (const [name, definition] of nameDefinitionTuples) {
-      let isInValid = false;
+  for (const [name, definition] of nameDefinitionTuples) {
+    let isInValid = false;
 
-      if (!name?.trim()) {
-        error.add(name, "Invalid name");
-        isInValid = true;
-      }
-
-      const { default: _default, parser } = getDefinition(definition);
-
-      if (parser && typeof parser != "function") {
-        error.add(name, "Invalid parser");
-        isInValid = true;
-      }
-
-      if (isInValid) continue;
-
-      let val = process.env?.[name];
-
-      if (val && parser) val = parser(val);
-
-      parsedVars[name] = val ? val : _default;
+    if (!name?.trim()) {
+      error.add(name, "Invalid name");
+      isInValid = true;
     }
 
-    if (error.isPayloadLoaded) throw error;
-  } catch (err: any) {
-    console.log(new ApiError(err).summary);
-    return {} as MappedObjectType<T>;
+    const { default: _default, parser } = getDefinition(definition);
+
+    if (parser && typeof parser != "function") {
+      error.add(name, "Invalid parser");
+      isInValid = true;
+    }
+
+    if (isInValid) continue;
+
+    let val = process.env?.[name];
+
+    if (val && parser) val = parser(val);
+
+    parsedVars[name] = val ? val : _default;
   }
+
+  if (error.isPayloadLoaded) error.throw();
 
   return parsedVars;
 };
 
-// const env = {
-//   DB_NAME: "test-deb",
-//   ETA: 20,
-//   IS_DEBUG_OPEN: false,
-//   MAX_TIME_TO_CANCEL: { parser: (v: any) => v, default: 25 },
-//   TO_REJECT: { default: ["apple", "potato"] },
-// };
+export const loadVariables = <T extends VariableDefinitions>(vars: T) => {
+  return processVariables(vars);
+};
 
-// const { DB_NAME, ETA, IS_DEBUG_OPEN, MAX_TIME_TO_CANCEL, TO_REJECT } =
-//   loadVariables(env);
+const env = {
+  DB_NAME: "test-deb",
+  ETA: 20,
+  IS_DEBUG_OPEN: false,
+  MAX_TIME_TO_CANCEL: { parser: (v: any) => v, default: 25 },
+  TO_REJECT: { default: ["apple", "potato"] },
+};
+
+const { DB_NAME, ETA, IS_DEBUG_OPEN, MAX_TIME_TO_CANCEL, TO_REJECT } =
+  loadVariables(env);

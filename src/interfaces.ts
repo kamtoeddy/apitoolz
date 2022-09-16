@@ -11,7 +11,7 @@ export type NestedKeyOf<T> = T extends never
         : `${Key}`;
     }[KeyOf<T>];
 
-export interface AdaptedResponse {
+export interface Adapter {
   end: (body: any) => void;
   setCookies: (cookies: CookieType[]) => this;
   setHeaders: (headers: HeaderType) => this;
@@ -26,4 +26,4 @@ export type CookieType = {
 
 export type HeaderType = Record<string, number | string>;
 
-export type ResponseAdapter = (response: ObjectType) => AdaptedResponse;
+export type ResponseAdapter = (response: ObjectType) => Adapter;

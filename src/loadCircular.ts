@@ -11,7 +11,7 @@ const loader =
     if (!_module)
       throw new ApiError({
         message: "Unknown Circular module",
-        payload: { [name]: "This module may is not registered" },
+        payload: { [name]: "This module is not registered" },
       });
 
     return require(join(dirName, _module));

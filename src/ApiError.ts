@@ -91,4 +91,8 @@ export class ApiError extends Error {
     this.message = message;
     return this;
   };
+
+  throw = () => {
+    throw this.summary;
+  };
 }

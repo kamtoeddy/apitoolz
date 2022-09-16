@@ -1,5 +1,5 @@
 import { ApiError } from "./ApiError";
-import { expressRequestAdapter } from "./adapters";
+import { expressAdapter } from "./adapters";
 import { ObjectType, ResponseAdapter } from "./interfaces";
 
 export interface IOptions {
@@ -29,13 +29,13 @@ const defaultControllerOptions = {
 async function makeController(
   controller: Function,
   req: ObjectType,
-  onResult?: OnResultHandler,
   {
     errorCode,
     errorHandlers,
     headers,
     successCode,
-  }: IOptions = defaultControllerOptions
+  }: IOptions = defaultControllerOptions,
+  onResult?: OnResultHandler
 ) {
   try {
     const body = makeResult(await controller(req), true, onResult);
@@ -70,16 +70,12 @@ async function makeController(
 }
 
 export const makeHandler =
-  (adaptResponse: ResponseAdapter = expressRequestAdapter) =>
-  (
-    controller: Function,
-    onResult?: OnResultHandler,
-    options: IOptions = defaultControllerOptions
-  ) => {
+  (adapter: ResponseAdapter = expressAdapter, onResult?: OnResultHandler) =>
+  (controller: Function, options: IOptions = defaultControllerOptions) => {
     return (req: ObjectType, res: ObjectType) => {
-      const response = adaptResponse(res);
+      const response = adapter(res);
 
-      makeController(controller, req, onResult, options)
+      makeController(controller, req, options, onResult)
         .then(({ body, headers, statusCode }: ObjectType) => {
           if (headers) response.setHeaders(headers);
 

@@ -6,13 +6,9 @@ export interface ParseOption {
   type?: "boolean" | "number";
 }
 
-export interface ParseOptions {
-  [key: string]: ParseOption;
-}
+export type ParseOptions = Record<string, ParseOption>;
 
-export interface ParsePropsConfig {
-  [key: string]: ParseOptions;
-}
+export type ParsePropsConfig = Record<string, ParseOptions>;
 
 const getValByType = (value: any, type: "boolean" | "number") => {
   if (type === "number") return Number(value);

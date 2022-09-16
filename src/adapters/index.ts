@@ -1,11 +1,6 @@
-import {
-  AdaptedResponse,
-  CookieType,
-  HeaderType,
-  ObjectType,
-} from "../interfaces";
+import { Adapter, CookieType, HeaderType, ObjectType } from "../interfaces";
 
-class ExpressRequestAdapter implements AdaptedResponse {
+class ExpressAdapter implements Adapter {
   constructor(private response: ObjectType) {}
 
   end = (body: any) => {
@@ -32,5 +27,4 @@ class ExpressRequestAdapter implements AdaptedResponse {
   };
 }
 
-export const expressRequestAdapter = (res: ObjectType) =>
-  new ExpressRequestAdapter(res);
+export const expressAdapter = (res: ObjectType) => new ExpressAdapter(res);
