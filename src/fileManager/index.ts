@@ -1,5 +1,5 @@
 import fs from "fs";
-import { asArray } from "../utils/asArray";
+import { toArray } from "../utils/toArray";
 
 export { parser as parseMultipartData } from "./parseMultipartData/parser";
 
@@ -28,7 +28,7 @@ export function deleteFile(filePath: string) {
 }
 
 export function deleteFilesAt(paths: string | string[] = []) {
-  paths = asArray(paths);
+  paths = toArray(paths);
   for (let _path of paths) deleteFile(_path);
 }
 
@@ -52,8 +52,8 @@ export function getFileType(mimetype: string) {
 
 export const makeFileSrc = (uploadDir: string) => (filePath: string) => {
   const uploadDirIndex = filePath.indexOf(uploadDir);
-  if (uploadDirIndex != -1) {
+  if (uploadDirIndex != -1)
     return filePath.substring(uploadDirIndex + uploadDir.length + 1);
-  }
+
   return filePath;
 };

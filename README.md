@@ -4,17 +4,13 @@
 
 ## Docs
 
-- [ApiError](./docs/ApiError.md)
-- [Auth](./docs/auth/index.md)
-  - [allowRoles](./docs//auth/allowRoles.md)
-  - [requireAuth](./docs/auth/requireAuth.md)
-- [handleAs](./docs/handleAs.md)
-- [loadCircular](./docs/loadCircular.md)
-- [loadEnvVars](./docs/loadEnvVars.md)
-- [makeCallback](./docs/makeCallback.md)
-- [Paginator](./docs/Paginator.md)
-- [parseRequestKeys](./docs/parseRequestKeys.md)
-- [sanitize](./docs/sanitize.md)
-- [useController](./docs/useController.md)
-- [useWorker](./docs/useWorker.md)
-- [Changelog](./docs/CHANGELOG.md)
+- [ApiError](./docs/v0.2.2/ApiError.md#apierror)
+- [loadCircular](./docs/v0.2.2/loadCircular.md#loadcircular)
+- [loadVariables](./docs/v0.2.2/loadVariables.md#loadvariables)
+- [Paginator](./docs/v0.2.2/Paginator.md#paginator)
+- [parseRequestKeys](./docs/v0.2.2/parseRequestKeys.md#parse-request-keys)
+- Route Handling
+  - [makeHandler](./docs/v0.2.2/makeHandler.md#makehandler)
+- [sanitize](./docs/v0.2.2/sanitize.md#sanitize)
+- [useWorker](./docs/v0.2.2/useWorker.md#useworker)
+- [Changelog](./docs/v0.2.2/CHANGELOG.md#changelog)

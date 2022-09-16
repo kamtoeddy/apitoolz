@@ -1,44 +1,46 @@
 import { ObjectType } from "./interfaces";
-import {
-  assignDeep,
-  getDeepValue,
-  hasDeepKey,
-} from "./utils/_object-manipulations";
+import { assignDeep, getDeepValue, hasDeepKey } from "./utils/_object-tools";
 
-export interface ParseOption {
-  parser?: (v: any) => any;
-  type?: "boolean" | "number";
-}
+export type TypeParser = ((v: any) => any) | "boolean" | "number";
 
-export interface ParseOptions {
-  [key: string]: ParseOption;
-}
-
-export interface ParsePropsConfig {
-  [key: string]: ParseOptions;
-}
+export type ParsePropsConfig = Record<
+  string,
+  TypeParser | Record<string, TypeParser>
+>;
 
 const getValByType = (value: any, type: "boolean" | "number") => {
+  if (!["boolean", "number"].includes(type)) return value;
+
   if (type === "number") return Number(value);
 
   return value === "false" ? false : true;
 };
 
-const parseKey = (reqSubset: ObjectType, key: string, option: ParseOption) => {
-  const { parser, type } = option;
-  if (!parser && !type) return reqSubset;
-
+const parseKey = (reqSubset: ObjectType, key: string, parser: TypeParser) => {
   let value = getDeepValue(reqSubset, key);
 
-  value = parser ? parser(value) : type ? getValByType(value, type) : value;
+  value =
+    typeof parser == "function" ? parser(value) : getValByType(value, parser);
 
-  return assignDeep(reqSubset, { key, value });
+  return assignDeep(reqSubset, key, value);
 };
 
-const parseKeys = (reqSubset: ObjectType, options: ParseOptions) => {
-  const keys = Object.keys(options).filter((key) => hasDeepKey(reqSubset, key));
+const parseKeys = (
+  reqSubset: ObjectType,
+  key: string,
+  config: TypeParser | Record<string, TypeParser>
+) => {
+  if (typeof config != "object") {
+    key = key.substring(key.indexOf(".") + 1);
 
-  keys.forEach((key) => parseKey(reqSubset, key, options[key]));
+    parseKey(reqSubset, key, config);
+
+    return getDeepValue(reqSubset, key);
+  }
+
+  const keys = Object.keys(config).filter((key) => hasDeepKey(reqSubset, key));
+
+  keys.forEach((key) => parseKey(reqSubset, key, config[key]));
 
   return reqSubset;
 };
@@ -51,9 +53,14 @@ export const parseRequestKeys =
     for (let key of keys) {
       if (!hasDeepKey(req, key)) continue;
 
-      let sub = getDeepValue(req, key);
+      const config = propsConfig[key];
 
-      assignDeep(req, { key, value: parseKeys(sub, propsConfig[key]) });
+      const sub =
+        typeof config == "object"
+          ? getDeepValue(req, key)
+          : req[key.substring(0, key.indexOf("."))];
+
+      assignDeep(req, key, parseKeys(sub, key, config));
     }
 
     next();

@@ -1,61 +1,96 @@
-import { asArray } from "./utils/asArray";
+import { sortKeys } from "./utils/_object-tools";
+import { toArray } from "./utils/toArray";
 
-export interface ApiErrorProps {
-  message: string;
-  payload?: ErrorPayload;
-  statusCode?: number;
-}
 export type PayloadKey = number | string;
 
 export type ErrorPayload = Record<PayloadKey, string[]>;
+export type InputPayload = Record<PayloadKey, string | string[]>;
 
-export class ApiError extends Error {
-  name = "ApiError";
+export interface ApiErrorProps {
+  message: string;
+  payload?: InputPayload;
+  statusCode?: number;
+}
+
+export interface ErrorSummaryProps {
+  message: string;
   payload: ErrorPayload;
   statusCode: number;
+}
 
-  constructor({ message, payload = {}, statusCode = 400 }: ApiErrorProps) {
+export class ErrorSummary extends Error {
+  payload: ErrorPayload = {};
+  statusCode: number;
+
+  constructor({ message, payload = {}, statusCode = 400 }: ErrorSummaryProps) {
     super(message);
     this.payload = payload;
     this.statusCode = statusCode;
   }
+}
 
-  get isPayloadLoaded() {
-    return Object.keys(this.payload).length > 0;
+export class ApiError extends Error {
+  statusCode: number;
+  private _payload: ErrorPayload = {};
+  private _initMessage: string;
+  private _initStatusCode: number;
+
+  constructor({ message, payload = {}, statusCode = 400 }: ApiErrorProps) {
+    super(message);
+    this._initMessage = message;
+    this._initStatusCode = this.statusCode = statusCode;
+    this._setPayload(payload);
   }
 
-  private _has = (field: PayloadKey) => this.payload.hasOwnProperty(field);
+  get isPayloadLoaded() {
+    return Object.keys(this._payload).length > 0;
+  }
+
+  get summary() {
+    return {
+      message: this.message,
+      payload: sortKeys(this._payload),
+      statusCode: this.statusCode,
+    };
+  }
+
+  private _has = (field: PayloadKey) => this._payload.hasOwnProperty(field);
+
+  private _setPayload = (payload: InputPayload) => {
+    Object.entries(payload).forEach(([key, value]) => this.add(key, value));
+  };
 
   add(field: PayloadKey, value?: string | string[]) {
     if (value) {
-      value = asArray(value);
+      value = toArray(value);
 
-      this.payload[field] = this._has(field)
-        ? [...this.payload[field], ...value]
+      this._payload[field] = this._has(field)
+        ? [...this._payload[field], ...value]
         : value;
     }
 
     return this;
   }
 
-  clear = () => {
-    this.payload = {};
+  remove = (field: PayloadKey) => {
+    delete this._payload?.[field];
     return this;
   };
 
-  getInfo = () => ({
-    message: this.message,
-    payload: this.payload,
-    statusCode: this.statusCode,
-  });
+  reset = () => {
+    this.message = this._initMessage;
+    this._payload = {};
+    this.statusCode = this._initStatusCode;
 
-  remove = (field: PayloadKey) => {
-    delete this.payload?.[field];
     return this;
   };
 
   setMessage = (message: string) => {
     this.message = message;
     return this;
+  };
+
+  throw = () => {
+    throw new ErrorSummary(this.summary);
   };
 }
