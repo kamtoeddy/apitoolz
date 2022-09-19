@@ -56,7 +56,7 @@ export const parser =
 
     if (!uploadDir.endsWith("/")) uploadDir += "/";
 
-    // make specified upload directory if does not exixt
+    // make specified upload directory if does not exist
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
     const form = formidable({ uploadDir });
