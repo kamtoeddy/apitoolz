@@ -13,4 +13,4 @@
   - [makeHandler](./docs/v0.2.2/makeHandler.md#makehandler)
 - [sanitize](./docs/v0.2.2/sanitize.md#sanitize)
 - [useWorker](./docs/v0.2.2/useWorker.md#useworker)
-- [Changelog](./docs/v0.2.2/CHANGELOG.md#changelog)
+- [Changelog](./docs/v0.3.0/CHANGELOG.md#changelog)
