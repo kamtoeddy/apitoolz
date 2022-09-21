@@ -4,7 +4,7 @@
 
 ## Docs
 
-- [ApiError](./docs/v0.2.2/ApiError.md#apierror)
+- [ApiError](./docs/v0.3.0/ApiError.md#apierror)
 - [loadCircular](./docs/v0.2.2/loadCircular.md#loadcircular)
 - [loadVariables](./docs/v0.2.2/loadVariables.md#loadvariables)
 - [Paginator](./docs/v0.2.2/Paginator.md#paginator)

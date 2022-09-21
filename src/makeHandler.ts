@@ -14,7 +14,7 @@ export interface IOptions {
 export type ControllerType = (request: Request) => any | Promise<any>;
 export type OnResultHandler = (data: any, success: boolean) => any;
 
-const makeResult = (
+export const makeResult = (
   data: any,
   success: boolean,
   onResult?: OnResultHandler

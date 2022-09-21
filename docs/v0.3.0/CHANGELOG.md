@@ -2,6 +2,7 @@
 
 # 0.3.0 <small><sup>22-09-2022</sup></small>
 
+- [Added] setStatusCode to ApiError and made the statusCode private
 - [Updated] enhanced default configs in file manager
 - [Updated] enhanced individual file configs in file manager
 - [Updated] the makeHandler can take one or more handlers

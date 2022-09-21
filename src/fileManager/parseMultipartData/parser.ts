@@ -1,11 +1,16 @@
 import fs from "fs";
-import { IncomingMessage } from "http";
+import { Request } from "express";
 
 import formidable from "formidable";
 
 import { deleteFilesAt, getFileExtention } from "..";
 import { ApiError } from "../../ApiError";
-import { ObjectType, StringKey } from "../../interfaces";
+import {
+  Adapter,
+  ObjectType,
+  ResponseAdapter,
+  StringKey,
+} from "../../interfaces";
 import { isJSON } from "../../utils/isJSON";
 import {
   assignDeep,
@@ -13,6 +18,8 @@ import {
   hasDeepKey,
 } from "../../utils/_object-tools";
 import { IFileConfig, IParseMultipartDataConfig } from "./interfaces";
+import { expressAdapter } from "../../adapters";
+import { makeResult, OnResultHandler } from "../../makeHandler";
 
 const defaultConfig: IParseMultipartDataConfig = {
   filesConfig: {},
@@ -39,20 +46,32 @@ function makeFileConfig(
   return config;
 }
 
-export * from "./interfaces";
+function terminateOperation(
+  error: ApiError,
+  response: Adapter,
+  onResult?: OnResultHandler
+) {
+  const body = makeResult(error.summary, false, onResult);
+  response.setStatusCode(error.statusCode).end(body);
+}
 
 export const parser =
+  (adapter: ResponseAdapter = expressAdapter, onResult?: OnResultHandler) =>
   (config: IParseMultipartDataConfig = defaultConfig) =>
   (req: ObjectType, res: ObjectType, next: Function) => {
-    let { filesConfig, getFilesConfig, maxSize, uploadDir, validFormats } =
-      config;
+    const response = adapter(res);
+
+    let { filesConfig, getFilesConfig, maxSize, uploadDir, validFormats } = {
+      ...defaultConfig,
+      ...config,
+    };
 
     let error = new ApiError({
       message: "Invalid Upload directory",
       statusCode: 500,
     });
 
-    if (!uploadDir) return res.status(error.statusCode).json(error.summary);
+    if (!uploadDir) return terminateOperation(error, response, onResult);
 
     if (!uploadDir.endsWith("/")) uploadDir += "/";
 
@@ -61,16 +80,15 @@ export const parser =
 
     const form = formidable({ uploadDir });
 
-    error = new ApiError({ message: "File upload error", statusCode: 400 });
+    error.setMessage("File upload error").setStatusCode(400);
 
-    form.parse(req as IncomingMessage, (err, fields, files) => {
-      if (err) return res.status(error.statusCode).json(error.summary);
+    form.parse(req as Request, (err, fields, files) => {
+      if (err) return terminateOperation(error, response, onResult);
 
-      for (let prop in fields) {
+      for (let prop in fields)
         req.body[prop] = isJSON(fields[prop])
           ? JSON.parse(fields[prop] as string)
           : fields[prop];
-      }
 
       if (getFilesConfig) filesConfig = getFilesConfig(req.body);
 
@@ -123,7 +141,7 @@ export const parser =
       if (error.isPayloadLoaded) {
         deleteFilesAt(paths);
 
-        return res.status(error.statusCode).json(error.summary);
+        return terminateOperation(error, response, onResult);
       }
 
       deleteFilesAt(unWantedPaths);
