@@ -20,8 +20,6 @@ describe("makeHandler with express app", () => {
     it("should return a body with {data,success:fasle} for unsuccessful operations", async () => {
       const res = await request(server).get(`${baseUrl}/error`);
 
-      console.log(res.body);
-
       expect(res.body).toEqual({
         data: { message: "Invalid Operation", payload: {}, statusCode: 400 },
         success: false,

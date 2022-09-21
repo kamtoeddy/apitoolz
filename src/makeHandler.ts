@@ -1,16 +1,17 @@
 import { Request } from "express";
 import { ApiError } from "./ApiError";
 import { expressAdapter } from "./adapters";
-import { ObjectType, ResponseAdapter } from "./interfaces";
+import { NonEmptyArray, ObjectType, ResponseAdapter } from "./interfaces";
+import { toArray } from "./utils/toArray";
 
 export interface IOptions {
   errorCode?: number;
-  errorHandlers: Function[];
+  errorHandlers?: ControllerType | NonEmptyArray<ControllerType>;
   headers: Record<string, any>;
   successCode?: number;
 }
 
-export type ControllerType = (reqeust: Request) => any | Promise<any>;
+export type ControllerType = (request: Request) => any | Promise<any>;
 export type OnResultHandler = (data: any, success: boolean) => any;
 
 const makeResult = (
@@ -23,7 +24,6 @@ const makeResult = (
 
 const defaultControllerOptions = {
   errorCode: 400,
-  errorHandlers: [],
   headers: { "Content-Type": "application/json" },
   successCode: 200,
 };
@@ -48,7 +48,7 @@ async function makeController(
     console.log(err);
     console.log("=========== [ Log End ] ===========");
 
-    for (let handler of errorHandlers) {
+    for (let handler of toArray(errorHandlers)) {
       if (typeof handler !== "function") continue;
 
       try {
@@ -86,9 +86,13 @@ export const makeHandler =
         .catch(({ message }: any) => {
           const statusCode = 500;
 
-          response
-            .setStatusCode(statusCode)
-            .end(new ApiError({ message, statusCode }).summary);
+          const body = makeResult(
+            new ApiError({ message, statusCode }).summary,
+            false,
+            onResult
+          );
+
+          response.setStatusCode(statusCode).end(body);
         });
     };
   };
