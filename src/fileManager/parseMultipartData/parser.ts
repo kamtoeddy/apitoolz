@@ -29,12 +29,16 @@ const defaultConfig: ParserConfig = {
   validFormats: [],
 };
 
+const requiredConfigs = [
+  "maxSize",
+  "pathOnly",
+  "validFormats",
+] as StringKey<FileConfig>[];
+
 function makeFileConfig(config?: FileConfig, fallback: FileConfig = {}) {
   if (!config) return fallback;
 
-  const keys = Object.keys(fallback) as StringKey<FileConfig>[];
-
-  for (const key of keys)
+  for (const key of requiredConfigs)
     if (!hasDeepKey(config, key))
       assignDeep(config, key, getDeepValue(fallback, key));
 
@@ -56,10 +60,9 @@ export const parser =
   (req: ObjectType, res: ObjectType, next: Function) => {
     const response = adapter(res);
 
-    let { filesConfig, getFilesConfig, maxSize, uploadDir, validFormats } = {
-      ...defaultConfig,
-      ...config,
-    };
+    const generalConfig = { ...defaultConfig, ...config };
+
+    let { filesConfig, getFilesConfig, uploadDir } = generalConfig;
 
     const error = new ApiError({
       message: "Invalid Upload directory",
@@ -100,9 +103,9 @@ export const parser =
           continue;
         }
 
-        const { maxSize: _maxSize, pathOnly } = makeFileConfig(
+        let { maxSize, pathOnly, validFormats } = makeFileConfig(
           filesConfig?.[key],
-          { maxSize, pathOnly: true }
+          generalConfig
         );
 
         const { filepath, newFilename, size } = file;
@@ -121,7 +124,7 @@ export const parser =
           error.add(key, "Invalid file format");
 
         // size validation check
-        if (size > _maxSize!) error.add(key, "Maximum file size exceeded");
+        if (size > maxSize!) error.add(key, "Maximum file size exceeded");
 
         const newPath = `${uploadDir}${newFilename}.${fileExtention}`;
         fs.renameSync(filepath, newPath);
@@ -133,13 +136,12 @@ export const parser =
         req.body[key] = pathOnly ? newPath : { path: newPath, size };
       }
 
+      deleteFilesAt(unWantedPaths);
+
       if (error.isPayloadLoaded) {
         deleteFilesAt(paths);
-
         return terminateOperation(error, response, onResult);
       }
-
-      deleteFilesAt(unWantedPaths);
 
       next();
     });

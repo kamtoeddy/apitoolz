@@ -20,7 +20,7 @@ export function cutFile(from: string, to: string) {
     copyFile(from, to);
     deleteFile(from);
   } catch (err: any) {
-    console.error(err.message);
+    console.error(err);
   }
 }
 

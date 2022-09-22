@@ -4,12 +4,12 @@ export type FileConfig = {
   validFormats?: string[];
 };
 
-export type IFilesConfig = Record<string, FileConfig>;
+export type FilesConfig = Record<string, FileConfig>;
 
-export type ConfigSetter = (data: any) => IFilesConfig;
+export type ConfigSetter = (data: any) => FilesConfig;
 
 export type ParserConfig = FileConfig & {
-  filesConfig?: IFilesConfig;
+  filesConfig?: FilesConfig;
   getFilesConfig?: ConfigSetter;
   uploadDir?: string;
 };
