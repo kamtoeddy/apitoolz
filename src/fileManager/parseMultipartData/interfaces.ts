@@ -1,20 +1,15 @@
-export interface IFileConfig {
+export type FileConfig = {
   maxSize?: number;
   pathOnly?: boolean;
-}
-
-export interface IFilesConfig {
-  [key: string]: IFileConfig;
-}
-
-export type FilesConfigFx = (prop: any) => IFilesConfig;
-
-export interface IParseMultipartDataConfig {
-  filesConfig?: IFilesConfig;
-  getFilesConfig?: FilesConfigFx;
-  //   invalidFormats?: string[];
-  maxSize?: number;
-  pathOnly?: boolean;
-  uploadDir: string;
   validFormats?: string[];
-}
+};
+
+export type IFilesConfig = Record<string, FileConfig>;
+
+export type ConfigSetter = (data: any) => IFilesConfig;
+
+export type ParserConfig = FileConfig & {
+  filesConfig?: IFilesConfig;
+  getFilesConfig?: ConfigSetter;
+  uploadDir?: string;
+};

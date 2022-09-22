@@ -17,11 +17,11 @@ import {
   getDeepValue,
   hasDeepKey,
 } from "../../utils/_object-tools";
-import { IFileConfig, IParseMultipartDataConfig } from "./interfaces";
+import { FileConfig, ParserConfig } from "./interfaces";
 import { expressAdapter } from "../../adapters";
 import { makeResult, OnResultHandler } from "../../makeHandler";
 
-const defaultConfig: IParseMultipartDataConfig = {
+const defaultConfig: ParserConfig = {
   filesConfig: {},
   maxSize: 5 * 1024 * 1024,
   pathOnly: true,
@@ -29,19 +29,14 @@ const defaultConfig: IParseMultipartDataConfig = {
   validFormats: [],
 };
 
-function makeFileConfig(
-  config: IFileConfig | undefined,
-  fallback: IFileConfig = {}
-) {
+function makeFileConfig(config?: FileConfig, fallback: FileConfig = {}) {
   if (!config) return fallback;
 
-  for (let key in fallback)
-    if (!hasDeepKey(config, key as StringKey<IFileConfig>))
-      assignDeep(
-        config,
-        key as StringKey<IFileConfig>,
-        getDeepValue(fallback, key as StringKey<IFileConfig>)
-      );
+  const keys = Object.keys(fallback) as StringKey<FileConfig>[];
+
+  for (const key of keys)
+    if (!hasDeepKey(config, key))
+      assignDeep(config, key, getDeepValue(fallback, key));
 
   return config;
 }
@@ -57,7 +52,7 @@ function terminateOperation(
 
 export const parser =
   (adapter: ResponseAdapter = expressAdapter, onResult?: OnResultHandler) =>
-  (config: IParseMultipartDataConfig = defaultConfig) =>
+  (config: ParserConfig = defaultConfig) =>
   (req: ObjectType, res: ObjectType, next: Function) => {
     const response = adapter(res);
 
@@ -66,7 +61,7 @@ export const parser =
       ...config,
     };
 
-    let error = new ApiError({
+    const error = new ApiError({
       message: "Invalid Upload directory",
       statusCode: 500,
     });

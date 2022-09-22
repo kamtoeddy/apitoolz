@@ -3,18 +3,19 @@ import { toArray } from "../utils/toArray";
 
 export { parser as parseMultipartData } from "./parseMultipartData/parser";
 
+const isExistingPath = (path: string) => {
+  return fs.existsSync(path.substring(0, path.lastIndexOf("/")));
+};
+
 export function copyFile(from: string, to: string) {
+  if (!isExistingPath(from)) return;
+
+  if (!isExistingPath(to)) fs.mkdirSync(to, { recursive: true });
+
   fs.copyFileSync(from, to, fs.constants.COPYFILE_FICLONE);
 }
 
 export function cutFile(from: string, to: string) {
-  const dirFrom = from.substring(0, from.lastIndexOf("/"));
-  const dirTo = to.substring(0, to.lastIndexOf("/"));
-
-  if (!fs.existsSync(dirFrom)) return;
-
-  if (!fs.existsSync(dirTo)) fs.mkdirSync(dirTo, { recursive: true });
-
   try {
     copyFile(from, to);
     deleteFile(from);
@@ -23,37 +24,38 @@ export function cutFile(from: string, to: string) {
   }
 }
 
-export function deleteFile(filePath: string) {
-  fs.unlinkSync(filePath);
+export function deleteFile(path: string) {
+  if (isExistingPath(path)) fs.unlinkSync(path);
 }
 
 export function deleteFilesAt(paths: string | string[] = []) {
   paths = toArray(paths);
-  for (let _path of paths) deleteFile(_path);
+  for (let path of paths) deleteFile(path);
 }
 
-export async function deleteFolder(filePath: string) {
-  return fs.rm(filePath, { recursive: true }, (err) =>
-    err ? console.log(`error deleting folder, {${filePath}}:`, err) : null
-  );
+export async function deleteFolder(path: string) {
+  if (!isExistingPath(path)) return;
+  return fs.rm(path, { recursive: true }, (err) => {
+    if (err) console.log(`error deleting folder @${path}:`, err);
+  });
 }
 
 export function getFileExtention(mimetype: string | null) {
   return String(mimetype).split("/")?.[1];
 }
 
-export function getFileName(filePath: string) {
-  return filePath.substring(filePath.lastIndexOf("/") + 1);
+export function getFileName(path: string) {
+  return path.substring(path.lastIndexOf("/") + 1);
 }
+
+export const getFilePath = (uploadDir: string) => (path: string) => {
+  const uploadDirIndex = path.indexOf(uploadDir);
+
+  return uploadDirIndex != -1
+    ? path.substring(uploadDirIndex + uploadDir.length + 1)
+    : path;
+};
 
 export function getFileType(mimetype: string) {
   return mimetype.split("/")[0];
 }
-
-export const makeFileSrc = (uploadDir: string) => (filePath: string) => {
-  const uploadDirIndex = filePath.indexOf(uploadDir);
-  if (uploadDirIndex != -1)
-    return filePath.substring(uploadDirIndex + uploadDir.length + 1);
-
-  return filePath;
-};
