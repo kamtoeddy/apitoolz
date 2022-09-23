@@ -18,5 +18,5 @@ const loader =
   };
 
 export function registerModules<T extends ObjectType>(modules: T) {
-  return { loadCircular: loader(modules, _getCallerFile(2, true)) };
+  return loader(modules, _getCallerFile(2, true));
 }
