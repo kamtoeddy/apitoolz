@@ -11,6 +11,8 @@ It expects an object with 3 properties:
 Only the event & data would be passed to the worker file
 
 ```js
+const { useWorker } = require("apitoolz");
+
 const data = await useWorker({
   path: "./test-worker.js",
   data: { message: "data to process" },
