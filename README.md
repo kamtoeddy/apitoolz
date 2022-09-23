@@ -4,13 +4,14 @@
 
 ## Docs
 
-- [ApiError](./docs/v0.2.2/ApiError.md#apierror)
-- [loadCircular](./docs/v0.2.2/loadCircular.md#loadcircular)
+- [ApiError](./docs/v0.3.0/ApiError.md#apierror)
+- [fileManager](./docs/v0.3.0/file-manager.md#filemanager)
+- [loadCircular](./docs/v0.3.0/loadCircular.md#loadcircular)
 - [loadVariables](./docs/v0.2.2/loadVariables.md#loadvariables)
 - [Paginator](./docs/v0.2.2/Paginator.md#paginator)
 - [parseRequestKeys](./docs/v0.2.2/parseRequestKeys.md#parse-request-keys)
 - Route Handling
   - [makeHandler](./docs/v0.2.2/makeHandler.md#makehandler)
 - [sanitize](./docs/v0.2.2/sanitize.md#sanitize)
-- [useWorker](./docs/v0.2.2/useWorker.md#useworker)
-- [Changelog](./docs/v0.2.2/CHANGELOG.md#changelog)
+- [useWorker](./docs/v0.3.0/useWorker.md#useworker)
+- [Changelog](./docs/v0.3.0/CHANGELOG.md#changelog)

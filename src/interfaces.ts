@@ -2,6 +2,7 @@ export type ObjectType = Record<number | string, any>;
 export type StringKey<T> = Extract<keyof T, string>;
 
 export type KeyOf<T> = keyof T & (string | number);
+export type NonEmptyArray<T> = [T, ...T[]];
 
 export type NestedKeyOf<T> = T extends never
   ? ""

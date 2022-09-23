@@ -24,7 +24,7 @@ const defaultOptions = { remove: [], replace: {} };
 
 const removeValues = <T extends ObjectType>(
   data: T,
-  keysToRemove: NestedKeyOf<T>
+  keysToRemove: KeyType<T>
 ) => {
   const _keysToRemove = toArray(keysToRemove);
 
@@ -53,7 +53,7 @@ const replaceValues = <T extends ObjectType>(
 
 const selectValues = <T extends ObjectType>(
   data: T,
-  keysToSelect: Sanitize.Options<T>
+  keysToSelect: KeyType<T>
 ) => {
   const _keysToSelect = toArray(keysToSelect);
 

@@ -1,20 +1,27 @@
 import fs from "fs";
-import { IncomingMessage } from "http";
+import { Request } from "express";
 
 import formidable from "formidable";
 
 import { deleteFilesAt, getFileExtention } from "..";
 import { ApiError } from "../../ApiError";
-import { ObjectType, StringKey } from "../../interfaces";
+import {
+  Adapter,
+  ObjectType,
+  ResponseAdapter,
+  StringKey,
+} from "../../interfaces";
 import { isJSON } from "../../utils/isJSON";
 import {
   assignDeep,
   getDeepValue,
   hasDeepKey,
 } from "../../utils/_object-tools";
-import { IFileConfig, IParseMultipartDataConfig } from "./interfaces";
+import { FileConfig, ParserConfig } from "./interfaces";
+import { expressAdapter } from "../../adapters";
+import { makeResult, OnResultHandler } from "../../makeHandler";
 
-const defaultConfig: IParseMultipartDataConfig = {
+const defaultConfig: ParserConfig = {
   filesConfig: {},
   maxSize: 5 * 1024 * 1024,
   pathOnly: true,
@@ -22,55 +29,64 @@ const defaultConfig: IParseMultipartDataConfig = {
   validFormats: [],
 };
 
-function makeFileConfig(
-  config: IFileConfig | undefined,
-  fallback: IFileConfig = {}
-) {
+const requiredConfigs = [
+  "maxSize",
+  "pathOnly",
+  "validFormats",
+] as StringKey<FileConfig>[];
+
+function makeFileConfig(config?: FileConfig, fallback: FileConfig = {}) {
   if (!config) return fallback;
 
-  for (let key in fallback)
-    if (!hasDeepKey(config, key as StringKey<IFileConfig>))
-      assignDeep(
-        config,
-        key as StringKey<IFileConfig>,
-        getDeepValue(fallback, key as StringKey<IFileConfig>)
-      );
+  for (const key of requiredConfigs)
+    if (!hasDeepKey(config, key))
+      assignDeep(config, key, getDeepValue(fallback, key));
 
   return config;
 }
 
-export * from "./interfaces";
+function terminateOperation(
+  error: ApiError,
+  response: Adapter,
+  onResult?: OnResultHandler
+) {
+  const body = makeResult(error.summary, false, onResult);
+  response.setStatusCode(error.statusCode).end(body);
+}
 
 export const parser =
-  (config: IParseMultipartDataConfig = defaultConfig) =>
+  (adapter: ResponseAdapter = expressAdapter, onResult?: OnResultHandler) =>
+  (config: ParserConfig = defaultConfig) =>
   (req: ObjectType, res: ObjectType, next: Function) => {
-    let { filesConfig, getFilesConfig, maxSize, uploadDir, validFormats } =
-      config;
+    const response = adapter(res);
 
-    let error = new ApiError({
+    const generalConfig = { ...defaultConfig, ...config };
+
+    let { filesConfig, getFilesConfig, uploadDir } = generalConfig;
+
+    const error = new ApiError({
       message: "Invalid Upload directory",
       statusCode: 500,
     });
 
-    if (!uploadDir) return res.status(error.statusCode).json(error.summary);
+    if (!uploadDir) return terminateOperation(error, response, onResult);
 
     if (!uploadDir.endsWith("/")) uploadDir += "/";
 
-    // make specified upload directory if does not exixt
+    // make specified upload directory if does not exist
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
     const form = formidable({ uploadDir });
 
-    error = new ApiError({ message: "File upload error", statusCode: 400 });
+    error.setMessage("File upload error").setStatusCode(400);
 
-    form.parse(req as IncomingMessage, (err, fields, files) => {
-      if (err) return res.status(error.statusCode).json(error.summary);
+    form.parse(req as Request, (err, fields, files) => {
+      if (err) return terminateOperation(error, response, onResult);
 
-      for (let prop in fields) {
+      for (let prop in fields)
         req.body[prop] = isJSON(fields[prop])
           ? JSON.parse(fields[prop] as string)
           : fields[prop];
-      }
 
       if (getFilesConfig) filesConfig = getFilesConfig(req.body);
 
@@ -87,9 +103,9 @@ export const parser =
           continue;
         }
 
-        const { maxSize: _maxSize, pathOnly } = makeFileConfig(
+        let { maxSize, pathOnly, validFormats } = makeFileConfig(
           filesConfig?.[key],
-          { maxSize, pathOnly: true }
+          generalConfig
         );
 
         const { filepath, newFilename, size } = file;
@@ -108,7 +124,7 @@ export const parser =
           error.add(key, "Invalid file format");
 
         // size validation check
-        if (size > _maxSize!) error.add(key, "Maximum file size exceeded");
+        if (size > maxSize!) error.add(key, "Maximum file size exceeded");
 
         const newPath = `${uploadDir}${newFilename}.${fileExtention}`;
         fs.renameSync(filepath, newPath);
@@ -120,13 +136,12 @@ export const parser =
         req.body[key] = pathOnly ? newPath : { path: newPath, size };
       }
 
+      deleteFilesAt(unWantedPaths);
+
       if (error.isPayloadLoaded) {
         deleteFilesAt(paths);
-
-        return res.status(error.statusCode).json(error.summary);
+        return terminateOperation(error, response, onResult);
       }
-
-      deleteFilesAt(unWantedPaths);
 
       next();
     });

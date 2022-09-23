@@ -20,6 +20,7 @@ interface ApiError {
   clear: () => this;
   remove: (field: number | string) => this;
   setMessage: (message: string) => this;
+  setStatusCode: (code: number) => this;
 }
 ```
 
@@ -146,6 +147,39 @@ console.log(error.summary);
 //     ],
 //   },
 //   statusCode: 400,
+// }
+```
+
+- ### setStatusCode (v0.3.0)
+
+  This method is used to change the error's statusCode as the statusCode is now a private property.
+
+```ts
+import { ApiError } from "apitoolz";
+
+const error: ApiError = new ApiError({
+  message: "Auth failed",
+  payload: {
+    password: [
+      "should be between 8 and 30 characters long",
+      "must have at least one number",
+    ],
+  },
+  statusCode: 400,
+});
+
+error.setStatusCode(401);
+
+console.log(error.summary);
+// {
+//   message: "Auth failed",
+//   payload: {
+//     password: [
+//       "should be between 8 and 30 characters long",
+//       "must have at least one number",
+//     ],
+//   },
+//   statusCode: 401,
 // }
 ```
 

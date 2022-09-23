@@ -30,7 +30,7 @@ export class ErrorSummary extends Error {
 }
 
 export class ApiError extends Error {
-  statusCode: number;
+  private _statusCode: number;
   private _payload: ErrorPayload = {};
   private _initMessage: string;
   private _initStatusCode: number;
@@ -38,7 +38,7 @@ export class ApiError extends Error {
   constructor({ message, payload = {}, statusCode = 400 }: ApiErrorProps) {
     super(message);
     this._initMessage = message;
-    this._initStatusCode = this.statusCode = statusCode;
+    this._initStatusCode = this._statusCode = statusCode;
     this._setPayload(payload);
   }
 
@@ -46,11 +46,15 @@ export class ApiError extends Error {
     return Object.keys(this._payload).length > 0;
   }
 
+  get statusCode() {
+    return this._statusCode;
+  }
+
   get summary() {
     return {
       message: this.message,
       payload: sortKeys(this._payload),
-      statusCode: this.statusCode,
+      statusCode: this._statusCode,
     };
   }
 
@@ -80,13 +84,19 @@ export class ApiError extends Error {
   reset = () => {
     this.message = this._initMessage;
     this._payload = {};
-    this.statusCode = this._initStatusCode;
+    this._statusCode = this._initStatusCode;
 
     return this;
   };
 
   setMessage = (message: string) => {
     this.message = message;
+    return this;
+  };
+
+  setStatusCode = (code: number) => {
+    this._statusCode = code;
+
     return this;
   };
 
