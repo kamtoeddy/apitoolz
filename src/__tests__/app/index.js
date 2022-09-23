@@ -72,17 +72,3 @@ module.exports = server;
 //     remove: ["a"],
 //   })
 // );
-
-(async () => {
-  // err.remove("username");
-  // err.clear();
-  // console.log(err.getInfo());
-  // console.log(sanitize.one(1));
-  // console.log(LoadEnvVars(vars));
-  // const { loadCircular } = registerModules({ c_m1: "./c_modules/sample.js" });
-  // const mod = loadCircular("c_m1");
-  // console.log(mod(100, 2));
-  // console.log(isOfType(() => 1, "array"));
-  // const data = await useWorker({ path: "./worker.js", data: users });
-  // console.log("results:", data);
-})();

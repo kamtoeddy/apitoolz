@@ -10,15 +10,11 @@ export interface useWorkerProps {
   path: string;
 }
 
-export const useWorker = ({
-  path = "",
-  event = "handle-data",
-  data,
-}: useWorkerProps) => {
+export const useWorker = ({ path = "", data }: useWorkerProps) => {
   const workerPath = join(_getCallerFile(2, true), path);
   return new Promise((resolve, reject) => {
     const worker = new Worker(workerPath, {
-      workerData: { event, data: JSON.stringify(data) },
+      workerData: JSON.stringify(data),
     });
 
     worker.on("message", resolve);
@@ -27,7 +23,7 @@ export const useWorker = ({
       if (code !== 0) {
         reject(
           new ApiError({
-            message: `Worker stopped executing ${event} with code ${code}`,
+            message: `Worker @${path} stopped executing with code ${code}`,
           }).summary
         );
       }
