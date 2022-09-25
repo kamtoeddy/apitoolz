@@ -2,7 +2,6 @@
   "author": "kamtoeddy",
   "description": "javascript server-side helper tools",
   "dependencies": {
-    "callsite": "^1.0.0",
     "formidable": "^2.0.1"
   },
   "devDependencies": {
@@ -51,5 +50,5 @@
     "prepare": "npm run clean-up && npm run build"
   },
   "types": "dist/index.d.ts",
-  "version": "0.3.0"
+  "version": "0.3.1"
 }
