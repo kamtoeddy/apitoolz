@@ -5,6 +5,7 @@ import { NonEmptyArray, ObjectType, ResponseAdapter } from "./interfaces";
 import { toArray } from "./utils/toArray";
 
 export interface IOptions {
+  debug?: boolean;
   errorCode?: number;
   errorHandlers?: ControllerType | NonEmptyArray<ControllerType>;
   headers: Record<string, any>;
@@ -23,6 +24,7 @@ export const makeResult = (
 };
 
 const defaultControllerOptions = {
+  debug: false,
   errorCode: 400,
   headers: { "Content-Type": "application/json" },
   successCode: 200,
@@ -32,6 +34,7 @@ async function makeController(
   controller: Function,
   req: Request,
   {
+    debug,
     errorCode,
     errorHandlers,
     headers,
@@ -44,9 +47,11 @@ async function makeController(
 
     return { body, headers, statusCode: successCode ?? 200 };
   } catch (err: any) {
-    console.log("========== [ Log Start ] ==========");
-    console.log(err);
-    console.log("=========== [ Log End ] ===========");
+    if (debug) {
+      console.log("========== [ Log Start ] ==========");
+      console.log(err);
+      console.log("=========== [ Log End ] ===========");
+    }
 
     for (let handler of toArray(errorHandlers)) {
       if (typeof handler !== "function") continue;
@@ -54,6 +59,8 @@ async function makeController(
       try {
         await handler(req);
       } catch (err) {
+        if (!debug) continue;
+
         console.log(
           `========= [ Error Handler @${handler?.name} crashed ] =========`
         );
@@ -84,15 +91,17 @@ export const makeHandler =
           response.setStatusCode(statusCode ?? 200).end(body) as never;
         })
         .catch(({ message }: any) => {
-          const statusCode = 500;
+          const error = new ApiError({ message, statusCode: 500 });
 
-          const body = makeResult(
-            new ApiError({ message, statusCode }).summary,
-            false,
-            onResult
-          );
+          const body = makeResult(error.summary, false, onResult);
 
-          response.setStatusCode(statusCode).end(body);
+          if (options.debug) {
+            console.log("========== [ Log Start ] ==========");
+            console.log(error.summary);
+            console.log("=========== [ Log End ] ===========");
+          }
+
+          response.setStatusCode(error.statusCode).end(body);
         });
     };
   };
