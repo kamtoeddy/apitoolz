@@ -4,16 +4,13 @@
 import { makeHandler } from "apitoolz";
 
 interface IOptions {
-  data: any;
   errorCode?: number;
-  errorHandlers?: Function[];
+  errorHandlers?: Function | Function[];
   headers: Record<string, any>;
-  preTasks?: Function[];
-  postTasks?: Function[];
   successCode?: number;
 }
 
-interface IControllerresponse {
+interface IControllerResponse {
   body: any;
   headers: Record<string, any>;
   statusCode: number;
