@@ -91,17 +91,19 @@ export const makeHandler =
           response.setStatusCode(statusCode ?? 200).end(body) as never;
         })
         .catch(({ message }: any) => {
-          const error = new ApiError({ message, statusCode: 500 });
+          const statusCode = 500;
 
-          const body = makeResult(error.summary, false, onResult);
+          const body = makeResult(
+            { message: "Server Error", payload: {}, statusCode },
+            false,
+            onResult
+          );
 
-          if (options.debug) {
-            console.log("========== [ Log Start ] ==========");
-            console.log(error.summary);
-            console.log("=========== [ Log End ] ===========");
-          }
+          console.log("========== [ Server Error ] ==========");
+          console.log(new ApiError({ message, statusCode }).summary);
+          console.log("============ [ Log End ] =============");
 
-          response.setStatusCode(error.statusCode).end(body);
+          response.setStatusCode(statusCode).end(body);
         });
     };
   };
