@@ -4,7 +4,7 @@ const {
   parseRequestKeys,
   registerModules,
   useWorker,
-} = require("../../../dist");
+} = require("../../../../dist");
 
 module.exports = {
   loadVariables,
