@@ -4,7 +4,7 @@ const {
   parseRequestKeys,
   registerModules,
   useWorker,
-} = require("apitoolz");
+} = require("../../../dist");
 
 module.exports = {
   loadVariables,

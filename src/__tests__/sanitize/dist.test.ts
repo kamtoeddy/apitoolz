@@ -1,4 +1,4 @@
 import { sanitize_Tests } from ".";
-import { sanitize } from "apitoolz";
+import { sanitize } from "../../../dist";
 
 sanitize_Tests({ sanitize });
