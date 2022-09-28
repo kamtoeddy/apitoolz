@@ -9,9 +9,9 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "skipLibCheck": true,
     "target": "es2017",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "removeComments": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "**/__tests__/*"]

@@ -1,4 +1,4 @@
 import { apiError_Tests } from ".";
-import { ApiError } from "../../../dist";
+import { ApiError } from "apitoolz";
 
 apiError_Tests({ ApiError });
