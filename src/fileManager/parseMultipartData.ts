@@ -3,23 +3,15 @@ import { Request } from "express";
 
 import formidable from "formidable";
 
-import { deleteFilesAt, getFileExtention } from "..";
-import { ApiError } from "../../ApiError";
-import {
-  Adapter,
-  ObjectType,
-  ResponseAdapter,
-  StringKey,
-} from "../../interfaces";
-import { isJSON } from "../../utils/isJSON";
-import {
-  assignDeep,
-  getDeepValue,
-  hasDeepKey,
-} from "../../utils/_object-tools";
-import { FileConfig, ParserConfig } from "./interfaces";
-import { expressAdapter } from "../../adapters";
-import { makeResult, OnResultHandler } from "../../makeHandler";
+import { deleteFilesAt, getFileExtention } from ".";
+import { ApiError } from "../ApiError";
+import { Adapter, ObjectType, ResponseAdapter, StringKey } from "../types";
+import { isJSON } from "../utils/isJSON";
+import { assignDeep, getDeepValue, hasDeepKey } from "../utils/_object-tools";
+// import { FileConfig, ParserConfig } from "../in";
+import { expressAdapter } from "../adapters";
+import { makeResult, OnResultHandler } from "../makeHandler";
+import { FileConfig, ParserConfig } from "../types";
 
 const defaultConfig: ParserConfig = {
   filesConfig: {},

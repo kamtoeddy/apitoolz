@@ -1,22 +1,12 @@
 import { sortKeys } from "./utils/_object-tools";
 import { toArray } from "./utils/toArray";
-
-export type PayloadKey = number | string;
-
-export type ErrorPayload = Record<PayloadKey, string[]>;
-export type InputPayload = Record<PayloadKey, string | string[]>;
-
-export interface ApiErrorProps {
-  message: string;
-  payload?: InputPayload;
-  statusCode?: number;
-}
-
-export interface ErrorSummaryProps {
-  message: string;
-  payload: ErrorPayload;
-  statusCode: number;
-}
+import {
+  ApiErrorProps,
+  ErrorPayload,
+  ErrorSummaryProps,
+  InputPayload,
+  PayloadKey,
+} from "./types";
 
 export class ErrorSummary extends Error {
   payload: ErrorPayload = {};

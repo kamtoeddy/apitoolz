@@ -1,4 +1,4 @@
-import { ObjectType } from "./interfaces";
+import { ObjectType } from "./types";
 import { assignDeep, getDeepValue, hasDeepKey } from "./utils/_object-tools";
 
 export type TypeParser = ((v: any) => any) | "boolean" | "number";

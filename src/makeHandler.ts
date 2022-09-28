@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { ApiError } from "./ApiError";
 import { expressAdapter } from "./adapters";
-import { NonEmptyArray, ObjectType, ResponseAdapter } from "./interfaces";
+import { NonEmptyArray, ObjectType, ResponseAdapter } from "./types";
 import { toArray } from "./utils/toArray";
 
 export interface IOptions {
