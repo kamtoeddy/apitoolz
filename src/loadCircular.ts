@@ -1,5 +1,5 @@
 import { ApiError } from "./ApiError";
-import { ObjectType } from "./interfaces";
+import { ObjectType } from "./types";
 import { _getCallerFile } from "./utils/_getCallerFile.js";
 import { join } from "path";
 

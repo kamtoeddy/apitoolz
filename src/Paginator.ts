@@ -1,4 +1,4 @@
-import { ObjectType } from "./interfaces";
+import { ObjectType } from "./types";
 
 export interface PaginatorProps {
   limit: number;

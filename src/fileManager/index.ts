@@ -1,7 +1,7 @@
 import fs from "fs";
 import { toArray } from "../utils/toArray";
 
-export { parser as parseMultipartData } from "./parseMultipartData/parser";
+export { parser as parseMultipartData } from "./parseMultipartData";
 
 const isExistingPath = (path: string) => {
   return fs.existsSync(path.substring(0, path.lastIndexOf("/")));

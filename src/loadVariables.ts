@@ -1,12 +1,10 @@
 import { ApiError } from "./ApiError";
-import { StringKey } from "./interfaces";
-
-type ObjectDefinition = { default?: any; parser?: (v: any) => any };
-type PrimitiveDefinition = boolean | number | string | symbol;
-
-export interface VariableDefinitions {
-  [key: string]: PrimitiveDefinition | ObjectDefinition;
-}
+import { StringKey } from "./types";
+import {
+  ObjectDefinition,
+  PrimitiveDefinition,
+  VariableDefinitions,
+} from "./types";
 
 type GetType<T> = T extends { default: infer D }
   ? D extends undefined

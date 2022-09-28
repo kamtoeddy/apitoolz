@@ -1,4 +1,4 @@
-import { NestedKeyOf, ObjectType } from "./interfaces";
+import { NestedKeyOf, ObjectType } from "./types";
 import { toArray } from "./utils/toArray";
 import {
   assignDeep,

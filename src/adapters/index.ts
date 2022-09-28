@@ -1,4 +1,4 @@
-import { Adapter, CookieType, HeaderType, ObjectType } from "../interfaces";
+import { Adapter, CookieType, HeaderType, ObjectType } from "../types";
 
 class ExpressAdapter implements Adapter {
   constructor(private response: ObjectType) {}
