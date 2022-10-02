@@ -2,7 +2,6 @@ import { NestedKeyOf, ObjectType } from "./types";
 import { toArray } from "./utils/toArray";
 import {
   assignDeep,
-  cloneDeep,
   getDeepValue,
   hasDeepKey,
   removeDeep,
@@ -107,7 +106,7 @@ export const sanitize = <T extends ObjectType>(
 
   if (!remove && !replace && !select) return data;
 
-  const _data = cloneDeep(data);
+  const _data = structuredClone(data);
 
   return Array.isArray(_data) ? many(_data, options) : one(_data, options);
 };
