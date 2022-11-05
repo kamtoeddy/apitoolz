@@ -1,8 +1,9 @@
 # CHANGELOG
 
-# 0.3.4 <small><sup>02-10-2022</sup></small>
+# 0.3.4 <small><sup>05-11-2022</sup></small>
 
-- [Updates] imporved performance performance
+- [Added] possibility to pass a function(setter) for default values to variable loader
+- [Updates] imporved performance
 
 # 0.3.3 <small><sup>28-09-2022</sup></small>
 

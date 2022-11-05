@@ -2,6 +2,7 @@ import { NestedKeyOf, ObjectType } from "../types";
 
 export {
   assignDeep,
+  cloneDeep,
   getDeepValue,
   hasDeepKey,
   removeDeep,
@@ -22,6 +23,10 @@ const isEmptyObject = (obj: ObjectType) =>
   obj === undefined || !Object.keys(obj).length;
 
 // methods
+
+function cloneDeep<T>(dt: T): T {
+  return dt === undefined ? dt : JSON.parse(JSON.stringify(dt));
+}
 
 function _assignDeep<T extends ObjectType>(
   data: T,
