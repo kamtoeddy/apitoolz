@@ -23,6 +23,7 @@ const isEmptyObject = (obj: ObjectType) =>
   obj === undefined || !Object.keys(obj).length;
 
 // methods
+
 function cloneDeep<T>(dt: T): T {
   return dt === undefined ? dt : JSON.parse(JSON.stringify(dt));
 }

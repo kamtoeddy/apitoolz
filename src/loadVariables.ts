@@ -9,7 +9,11 @@ import {
 type GetType<T> = T extends { default: infer D }
   ? D extends undefined
     ? T
+    : D extends () => infer R
+    ? R
     : D
+  : T extends { default: () => infer R }
+  ? R
   : T extends { parser: () => infer R }
   ? R
   : T;
@@ -17,6 +21,10 @@ type GetType<T> = T extends { default: infer D }
 type ParsedVariables<T> = {
   [K in StringKey<T>]: GetType<T[K]>;
 };
+
+function getDefault(val: PrimitiveDefinition) {
+  return typeof val == "function" ? val() : val;
+}
 
 function getDefinition(
   def: PrimitiveDefinition | ObjectDefinition
@@ -60,7 +68,7 @@ const processVariables = <T extends VariableDefinitions>(vars: T) => {
 
     if (val && parser) val = parser(val);
 
-    parsedVars[name] = val ? val : _default;
+    parsedVars[name] = val ? val : getDefault(_default);
   }
 
   if (error.isPayloadLoaded) error.throw();

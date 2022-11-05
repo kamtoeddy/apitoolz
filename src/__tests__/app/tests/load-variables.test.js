@@ -84,6 +84,15 @@ describe("loadVariables with express app", () => {
       });
     });
 
+    it("should return default values provided by setter", async () => {
+      const res = await request(server).get(`${baseUrl}/by-setter`);
+
+      expect(res.body).toEqual({
+        TEST_VAL: "test val",
+        TEST_VAL_1: "test-val 1",
+      });
+    });
+
     it("should return parsed values not in `env` as configured", async () => {
       const res = await request(server).get(`${baseUrl}/parsed`);
 

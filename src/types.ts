@@ -56,7 +56,7 @@ export type ParserConfig = FileConfig & {
 
 // loadVariables
 export type ObjectDefinition = { default?: any; parser?: (v: any) => any };
-export type PrimitiveDefinition = boolean | number | string | symbol;
+export type PrimitiveDefinition = boolean | number | string | symbol | Function;
 
 export interface VariableDefinitions {
   [key: string]: PrimitiveDefinition | ObjectDefinition;
@@ -72,10 +72,3 @@ export type CookieType = {
 export type HeaderType = Record<string, number | string>;
 
 export type ResponseAdapter = (response: ObjectType) => Adapter;
-
-// sanitize
-
-// export declare function sanitize<T extends ObjectType>(
-//   data: T | T[],
-//   options: Sanitize.Options<T> = defaultOptions
-// ): Partial<T> | Partial<T>[] {};
