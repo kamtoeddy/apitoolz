@@ -11,6 +11,7 @@ import {
 
 type KeyType<T> = NestedKeyOf<T> | NestedKeyOf<T>[];
 type ReplaceType<T> = { [K in NestedKeyOf<T>]?: string };
+type SanitizedType<T> = T extends Array<infer U> ? U[] : T;
 
 namespace Sanitize {
   export interface Options<T> {
@@ -99,15 +100,19 @@ const many = <T extends ObjectType>(
   options: Sanitize.Options<T> = defaultOptions
 ) => data.map((dt) => one(dt, options));
 
-export const sanitize = <T extends ObjectType>(
-  data: T | T[],
+export const sanitize = <T extends ObjectType | ObjectType[]>(
+  data: T,
   options: Sanitize.Options<T> = defaultOptions
 ) => {
   const { remove, replace, select } = options;
 
-  if (!remove && !replace && !select) return data;
+  if (!remove && !replace && !select) return data as SanitizedType<T>;
 
   const _data = cloneDeep(data);
 
-  return Array.isArray(_data) ? many(_data, options) : one(_data, options);
+  const sanitized = Array.isArray(_data)
+    ? many(_data, options)
+    : one(_data, options);
+
+  return sanitized as SanitizedType<T>;
 };
