@@ -12,12 +12,13 @@ import {
 type KeyType<T> = NestedKeyOf<T> | NestedKeyOf<T>[];
 type ReplaceType<T> = { [K in NestedKeyOf<T>]?: string };
 type SanitizedType<T> = T extends Array<infer U> ? U[] : T;
+type SingleType<T> = T extends Array<infer U> ? U : T;
 
-namespace Sanitize {
+export namespace Sanitize {
   export interface Options<T> {
-    remove?: KeyType<T>;
-    replace?: ReplaceType<T>;
-    select?: KeyType<T>;
+    remove?: KeyType<SingleType<T>>;
+    replace?: ReplaceType<SingleType<T>>;
+    select?: KeyType<SingleType<T>>;
   }
 }
 
