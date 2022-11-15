@@ -8,7 +8,7 @@ export interface IOptions {
   debug?: boolean;
   errorCode?: number;
   errorHandlers?: ControllerType | NonEmptyArray<ControllerType>;
-  headers: Record<string, any>;
+  headers?: Record<string, any>;
   successCode?: number;
 }
 
