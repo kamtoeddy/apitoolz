@@ -71,7 +71,11 @@ async function makeController(
 
     const body = makeResult(new ApiError(err).summary, false, onResult);
 
-    return { body, headers, statusCode: errorCode ?? body.statusCode };
+    return {
+      body,
+      headers,
+      statusCode: errorCode ?? body?.data?.statusCode ?? 400,
+    };
   }
 }
 
