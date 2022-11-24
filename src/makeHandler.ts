@@ -74,7 +74,7 @@ async function makeController(
     return {
       body,
       headers,
-      statusCode: errorCode ?? body?.data?.statusCode ?? 400,
+      statusCode: body?.data?.statusCode ?? errorCode ?? 400,
     };
   }
 }
