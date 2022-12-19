@@ -1,16 +1,18 @@
 import fs from "fs";
+import {dirname} from "path";
 import { toArray } from "../utils/toArray";
 
 export { parser as parseMultipartData } from "./parseMultipartData";
 
 const isExistingPath = (path: string) => {
-  return fs.existsSync(path.substring(0, path.lastIndexOf("/")));
+  return fs.existsSync(dirname(path));
 };
 
 export function copyFile(from: string, to: string) {
   if (!isExistingPath(from)) return;
 
-  if (!isExistingPath(to)) fs.mkdirSync(to, { recursive: true });
+  const directoryTo = dirname(to)
+  if (!isExistingPath(directoryTo)) fs.mkdirSync(directoryTo, { recursive: true });
 
   fs.copyFileSync(from, to, fs.constants.COPYFILE_FICLONE);
 }
@@ -38,6 +40,10 @@ export async function deleteFolder(path: string) {
   return fs.rm(path, { recursive: true }, (err) => {
     if (err) console.log(`error deleting folder @${path}:`, err);
   });
+}
+
+function getDirectoryName(path:string){
+
 }
 
 export function getFileExtention(mimetype: string | null) {
