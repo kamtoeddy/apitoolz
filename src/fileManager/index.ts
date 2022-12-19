@@ -6,6 +6,7 @@ export { parser as parseMultipartData } from "./parseMultipartData";
 
 export {
   copyFile,
+  cutFile,
   deleteFile,
   deleteFilesAt,
   deleteFolder,
