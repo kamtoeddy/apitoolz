@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.10 <small><sup>19-12-2022</sup></small>
+
+- [Fixed] error where copying a file to a non-existing directory created a folder with that file's name
+
 # 0.3.9 <small><sup>24-11-2022</sup></small>
 
 - [Fixed] errorCode blocking runtime errorCode
