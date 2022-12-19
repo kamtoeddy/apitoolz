@@ -8,7 +8,9 @@ import {
   PayloadKey,
 } from "./types";
 
-export class ErrorSummary extends Error {
+export { ApiError, ErrorSummary };
+
+class ErrorSummary extends Error {
   payload: ErrorPayload = {};
   statusCode: number;
 
@@ -19,7 +21,7 @@ export class ErrorSummary extends Error {
   }
 }
 
-export class ApiError extends Error {
+class ApiError extends Error {
   private _statusCode: number;
   private _payload: ErrorPayload = {};
   private _initMessage: string;
