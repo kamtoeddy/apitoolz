@@ -50,9 +50,7 @@ function deleteFilesAt(paths: string | string[] = []) {
 
 async function deleteFolder(path: string) {
   if (!isExistingPath(path)) return;
-  return fs.rm(path, { recursive: true }, (err) => {
-    if (err) console.log(`error deleting folder @${path}:`, err);
-  });
+  return fs.rm(path, { recursive: true }, (err) => {});
 }
 
 function getFileExtention(mimetype: string | null) {
