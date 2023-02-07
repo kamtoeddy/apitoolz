@@ -23,9 +23,7 @@ const isExistingPath = (path: string) => {
 function copyFile(from: string, to: string) {
   if (!isExistingPath(from)) return;
 
-  const directoryTo = dirname(to);
-  if (!isExistingPath(directoryTo))
-    fs.mkdirSync(directoryTo, { recursive: true });
+  if (!isExistingPath(to)) fs.mkdirSync(dirname(to), { recursive: true });
 
   fs.copyFileSync(from, to, fs.constants.COPYFILE_FICLONE);
 }
