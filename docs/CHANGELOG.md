@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.14 <small><sup>27-02-2023</sup></small>
+
+- [Updated] made Paginator to cast 'limit' and 'page' options to numbers before manipulating
+
 # 0.3.13 <small><sup>27-02-2023</sup></small>
 
 - [Updated] updated Paginator class

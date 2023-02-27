@@ -37,7 +37,9 @@ export class Paginator {
     page,
     totalRecords,
   }: PaginateOptions<T>): PaginatedData<T> {
-    if (page < 1) page = 1;
+    page = Number(page);
+
+    if (page < 1 || isNaN(page)) page = 1;
 
     const paginated: PaginatedData<T> = {
       currentPage: page,
@@ -87,7 +89,9 @@ export class Paginator {
   }
 
   seLimit(limit: number) {
-    if (limit <= this._maxLimit) this._limit = limit;
+    limit = Number(limit);
+
+    if (limit <= this._maxLimit || isNaN(limit)) this._limit = limit;
 
     return this;
   }
