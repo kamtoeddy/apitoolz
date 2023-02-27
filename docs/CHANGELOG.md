@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.13 <small><sup>27-02-2023</sup></small>
+
+- [Updated] updated Paginator class
+
 # 0.3.12 <small><sup>07-02-2023</sup></small>
 
 - [Fix] fixed error when copying files to a new location with copyFile util in fileManager
