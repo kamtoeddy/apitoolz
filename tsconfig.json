@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
-    "declaration": true,
+    "lib": ["ESNext", "es6"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["es2017", "es7", "es6", "dom"],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
-    "target": "es2017",
-    "types": ["jest", "node"],
-    "removeComments": true
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/__tests__/*"]
+  "include": ["."],
+  "exclude": ["node_modules", "dist", "**/tests/*"]
 }
