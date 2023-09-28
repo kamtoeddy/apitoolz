@@ -1,14 +1,20 @@
-import { sortKeys } from './utils/_object-tools'
+import { isEqual, isPropertyOf, sortKeys } from './utils/_object-tools'
 import { toArray } from './utils/to-array'
 import {
   ApiErrorProps,
   ErrorPayload,
   ErrorSummaryProps,
+  FieldError,
   InputPayload,
   PayloadKey
 } from './types'
 
 export { ApiError, ErrorSummary }
+
+export type ValidationErrorToolProps = {
+  message: string
+  payload?: InputPayload
+}
 
 class ErrorSummary extends Error {
   payload: ErrorPayload = {}
@@ -21,9 +27,9 @@ class ErrorSummary extends Error {
   }
 }
 
-class ApiError extends Error {
+class ApiError<OutputKeys extends PayloadKey = PayloadKey> extends Error {
   private _statusCode: number
-  private _payload: ErrorPayload = {}
+  private _payload: ErrorPayload<OutputKeys> = {}
   private _initMessage: string
   private _initStatusCode: number
 
@@ -50,26 +56,42 @@ class ApiError extends Error {
     }
   }
 
-  private _has = (field: PayloadKey) => this._payload.hasOwnProperty(field)
+  private _has = (field: OutputKeys) => isPropertyOf(field, this._payload)
 
   private _setPayload = (payload: InputPayload) => {
-    Object.entries(payload).forEach(([key, value]) => this.add(key, value))
+    Object.entries(payload).forEach(([key, value]) =>
+      this.add(key as OutputKeys, value)
+    )
   }
 
-  add(field: PayloadKey, value?: string | string[]) {
-    if (value) {
-      value = toArray(value)
+  add(field: OutputKeys, value?: InputPayload[OutputKeys]) {
+    const _value = makeFieldError(value ?? [])
 
-      this._payload[field] = this._has(field)
-        ? [...this._payload[field], ...value]
-        : value
-    }
+    if (this._has(field)) {
+      const currentValues = this._payload[field]!
+
+      const { reasons = [], metadata } = _value
+
+      reasons.forEach((reason) => {
+        if (!currentValues.reasons.includes(reason))
+          currentValues.reasons.push(reason)
+      })
+
+      if (metadata && !isEqual(currentValues.metadata, metadata))
+        currentValues.metadata = {
+          ...(currentValues?.metadata ?? {}),
+          ...metadata
+        }
+
+      this._payload[field] = currentValues
+    } else this._payload[field] = _value
 
     return this
   }
 
-  remove = (field: PayloadKey) => {
+  remove = (field: OutputKeys) => {
     delete this._payload?.[field]
+
     return this
   }
 
@@ -83,6 +105,7 @@ class ApiError extends Error {
 
   setMessage = (message: string) => {
     this.message = message
+
     return this
   }
 
@@ -93,6 +116,19 @@ class ApiError extends Error {
   }
 
   throw = () => {
-    throw new ErrorSummary(this.summary)
+    const summary = this.summary
+    this.reset()
+
+    throw new ErrorSummary(summary)
   }
+}
+
+function isFieldError(data: any): data is FieldError {
+  return isPropertyOf('reasons', data) && isPropertyOf('metadata', data)
+}
+
+function makeFieldError(value: InputPayload[PayloadKey]): FieldError {
+  return isFieldError(value)
+    ? value
+    : { reasons: toArray(value), metadata: null }
 }

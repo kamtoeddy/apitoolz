@@ -27,11 +27,13 @@ describe('loadVariables (configuration)', () => {
         try {
           toFail(value)()
         } catch (err) {
-          expect(err).toEqual(
+          expect(err).toMatchObject(
             expect.objectContaining({
               message: errorMessage,
               payload: {
-                [value]: ['Should not be empty nor contain spaces']
+                [value]: expect.objectContaining({
+                  reasons: ['Should not be empty nor contain spaces']
+                })
               },
               statusCode: 500
             })
@@ -59,7 +61,9 @@ describe('loadVariables (configuration)', () => {
             expect.objectContaining({
               message: errorMessage,
               payload: {
-                envName: ['A parser must be a function']
+                envName: expect.objectContaining({
+                  reasons: ['A parser must be a function']
+                })
               },
               statusCode: 500
             })
