@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
 export function apiError_Tests({ ApiError }: any) {
+  function getExpectedPayload(data: any) {
+    return Object.keys(data).map((key) => {
+      return [key, { reasons: data[key], metadata: null }] as const
+    })
+  }
+
   describe('ApiError', () => {
     it('should create properly with default values for payload & statusCode', () => {
       const message = 'Test Error'
@@ -24,7 +30,9 @@ export function apiError_Tests({ ApiError }: any) {
       expect(error.summary).toEqual(
         expect.objectContaining({
           message,
-          payload,
+          payload: expect.objectContaining({
+            testKey: { reasons: payload.testKey, metadata: null }
+          }),
           statusCode
         })
       )
@@ -57,10 +65,15 @@ export function apiError_Tests({ ApiError }: any) {
       for (const [payload, expectedResults] of values) {
         const error = new ApiError({ message, payload, statusCode })
 
-        expect(error.summary).toEqual(
+        expect(error.summary).toMatchObject(
           expect.objectContaining({
             message,
-            payload: expectedResults,
+            payload: expect.objectContaining(
+              getExpectedPayload(expectedResults).reduce(
+                (prev, [prop, data]) => ({ ...prev, [prop]: data }),
+                {}
+              )
+            ),
             statusCode
           })
         )
@@ -104,10 +117,14 @@ export function apiError_Tests({ ApiError }: any) {
 
       error.add('test key a', 'Added test key a')
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message,
-          payload: { 'test key a': ['Added test key a'] },
+          payload: expect.objectContaining(
+            getExpectedPayload({
+              'test key a': ['Added test key a']
+            }).reduce((prev, [prop, data]) => ({ ...prev, [prop]: data }), {})
+          ),
           statusCode
         })
       )
@@ -120,63 +137,73 @@ export function apiError_Tests({ ApiError }: any) {
 
       const error = new ApiError({ message, payload, statusCode })
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message,
-          payload: { 'test key a': ['Added test key a'] },
+          payload: expect.objectContaining(
+            getExpectedPayload({
+              'test key a': ['Added test key a']
+            }).reduce((prev, [prop, data]) => ({ ...prev, [prop]: data }), {})
+          ),
           statusCode
         })
       )
 
       error.add('test key a', 'Added test key a 2')
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message,
-          payload: {
-            'test key a': expect.arrayContaining([
-              'Added test key a',
-              'Added test key a 2'
-            ])
-          },
+          payload: expect.objectContaining(
+            getExpectedPayload({
+              'test key a': expect.arrayContaining([
+                'Added test key a',
+                'Added test key a 2'
+              ])
+            }).reduce((prev, [prop, data]) => ({ ...prev, [prop]: data }), {})
+          ),
           statusCode
         })
       )
 
       error.add('test key a', ['Added test key a 3', 'Added test key a 4'])
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message,
-          payload: {
-            'test key a': expect.arrayContaining([
-              'Added test key a',
-              'Added test key a 2',
-              'Added test key a 3',
-              'Added test key a 4'
-            ])
-          },
+          payload: expect.objectContaining(
+            getExpectedPayload({
+              'test key a': expect.arrayContaining([
+                'Added test key a',
+                'Added test key a 2',
+                'Added test key a 3',
+                'Added test key a 4'
+              ])
+            }).reduce((prev, [prop, data]) => ({ ...prev, [prop]: data }), {})
+          ),
           statusCode
         })
       )
 
       error.add('test key b', ['Added test key b', 'Added test key b 1'])
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message,
-          payload: {
-            'test key a': expect.arrayContaining([
-              'Added test key a',
-              'Added test key a 2',
-              'Added test key a 3',
-              'Added test key a 4'
-            ]),
-            'test key b': expect.arrayContaining([
-              'Added test key b',
-              'Added test key b 1'
-            ])
-          },
+          payload: expect.objectContaining(
+            getExpectedPayload({
+              'test key a': expect.arrayContaining([
+                'Added test key a',
+                'Added test key a 2',
+                'Added test key a 3',
+                'Added test key a 4'
+              ]),
+              'test key b': expect.arrayContaining([
+                'Added test key b',
+                'Added test key b 1'
+              ])
+            }).reduce((prev, [prop, data]) => ({ ...prev, [prop]: data }), {})
+          ),
           statusCode
         })
       )
@@ -200,24 +227,31 @@ export function apiError_Tests({ ApiError }: any) {
       expect(error.summary).toEqual(
         expect.objectContaining({
           message,
-          payload,
+          payload: expect.objectContaining(
+            getExpectedPayload(payload).reduce(
+              (prev, [prop, data]) => ({ ...prev, [prop]: data }),
+              {}
+            )
+          ),
           statusCode
         })
       )
 
       error.remove('test key b')
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message,
-          payload: {
-            'test key a': [
-              'Added test key a',
-              'Added test key a 2',
-              'Added test key a 3',
-              'Added test key a 4'
-            ]
-          },
+          payload: expect.objectContaining(
+            getExpectedPayload({
+              'test key a': [
+                'Added test key a',
+                'Added test key a 2',
+                'Added test key a 3',
+                'Added test key a 4'
+              ]
+            }).reduce((prev, [prop, data]) => ({ ...prev, [prop]: data }), {})
+          ),
           statusCode
         })
       )
@@ -238,20 +272,30 @@ export function apiError_Tests({ ApiError }: any) {
 
       const error = new ApiError({ message, payload, statusCode })
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message,
-          payload,
+          payload: expect.objectContaining(
+            getExpectedPayload(payload).reduce(
+              (prev, [prop, data]) => ({ ...prev, [prop]: data }),
+              {}
+            )
+          ),
           statusCode
         })
       )
 
       error.remove('test key c')
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message,
-          payload,
+          payload: expect.objectContaining(
+            getExpectedPayload(payload).reduce(
+              (prev, [prop, data]) => ({ ...prev, [prop]: data }),
+              {}
+            )
+          ),
           statusCode
         })
       )
@@ -275,7 +319,12 @@ export function apiError_Tests({ ApiError }: any) {
       expect(error.summary).toEqual(
         expect.objectContaining({
           message,
-          payload,
+          payload: expect.objectContaining(
+            getExpectedPayload(payload).reduce(
+              (prev, [prop, data]) => ({ ...prev, [prop]: data }),
+              {}
+            )
+          ),
           statusCode
         })
       )
@@ -287,7 +336,12 @@ export function apiError_Tests({ ApiError }: any) {
       expect(error.summary).toEqual(
         expect.objectContaining({
           message: newMessage,
-          payload,
+          payload: expect.objectContaining(
+            getExpectedPayload(payload).reduce(
+              (prev, [prop, data]) => ({ ...prev, [prop]: data }),
+              {}
+            )
+          ),
           statusCode
         })
       )
@@ -308,10 +362,15 @@ export function apiError_Tests({ ApiError }: any) {
 
       const error = new ApiError({ message, payload, statusCode })
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message,
-          payload,
+          payload: expect.objectContaining(
+            getExpectedPayload(payload).reduce(
+              (prev, [prop, data]) => ({ ...prev, [prop]: data }),
+              {}
+            )
+          ),
           statusCode
         })
       )
@@ -320,10 +379,15 @@ export function apiError_Tests({ ApiError }: any) {
 
       error.setMessage(newMessage)
 
-      expect(error.summary).toEqual(
+      expect(error.summary).toMatchObject(
         expect.objectContaining({
           message: newMessage,
-          payload,
+          payload: expect.objectContaining(
+            getExpectedPayload(payload).reduce(
+              (prev, [prop, data]) => ({ ...prev, [prop]: data }),
+              {}
+            )
+          ),
           statusCode
         })
       )
@@ -337,6 +401,34 @@ export function apiError_Tests({ ApiError }: any) {
           statusCode
         })
       )
+    })
+
+    it('should empty the original error after the "throw" method has been invoked', () => {
+      const message = 'Test Error',
+        payload = {
+          'test key a': [
+            'Added test key a',
+            'Added test key a 2',
+            'Added test key a 3',
+            'Added test key a 4'
+          ],
+          'test key b': ['Added test key b', 'Added test key b 1']
+        },
+        statusCode = 300
+
+      const error = new ApiError({ message, payload, statusCode })
+
+      function toFail(error: any) {
+        return () => error.throw()
+      }
+
+      expect(toFail(error)).toThrow(message)
+
+      try {
+        toFail(error)()
+      } catch (err: any) {
+        expect(err).toMatchObject({ message, payload: {}, statusCode })
+      }
     })
 
     it('should throw the summary with the throw method', () => {
@@ -361,15 +453,18 @@ export function apiError_Tests({ ApiError }: any) {
       expect(toFail(error)).toThrow(message)
 
       try {
-        toFail(error)()
+        toFail(new ApiError({ message, payload, statusCode }))()
       } catch (err: any) {
-        expect(err).toEqual(
-          expect.objectContaining({
-            message,
-            payload,
-            statusCode
-          })
-        )
+        expect(err).toMatchObject({
+          message,
+          payload: expect.objectContaining(
+            getExpectedPayload(payload).reduce(
+              (prev, [prop, data]) => ({ ...prev, [prop]: data }),
+              {}
+            )
+          ),
+          statusCode
+        })
       }
 
       const newMessage = 'New Error Message'
@@ -378,22 +473,13 @@ export function apiError_Tests({ ApiError }: any) {
 
       expect(toFail(error)).toThrow(newMessage)
 
+      error.setMessage(newMessage)
+
       try {
         toFail(error)()
       } catch (err: any) {
-        expect(err).toEqual(
-          expect.objectContaining({
-            message: newMessage,
-            payload,
-            statusCode
-          })
-        )
+        expect(err).toMatchObject({ message: newMessage })
       }
-
-      // error.reset();
-
-      // expect(error.summary).toMatchObject({ message, statusCode });
-      // expect(error.summary.payload).toEqual({});
     })
   })
 }

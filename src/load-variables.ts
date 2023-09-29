@@ -5,6 +5,7 @@ import {
   PrimitiveDefinition,
   VariableDefinitions
 } from './types'
+import { isPropertyOf } from './utils/_object-tools'
 
 type GetType<T> = T extends { default: infer D }
   ? D extends undefined
@@ -46,25 +47,40 @@ const processVariables = <T extends VariableDefinitions>(vars: T) => {
   ][]
 
   for (const [name, definition] of nameDefinitionTuples) {
-    let isInValid = false
+    let isValid = true
 
     const _name = name?.trim()
 
     if (!_name || name !== _name) {
       error.add(name, 'Should not be empty nor contain spaces')
-      isInValid = true
+      isValid = false
     }
 
     const { default: _default, parser } = getDefinition(definition)
 
-    if (definition.hasOwnProperty('parser') && typeof parser != 'function') {
+    if (isPropertyOf('parser', definition) && typeof parser != 'function') {
       error.add(name, 'A parser must be a function')
-      isInValid = true
+      isValid = false
     }
 
-    if (isInValid) continue
-
     let val = process.env?.[name]
+
+    if (isPropertyOf('requred', definition)) {
+      try {
+        let required = (definition as ObjectDefinition).required
+
+        if (typeof required == 'function') required = required()
+
+        if (required && !val) {
+          error.add(name, `${name} is a required property`)
+          isValid = false
+        }
+      } finally {
+        // pass
+      }
+    }
+
+    if (!isValid) continue
 
     if (val && parser) val = parser(val)
 

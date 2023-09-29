@@ -59,9 +59,10 @@ class ApiError<OutputKeys extends PayloadKey = PayloadKey> extends Error {
   private _has = (field: OutputKeys) => isPropertyOf(field, this._payload)
 
   private _setPayload = (payload: InputPayload) => {
-    Object.entries(payload).forEach(([key, value]) =>
-      this.add(key as OutputKeys, value)
-    )
+    if (payload)
+      Object.entries(payload).forEach(([key, value]) =>
+        this.add(key as OutputKeys, value)
+      )
   }
 
   add(field: OutputKeys, value?: InputPayload[OutputKeys]) {

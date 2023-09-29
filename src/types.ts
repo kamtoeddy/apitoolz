@@ -60,7 +60,11 @@ export type ParserConfig = FileConfig & {
 }
 
 // loadVariables
-export type ObjectDefinition = { default?: any; parser?: (v: any) => any }
+export type ObjectDefinition = {
+  default?: any
+  parser?: (v: any) => any
+  required?: boolean | (() => boolean)
+}
 export type PrimitiveDefinition = boolean | number | string | symbol | Function
 
 export interface VariableDefinitions {

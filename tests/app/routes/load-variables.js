@@ -52,3 +52,13 @@ router.get('/env', (req, res) => {
 router.get('/env/parsed', (req, res) => {
   res.json({ ENV_NUMBER_VAL_PARSED })
 })
+
+router.get('/env/required', (req, res) => {
+  try {
+    loadVariables({ REQUIRED: { required: true } })
+
+    return res.json({ error: null })
+  } catch (error) {
+    return res.json({ error })
+  }
+})
