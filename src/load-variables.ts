@@ -21,7 +21,7 @@ type GetType<T> = T extends { default: infer D }
 
 type ParsedVariables<T> = {
   [K in StringKey<T>]: GetType<T[K]>
-}
+} & {}
 
 function getDefault(val: PrimitiveDefinition) {
   return typeof val == 'function' ? val() : val
