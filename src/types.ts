@@ -67,7 +67,7 @@ export type ObjectDefinition = {
 }
 export type PrimitiveDefinition = boolean | number | string | symbol | Function
 
-export interface VariableDefinitions {
+export type VariableDefinitions = {
   [key: string]: PrimitiveDefinition | ObjectDefinition
 }
 

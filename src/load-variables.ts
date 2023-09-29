@@ -65,7 +65,7 @@ const processVariables = <T extends VariableDefinitions>(vars: T) => {
 
     let val = process.env?.[name]
 
-    if (isPropertyOf('requred', definition)) {
+    if (isPropertyOf('required', definition)) {
       try {
         let required = (definition as ObjectDefinition).required
 

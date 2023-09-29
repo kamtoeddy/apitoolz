@@ -62,3 +62,33 @@ router.get('/env/required', (req, res) => {
     return res.json({ error })
   }
 })
+
+router.get('/env/required/false', (req, res) => {
+  try {
+    loadVariables({ REQUIRED: { required: false } })
+
+    return res.json({ error: null })
+  } catch (error) {
+    return res.json({ error })
+  }
+})
+
+router.get('/env/required/function', (req, res) => {
+  try {
+    loadVariables({ REQUIRED: { required: () => true } })
+
+    return res.json({ error: null })
+  } catch (error) {
+    return res.json({ error })
+  }
+})
+
+router.get('/env/required/function/false', (req, res) => {
+  try {
+    loadVariables({ REQUIRED: { required: () => false } })
+
+    return res.json({ error: null })
+  } catch (error) {
+    return res.json({ error })
+  }
+})

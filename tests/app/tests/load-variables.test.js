@@ -122,5 +122,45 @@ describe('loadVariables with express app', () => {
 
       expect(res.body).toEqual({ ENV_NUMBER_VAL_PARSED: 1000 })
     })
+
+    it('should respect "required" key word', async () => {
+      const res = await request(server).get(`${baseUrl}/required`)
+
+      expect(res.body).toMatchObject({
+        error: expect.objectContaining({
+          payload: {
+            REQUIRED: expect.objectContaining({
+              reasons: ['REQUIRED is a required property']
+            })
+          },
+          statusCode: 500
+        })
+      })
+
+      const res1 = await request(server).get(`${baseUrl}/required/false`)
+
+      expect(res1.body).toEqual({ error: null })
+    })
+
+    it('should respect "required" key word as function', async () => {
+      const res = await request(server).get(`${baseUrl}/required/function`)
+
+      expect(res.body).toMatchObject({
+        error: expect.objectContaining({
+          payload: {
+            REQUIRED: expect.objectContaining({
+              reasons: ['REQUIRED is a required property']
+            })
+          },
+          statusCode: 500
+        })
+      })
+
+      const res1 = await request(server).get(
+        `${baseUrl}/required/function/false`
+      )
+
+      expect(res1.body).toEqual({ error: null })
+    })
   })
 })
