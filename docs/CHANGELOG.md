@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.16 <small><sup>29-09-2023</sup></small>
+
+- [Updated] improve typings of `loadVariables`
+
 # 0.3.15 <small><sup>29-09-2023</sup></small>
 
 - [Updated] update signature of ApiError
