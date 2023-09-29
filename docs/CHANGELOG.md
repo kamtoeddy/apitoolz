@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# 0.3.15 <small><sup>29-09-2023</sup></small>
+
+- [Updated] update signature of ApiError
+- [Add] add `required` rule to env variable loader
+
 # 0.3.14 <small><sup>27-02-2023</sup></small>
 
 - [Updated] made Paginator to cast 'limit' and 'page' options to numbers before manipulating
@@ -78,8 +83,8 @@
 
   ```ts
   body: {
-    data: any;
-    sucess: boolean;
+    data: any
+    sucess: boolean
   }
   ```
 
