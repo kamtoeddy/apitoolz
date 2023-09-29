@@ -8,5 +8,5 @@ app.use(express.json())
 app.use(router)
 
 export default function makeServer() {
-  return app.listen(Math.floor(Math.random() * 1000))
+  return app.listen(Math.floor(1000 + Math.random() * 1000))
 }
