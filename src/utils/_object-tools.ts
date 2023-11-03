@@ -1,4 +1,4 @@
-import { NestedKeyOf, ObjectType } from '../types';
+import { DeepKeyOf, DeepValueOf, ObjectType } from '../types';
 
 export {
   assignDeep,
@@ -62,7 +62,7 @@ function cloneDeep<T>(dt: T): T {
 
 function _assignDeep<T extends ObjectType>(
   data: T,
-  key: NestedKeyOf<T> | string[],
+  key: DeepKeyOf<T> | string[],
   value: any
 ): ObjectType {
   key = getKeys(key);
@@ -84,19 +84,24 @@ function _assignDeep<T extends ObjectType>(
 
 function assignDeep<T extends ObjectType>(
   data: T,
-  key: NestedKeyOf<T>,
+  key: DeepKeyOf<T>,
   value: any
 ): ObjectType {
   return _assignDeep(data, key, value);
 }
 
-function getDeepValue<T extends ObjectType>(data: T, key: NestedKeyOf<T>): any {
-  return key.split('.').reduce((prev, next) => prev?.[next], data);
+function getDeepValue<T extends ObjectType, K extends DeepKeyOf<T>>(
+  data: T,
+  key: K
+): DeepValueOf<T, K> {
+  return (key as any)
+    .split('.')
+    .reduce((prev: any, next: any) => prev?.[next], data);
 }
 
 function _hasDeepKey<T extends ObjectType>(
   obj: T,
-  key: NestedKeyOf<T> | string[]
+  key: DeepKeyOf<T> | string[]
 ): boolean {
   key = getKeys(key);
 
@@ -110,10 +115,11 @@ function _hasDeepKey<T extends ObjectType>(
 
   if (keyFound && !key.length) return true;
 
+  // @ts-ignore
   return _hasDeepKey(obj?.[_key], key);
 }
 
-function hasDeepKey<T extends ObjectType>(obj: T, key: NestedKeyOf<T>) {
+function hasDeepKey<T extends ObjectType>(obj: T, key: DeepKeyOf<T>) {
   return _hasDeepKey(obj, key);
 }
 
@@ -135,7 +141,7 @@ function _removeDeep<T extends ObjectType>(
   return { ...obj, [_key]: _removeDeep(obj[_key], key) };
 }
 
-function removeDeep<T extends ObjectType>(obj: T, key: NestedKeyOf<T>) {
+function removeDeep<T extends ObjectType>(obj: T, key: DeepKeyOf<T>) {
   return _removeDeep(obj, key);
 }
 

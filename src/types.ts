@@ -4,13 +4,29 @@ export type StringKey<T> = Extract<keyof T, string>;
 export type KeyOf<T> = keyof T & (string | number);
 export type NonEmptyArray<T> = [T, ...T[]];
 
-export type NestedKeyOf<T> = T extends never
-  ? ''
-  : {
-      [Key in KeyOf<T>]: T[Key] extends ObjectType
-        ? `${Key}` | `${Key}.${NestedKeyOf<T[Key]>}`
-        : `${Key}`;
-    }[KeyOf<T>];
+export type DeepKeyOf<T, K extends keyof T = keyof T> = K extends
+  | string
+  | number
+  | `${number}`
+  ? T[K] extends infer R
+    ? R extends Function
+      ? never
+      : R extends Record<string, unknown>
+      ? `${K}` | `${K}.${DeepKeyOf<R>}`
+      : `${K}`
+    : never
+  : never;
+
+export type DeepValueOf<
+  T,
+  P extends DeepKeyOf<T>
+> = P extends `${infer K}.${infer Rest}`
+  ? T[K & keyof T] extends infer S
+    ? Rest extends DeepKeyOf<S>
+      ? DeepValueOf<S, Rest>
+      : never
+    : never
+  : T[P & keyof T];
 
 export interface Adapter {
   end: (body: any) => void;
@@ -66,12 +82,8 @@ type GetTypeOfObject<T> = T extends {
   default?: infer D;
   parser?: infer P;
 }
-  ? P extends never
-    ? D extends never
-      ? never
-      : GetCallableType<D>
-    : D extends never
-    ? GetCallableType<P>
+  ? GetCallableType<D> | GetCallableType<P> extends never
+    ? GetCallableType<D>
     : GetCallableType<D> | GetCallableType<P>
   : never;
 

@@ -53,5 +53,5 @@
     "test:watch": "npm run build && vitest",
     "prepare": "npm run clean-up && npm run build"
   },
-  "version": "0.3.16"
+  "version": "0.3.17"
 }

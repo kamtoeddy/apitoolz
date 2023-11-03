@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.17 <small><sup>[x][x]-11-2023</sup></small>
+
+- [Updated] improve typings of `sanitize` utility
+
 # 0.3.16 <small><sup>29-09-2023</sup></small>
 
 - [Updated] improve typings of `loadVariables`
@@ -87,8 +91,8 @@
 
   ```ts
   body: {
-    data: any
-    sucess: boolean
+    data: any;
+    sucess: boolean;
   }
   ```
 
