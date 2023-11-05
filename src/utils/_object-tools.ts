@@ -55,7 +55,6 @@ function isPropertyOf<T>(
 }
 
 // methods
-
 function cloneDeep<T>(dt: T): T {
   return dt === undefined ? dt : JSON.parse(JSON.stringify(dt));
 }
@@ -65,7 +64,7 @@ function _assignDeep<T extends ObjectType>(
   key: DeepKeyOf<T> | string[],
   value: any
 ): ObjectType {
-  key = getKeys(key);
+  key = getKeys(key as any);
 
   const _key = key.shift()! as keyof T;
 
@@ -103,7 +102,7 @@ function _hasDeepKey<T extends ObjectType>(
   obj: T,
   key: DeepKeyOf<T> | string[]
 ): boolean {
-  key = getKeys(key);
+  key = getKeys(key as any);
 
   const _key = key.shift();
 
@@ -135,6 +134,7 @@ function _removeDeep<T extends ObjectType>(
 
   if (!key.length) {
     delete obj?.[_key];
+
     return obj;
   }
 
@@ -142,13 +142,13 @@ function _removeDeep<T extends ObjectType>(
 }
 
 function removeDeep<T extends ObjectType>(obj: T, key: DeepKeyOf<T>) {
-  return _removeDeep(obj, key);
+  return _removeDeep(obj, key as any);
 }
 
 function removeEmpty(obj: ObjectType, key: string | string[]): ObjectType {
   const currentKey = getKey(key);
 
-  let deepValue = getDeepValue(obj, currentKey);
+  const deepValue = getDeepValue(obj, currentKey);
 
   if (isEmptyObject(deepValue)) {
     removeDeep(obj, currentKey);

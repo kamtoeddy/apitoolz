@@ -43,12 +43,13 @@ function deleteFile(path: string) {
 
 function deleteFilesAt(paths: string | string[] = []) {
   paths = toArray(paths)
-  for (let path of paths) deleteFile(path)
+  for (const path of paths) deleteFile(path)
 }
 
 async function deleteFolder(path: string) {
   if (!isExistingPath(path)) return
-  return fs.rm(path, { recursive: true }, () => {})
+  
+return fs.rm(path, { recursive: true }, () => {})
 }
 
 function getFileExtention(mimetype: string | null) {

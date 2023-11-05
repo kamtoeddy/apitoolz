@@ -4,18 +4,17 @@ export type StringKey<T> = Extract<keyof T, string>;
 export type KeyOf<T> = keyof T & (string | number);
 export type NonEmptyArray<T> = [T, ...T[]];
 
-export type DeepKeyOf<T, K extends keyof T = keyof T> = K extends
-  | string
-  | number
-  | `${number}`
-  ? T[K] extends infer R
-    ? R extends Function
-      ? never
-      : R extends Record<string, unknown>
-      ? `${K}` | `${K}.${DeepKeyOf<R>}`
-      : `${K}`
-    : never
-  : never;
+export type DeepKeyOf<T> = T extends Function
+  ? never
+  : T extends ObjectType
+  ? {
+      [K in keyof T & (string | number)]: T[K] extends Array<any>
+        ? K
+        : T[K] extends ObjectType
+        ? `${K}` | `${K}.${DeepKeyOf<T[K]>}`
+        : `${K}`;
+    }[keyof T & (string | number)]
+  : StringKey<T>;
 
 export type DeepValueOf<
   T,
@@ -76,15 +75,19 @@ export type ParserConfig = FileConfig & {
 };
 
 // loadVariables
-type GetCallableType<D, Fallback = D> = D extends () => infer R ? R : Fallback;
+type GetCallableType<D, Fallback = D> = D extends () => any
+  ? ReturnType<D>
+  : Fallback;
 
 type GetTypeOfObject<T> = T extends {
   default?: infer D;
   parser?: infer P;
 }
-  ? GetCallableType<D> | GetCallableType<P> extends never
-    ? GetCallableType<D>
-    : GetCallableType<D> | GetCallableType<P>
+  ? P extends NonNullable<Function>
+    ? D extends NonNullable<D>
+      ? GetCallableType<D> | GetCallableType<P>
+      : GetCallableType<P> | undefined
+    : GetCallableType<D>
   : never;
 
 type GetType<T> = T extends { default?: any; parser?: any }

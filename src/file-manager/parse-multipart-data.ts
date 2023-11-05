@@ -54,6 +54,7 @@ export const parser =
 
     const generalConfig = { ...defaultConfig, ...config };
 
+    // eslint-disable-next-line prefer-const
     let { filesConfig, getFilesConfig, uploadDir } = generalConfig;
 
     const error = new ApiError({
@@ -75,7 +76,7 @@ export const parser =
     form.parse(req as Request, (err, fields, files) => {
       if (err) return terminateOperation(error, response, onResult);
 
-      for (let prop in fields)
+      for (const prop in fields)
         req.body[prop] = isJSON(fields[prop])
           ? JSON.parse(fields[prop] as string)
           : fields[prop];
@@ -86,7 +87,7 @@ export const parser =
       const paths = [];
       const unWantedPaths = [];
 
-      for (let key in files) {
+      for (const key in files) {
         const file = files[key] as formidable.File;
 
         if (!desiredFields.includes(key)) {
@@ -95,6 +96,7 @@ export const parser =
           continue;
         }
 
+        // eslint-disable-next-line prefer-const
         let { maxSize, pathOnly, validFormats } = makeFileConfig(
           filesConfig?.[key],
           generalConfig
@@ -132,6 +134,7 @@ export const parser =
 
       if (error.isPayloadLoaded) {
         deleteFilesAt(paths);
+
         return terminateOperation(error, response, onResult);
       }
 

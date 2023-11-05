@@ -5,28 +5,30 @@ import {
   ParsedVariables,
   StringKey
 } from './types';
-import { ObjectDefinition, Primitive, VariableDefinitions } from './types';
+import { ObjectDefinition, VariableDefinitions } from './types';
 import { isPropertyOf } from './utils/_object-tools';
 
-function getDefault(val: Primitive | FunctionDefinition<any>) {
+function getDefault(val: any | FunctionDefinition<any>) {
   return typeof val == 'function' ? val() : val;
 }
 
-function getDefinition(def: Primitive | ObjectDefinition): ObjectDefinition {
-  return typeof def != 'object' ? { default: def } : def;
+function getDefinition(def: any | ObjectDefinition) {
+  return (typeof def != 'object' ? { default: def } : def) as ObjectDefinition;
 }
 
-const processVariables = <T extends VariableDefinitions<T>>(vars: T) => {
+const processVariables = <Definitions extends VariableDefinitions<Definitions>>(
+  vars: Definitions
+) => {
   const error = new ApiError({
     message: 'Invalid Environment Variables',
     statusCode: 500
   });
 
-  const parsedVars = {} as ParsedVariables<T>;
+  const parsedVars = {} as ParsedVariables<Definitions>;
 
   const nameDefinitionTuples = Object.entries(vars) as [
-    StringKey<T>,
-    ObjectDefinition | Primitive
+    StringKey<Definitions>,
+    ObjectDefinition | any
   ][];
 
   for (const [name, definition] of nameDefinitionTuples) {
@@ -55,7 +57,7 @@ const processVariables = <T extends VariableDefinitions<T>>(vars: T) => {
         if (typeof required == 'function') required = required();
 
         if (required && !val) {
-          error.add(name, `${name} is a required property`);
+          error.add(name, `'${name}' is a required property`);
           isValid = false;
         }
       } finally {
@@ -75,15 +77,18 @@ const processVariables = <T extends VariableDefinitions<T>>(vars: T) => {
   return parsedVars;
 };
 
-type Options<T extends VariableDefinitions<T>, Output extends ObjectType> = {
-  transform?: (variables: ParsedVariables<T>) => Output;
+type Options<
+  Definitions extends VariableDefinitions<Definitions>,
+  Output extends ObjectType
+> = {
+  transform?: (variables: ParsedVariables<Definitions>) => Output;
 };
 export const loadVariables = <
-  T extends VariableDefinitions<T>,
-  Output extends ObjectType = ParsedVariables<T>
+  Definitions extends VariableDefinitions<Definitions>,
+  Output extends ObjectType = ParsedVariables<Definitions>
 >(
-  vars: T,
-  { transform }: Options<T, Output> = {}
+  vars: Definitions,
+  { transform }: Options<Definitions, Output> = {}
 ) => {
   const parsed = processVariables(vars);
 

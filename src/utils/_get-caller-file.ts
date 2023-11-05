@@ -1,6 +1,6 @@
-import path from "path";
+import path from 'path';
 
-export function _getCallerFile(depth: number = 2, dirOnly = false) {
+export function _getCallerFile(depth = 2, dirOnly = false) {
   const stack = callsite() as any;
 
   const filePath = stack?.[depth]?.getFileName();
@@ -13,5 +13,6 @@ function callsite() {
   Error.prepareStackTrace = (_, stack) => stack;
   const stack = new Error().stack!.slice(1);
   Error.prepareStackTrace = _prepareStackTrace;
+
   return stack;
 }

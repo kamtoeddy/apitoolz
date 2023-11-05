@@ -1,4 +1,4 @@
-import { DeepKeyOf, ObjectType } from './types';
+import { DeepKeyOf, DeepValueOf, ObjectType } from './types';
 import { toArray } from './utils/to-array';
 import {
   assignDeep,
@@ -10,7 +10,7 @@ import {
 } from './utils/_object-tools';
 
 type KeyType<T> = DeepKeyOf<T> | DeepKeyOf<T>[];
-type ReplaceType<T> = { [K in DeepKeyOf<T>]?: string };
+type ReplaceType<T> = { [K in DeepKeyOf<T>]?: DeepValueOf<T, K> };
 type SanitizedType<T> = T extends Array<infer U> ? U[] : T;
 type SingleType<T> = T extends Array<infer U> ? U : T;
 
@@ -22,15 +22,13 @@ export namespace Sanitize {
   }
 }
 
-const defaultOptions = { remove: [], replace: {} };
-
 const removeValues = <T extends ObjectType>(
   data: T,
   keysToRemove: KeyType<T>
 ) => {
   const _keysToRemove = toArray(keysToRemove);
 
-  for (let key of _keysToRemove) removeDeep(data, key);
+  for (const key of _keysToRemove) removeDeep(data, key);
 
   return data;
 };
@@ -41,13 +39,13 @@ const replaceValues = <T extends ObjectType>(
 ) => {
   const entries = Object.entries(keysToReplace) as [DeepKeyOf<T>, string][];
 
-  for (let [key, newKey] of entries) {
+  for (const [key, newKey] of entries) {
     if (!hasDeepKey(data, key)) continue;
 
     assignDeep(data, newKey as DeepKeyOf<T>, getDeepValue(data, key));
 
     removeDeep(data, key);
-    removeEmpty(data, key);
+    removeEmpty(data, key as string);
   }
 
   return data;
@@ -61,7 +59,7 @@ const selectValues = <T extends ObjectType>(
 
   const _data = {} as T;
 
-  for (let key of _keysToSelect)
+  for (const key of _keysToSelect)
     if (hasDeepKey(data, key)) assignDeep(_data, key, getDeepValue(data, key));
 
   return _data;
@@ -79,7 +77,7 @@ const sortKeys = <T extends ObjectType>(data: T) => {
 
 const one = <T extends ObjectType>(
   data: T,
-  options: Sanitize.Options<T> = defaultOptions
+  options: Sanitize.Options<T> = {}
 ) => {
   if (!data || typeof data != 'object') return data;
 
@@ -87,6 +85,7 @@ const one = <T extends ObjectType>(
 
   const { remove, replace, select } = options;
 
+  // @ts-ignore
   if (select?.length) _data = selectValues(_data, select as any);
 
   if (replace) _data = replaceValues(_data, replace);
@@ -98,12 +97,12 @@ const one = <T extends ObjectType>(
 
 const many = <T extends ObjectType>(
   data: T[],
-  options: Sanitize.Options<T> = defaultOptions
+  options: Sanitize.Options<T> = {}
 ) => data.map((dt) => one(dt, options));
 
 export const sanitize = <T extends ObjectType | ObjectType[]>(
   data: T,
-  options: Sanitize.Options<T> = defaultOptions
+  options: Sanitize.Options<T> = {}
 ) => {
   const { remove, replace, select } = options;
 
