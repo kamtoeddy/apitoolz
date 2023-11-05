@@ -18,12 +18,14 @@ class ExpressAdapter implements Adapter {
 
   setHeaders = (headers: HeaderType) => {
     this.response.set(headers);
-    return this;
+    
+return this;
   };
 
   setStatusCode = (statusCode: number) => {
     this.response.status(statusCode);
-    return this;
+    
+return this;
   };
 }
 

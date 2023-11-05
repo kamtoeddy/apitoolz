@@ -1,7 +1,7 @@
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    setupFiles: './tests/app/setEnvVars.js'
+    setupFiles: './tests/setEnvVars.js'
   }
-})
+});

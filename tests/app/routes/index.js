@@ -1,15 +1,13 @@
-import { Router } from 'express'
+import { Router } from 'express';
 
-const router = Router()
+const router = Router();
 
-export default router
+export default router;
 
-import loadVariableRoutes from './load-variables'
-import makeHandlerRoutes from './make-handler'
-import requestParserRoutes from './request-parser'
-import useWorkerRoutes from './use-worker'
+import makeHandlerRoutes from './make-handler';
+import requestParserRoutes from './request-parser';
+import useWorkerRoutes from './use-worker';
 
-router.use('/load-variables', loadVariableRoutes)
-router.use('/make-handler', makeHandlerRoutes)
-router.use('/request-parser', requestParserRoutes)
-router.use('/use-worker', useWorkerRoutes)
+router.use('/make-handler', makeHandlerRoutes);
+router.use('/request-parser', requestParserRoutes);
+router.use('/use-worker', useWorkerRoutes);

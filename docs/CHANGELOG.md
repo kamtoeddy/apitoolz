@@ -1,21 +1,26 @@
 # CHANGELOG
 
+# 0.3.17 <small><sup>[x][x]-11-2023</sup></small>
+
+- [Add] added transform option to `loadVariables` utility
+- [Update] improved typings of `sanitize` utility
+
 # 0.3.16 <small><sup>29-09-2023</sup></small>
 
-- [Updated] improve typings of `loadVariables`
+- [Update] improved typings of `loadVariables`
 
 # 0.3.15 <small><sup>29-09-2023</sup></small>
 
-- [Updated] update signature of ApiError
+- [Update] updated signature of ApiError
 - [Add] add `required` rule to env variable loader
 
 # 0.3.14 <small><sup>27-02-2023</sup></small>
 
-- [Updated] made Paginator to cast 'limit' and 'page' options to numbers before manipulating
+- [Update] made Paginator to cast 'limit' and 'page' options to numbers before manipulating
 
 # 0.3.13 <small><sup>27-02-2023</sup></small>
 
-- [Updated] updated Paginator class
+- [Update] updated Paginator class
 
 # 0.3.12 <small><sup>07-02-2023</sup></small>
 
@@ -23,80 +28,80 @@
 
 # 0.3.11 <small><sup>25-12-2022</sup></small>
 
-- [Updated] disabled logging in console when there's an error deleting a folder with fileManager.deleteFolder
+- [Update] disabled logging in console when there's an error deleting a folder with fileManager.deleteFolder
 
 # 0.3.10 <small><sup>19-12-2022</sup></small>
 
-- [Fixed] error where copying a file to a non-existing directory created a folder with that file's name
+- [Fix] error where copying a file to a non-existing directory created a folder with that file's name
 
 # 0.3.9 <small><sup>24-11-2022</sup></small>
 
-- [Fixed] errorCode blocking runtime errorCode
+- [Fix] errorCode blocking runtime errorCode
 
 # 0.3.8 <small><sup>18-11-2022</sup></small>
 
-- [Fixed] errorCode not working with makeHandler options when errorCode is not set
+- [Fix] errorCode not working with makeHandler options when errorCode is not set
 
 # 0.3.7 <small><sup>15-11-2022</sup></small>
 
-- [Fixed] typing errors of headers in makeHandler
+- [Fix] typing errors of headers in makeHandler
 
 # 0.3.6 <small><sup>08-11-2022</sup></small>
 
-- [Fixed] typing errors with the sanitize utility
+- [Fix] typing errors with the sanitize utility
 
 # 0.3.5 <small><sup>08-11-2022</sup></small>
 
-- [Updated] typings with the sanitize utility
+- [Update] typings with the sanitize utility
 
 # 0.3.4 <small><sup>05-11-2022</sup></small>
 
-- [Added] possibility to pass a function(setter) for default values to variable loader
+- [Adde] possibility to pass a function(setter) for default values to variable loader
 - [Updates] imporved performance
 
 # 0.3.3 <small><sup>28-09-2022</sup></small>
 
-- [Changed] made server errors' logs in makeHandler non-optional
+- [Change] made server errors' logs in makeHandler non-optional
 
 # 0.3.2 <small><sup>25-09-2022</sup></small>
 
-- [Added] added debug option to makeHandler
+- [Adde] added debug option to makeHandler
 
 # 0.3.1 <small><sup>25-09-2022</sup></small>
 
-- [Removed] removed callsite
+- [Remove] removed callsite
 
 # 0.3.0 <small><sup>22-09-2022</sup></small>
 
-- [Added] setStatusCode to ApiError and made the statusCode private
-- [Updated] enhanced default configs in file manager
-- [Updated] enhanced individual file configs in file manager
-- [Updated] the makeHandler can take one or more handlers
-- [Updated] improved on overall typings
+- [Adde] setStatusCode to ApiError and made the statusCode private
+- [Update] enhanced default configs in file manager
+- [Update] enhanced individual file configs in file manager
+- [Update] the makeHandler can take one or more handlers
+- [Update] improved on overall typings
 
 # 0.2.2 <small><sup>16-09-2022</sup></small>
 
 - [Docs] updated docs
-- [Changed] loadEnvVars to loadVariables
-- [Changed] makeCallback + makeController to makeHandler
+- [Change] loadEnvVars to loadVariables
+- [Change] makeCallback + makeController to makeHandler
 
 # 0.2.1 <small><sup>09-08-2022</sup></small>
 
-- [Removed] removed \_isError from ApiError
-- [Changed] changed default structure of body property in response object returned by useController to:
+- [Remove] removed \_isError from ApiError
+- [Change] changed default structure of body property in response object returned by useController to:
 
   ```ts
   body: {
-    data: any
-    sucess: boolean
+    data: any;
+    sucess: boolean;
   }
   ```
 
 # 0.2.0 <small><sup>08-08-2022</sup></small>
 
-- [Changed] the sanitize object to a function
-- [Removed] sanitize.one & sanitize.many
-- [Added] `select` option to sanitize
+- [Change] the sanitize object to a function
+- [Remove] sanitize.one & sanitize.many
+- [Adde] `select` option to sanitize
 
 # 0.1.1 <small><sup>06-08-2022</sup></small>
 
@@ -104,7 +109,7 @@
 
 # 0.1.0 <small><sup>06-08-2022</sup></small>
 
-- [Changed] how loadEnvVars' default values are set
+- [Change] how loadEnvVars' default values are set
 
 # 0.0.46 <small><sup>27-07-2022</sup></small>
 
@@ -137,10 +142,10 @@
 
 # 0.0.39 <small><sup>20-07-2022</sup></small>
 
-- [Added] Helper parseMultipartData to parse form data
-- [Added] Some file manager utility functions
+- [Adde] Helper parseMultipartData to parse form data
+- [Adde] Some file manager utility functions
 
 # 0.0.38 <small><sup>18-07-2022</sup></small>
 
-- [Added] onResult handler to useController so you could standardize your successful & unsuccessful responses from the useController.
+- [Adde] onResult handler to useController so you could standardize your successful & unsuccessful responses from the useController.
 - [Docs] Started work on documenting this package
