@@ -75,7 +75,7 @@ export type ParserConfig = FileConfig & {
 };
 
 // loadVariables
-type GetCallableType<D, Fallback = D> = D extends () => any
+type GetCallableType<D, Fallback = D> = D extends (...args: any) => any
   ? ReturnType<D>
   : Fallback;
 
@@ -103,13 +103,12 @@ export type ParsedVariables<T> = {
 export type FunctionDefinition<T> = () => T;
 export type ObjectDefinition = {
   default?: any;
-  parser?: (v: any) => any;
+  parser?: (v: string | undefined) => any;
   required?: boolean | (() => boolean);
 };
-export type Primitive = boolean | number | string;
 
 export type VariableDefinitions<T> = {
-  [K in StringKey<T>]: Primitive | ObjectDefinition | (() => any);
+  [K in StringKey<T>]: ObjectDefinition | (() => any) | any;
 };
 
 // makeHandler

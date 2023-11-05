@@ -1,6 +1,10 @@
 # CHANGELOG
 
-# 0.3.17 <small><sup>[x][x]-11-2023</sup></small>
+# 0.3.18 <small><sup>05-11-2023</sup></small>
+
+- [Update] improved typings of `loadVariables` utility
+
+# 0.3.17 <small><sup>04-11-2023</sup></small>
 
 - [Add] added transform option to `loadVariables` utility
 - [Update] improved typings of `sanitize` utility
