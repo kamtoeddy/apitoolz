@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.19 <small><sup>06-11-2023</sup></small>
+
+- [Update] handle errors that may occur when dealing with `fileManager` util
+
 # 0.3.18 <small><sup>05-11-2023</sup></small>
 
 - [Update] improved typings of `loadVariables` utility

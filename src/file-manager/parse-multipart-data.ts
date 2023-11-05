@@ -1,17 +1,16 @@
 import fs from 'fs';
 import { Request } from 'express';
-
 import formidable from 'formidable';
 
-import { deleteFilesAt, getFileExtention } from '.';
 import { ApiError } from '../api-error';
-import { Adapter, ObjectType, ResponseAdapter, KeyOf } from '../types';
 import { isJSON } from '../utils/is-json';
-import { assignDeep, getDeepValue, hasDeepKey } from '../utils/_object-tools';
-// import { FileConfig, ParserConfig } from "../in";
 import { expressAdapter } from '../adapters';
-import { makeResult, OnResultHandler } from '../make-handler';
 import { FileConfig, ParserConfig } from '../types';
+import { makeResult, OnResultHandler } from '../make-handler';
+import { Adapter, ObjectType, ResponseAdapter, KeyOf } from '../types';
+import { assignDeep, getDeepValue, hasDeepKey } from '../utils/_object-tools';
+
+import { deleteFilesAt, getFileExtention } from '.';
 
 const defaultConfig: ParserConfig = {
   filesConfig: {},
@@ -93,6 +92,7 @@ export const parser =
         if (!desiredFields.includes(key)) {
           unWantedPaths.push(file.filepath);
           paths.push(file.filepath);
+
           continue;
         }
 
