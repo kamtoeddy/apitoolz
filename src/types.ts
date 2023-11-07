@@ -1,6 +1,5 @@
 import { type File } from 'formidable';
 
-export { type File } from 'formidable';
 export type ObjectType = Record<number | string, any>;
 export type StringKey<T> = Extract<keyof T, string>;
 
@@ -67,7 +66,7 @@ export type FileConfig = {
   validFormats?: string[];
 };
 
-export type FileInfo = Omit<File, 'filepath'> & { path: string };
+export type FileInfo = Omit<File & { path: string }, 'filepath'> & {};
 
 export type FilesConfig = Record<string, FileConfig>;
 
