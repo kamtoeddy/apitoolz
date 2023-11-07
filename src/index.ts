@@ -7,4 +7,4 @@ export * from './_paginator';
 export * from './parse-request-keys';
 export * from './sanitize';
 export * from './use-worker';
-export { FileInfo } from './types';
+export { type FileInfo } from './types';

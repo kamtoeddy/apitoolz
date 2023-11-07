@@ -66,7 +66,7 @@ export type FileConfig = {
   validFormats?: string[];
 };
 
-export type FileInfo = (File & { path: string }) & {};
+export type FileInfo = File & { path: string };
 
 export type FilesConfig = Record<string, FileConfig>;
 
