@@ -1,5 +1,6 @@
-import { File } from 'formidable';
+import { type File } from 'formidable';
 
+export { type File } from 'formidable';
 export type ObjectType = Record<number | string, any>;
 export type StringKey<T> = Extract<keyof T, string>;
 
