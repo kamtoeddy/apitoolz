@@ -66,9 +66,7 @@ export type FileConfig = {
   validFormats?: string[];
 };
 
-type RealType<T> = { [K in keyof T]: T[K] } & {};
-
-export type FileInfo = RealType<Omit<File, 'filepath'> & { path: string }>;
+export type FileInfo = Omit<File, 'filepath'> & { path: string };
 
 export type FilesConfig = Record<string, FileConfig>;
 
