@@ -102,10 +102,9 @@ export const parser =
           generalConfig
         );
 
-        const { filepath, ...fileInfo } = file,
-          { newFilename, size } = fileInfo;
+        const { filepath, newFilename, size, ...rest } = file;
 
-        const fileExtention = getFileExtention(fileInfo.mimetype);
+        const fileExtention = getFileExtention(rest.mimetype);
 
         if (!validFormats) validFormats = [];
 
@@ -128,7 +127,9 @@ export const parser =
         // it'd be deleted with all others
         paths.push(newPath);
 
-        req.body[key] = pathOnly ? newPath : { ...fileInfo, path: newPath };
+        req.body[key] = pathOnly
+          ? newPath
+          : { ...file, filepath: newPath, path: newPath };
       }
 
       deleteFilesAt(unWantedPaths);

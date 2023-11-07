@@ -66,7 +66,7 @@ export type FileConfig = {
   validFormats?: string[];
 };
 
-export type FileInfo = Omit<File & { path: string }, 'filepath'> & {};
+export type FileInfo = (File & { path: string }) & {};
 
 export type FilesConfig = Record<string, FileConfig>;
 
