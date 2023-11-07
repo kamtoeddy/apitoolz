@@ -1,3 +1,5 @@
+import { File } from 'formidable';
+
 export type ObjectType = Record<number | string, any>;
 export type StringKey<T> = Extract<keyof T, string>;
 
@@ -63,6 +65,10 @@ export type FileConfig = {
   pathOnly?: boolean;
   validFormats?: string[];
 };
+
+type RealType<T> = { [K in keyof T]: T[K] } & {};
+
+export type FileInfo = RealType<Omit<File, 'filepath'> & { path: string }>;
 
 export type FilesConfig = Record<string, FileConfig>;
 

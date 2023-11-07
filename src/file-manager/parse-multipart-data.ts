@@ -15,8 +15,8 @@ import { deleteFilesAt, getFileExtention } from '.';
 const defaultConfig: ParserConfig = {
   filesConfig: {},
   maxSize: 5 * 1024 * 1024,
-  pathOnly: true,
-  uploadDir: 'public/static/temp-upload-dir',
+  pathOnly: false,
+  uploadDir: 'public/tmp',
   validFormats: []
 };
 
@@ -102,9 +102,10 @@ export const parser =
           generalConfig
         );
 
-        const { filepath, newFilename, size } = file;
+        const { filepath, ...fileInfo } = file,
+          { newFilename, size } = fileInfo;
 
-        const fileExtention = getFileExtention(file.mimetype);
+        const fileExtention = getFileExtention(fileInfo.mimetype);
 
         if (!validFormats) validFormats = [];
 
@@ -127,7 +128,7 @@ export const parser =
         // it'd be deleted with all others
         paths.push(newPath);
 
-        req.body[key] = pathOnly ? newPath : { path: newPath, size };
+        req.body[key] = pathOnly ? newPath : { ...fileInfo, path: newPath };
       }
 
       deleteFilesAt(unWantedPaths);

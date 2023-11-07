@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.20 <small><sup>07-11-2023</sup></small>
+
+- [Update] update details provided in fileInfo of uploaded files
+
 # 0.3.19 <small><sup>06-11-2023</sup></small>
 
 - [Update] handle errors that may occur when dealing with `fileManager` util
