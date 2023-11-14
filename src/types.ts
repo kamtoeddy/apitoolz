@@ -1,4 +1,4 @@
-import { File } from 'formidable';
+import { FileJSON } from 'formidable';
 
 export type ObjectType = Record<number | string, any>;
 export type StringKey<T> = Extract<keyof T, string>;
@@ -66,9 +66,18 @@ export type FileConfig = {
   validFormats?: string[];
 };
 
-type RealType<T> = { [K in keyof T]: T[K] } & {};
-
-export type FileInfo = RealType<Omit<File, 'filepath'> & { path: string }>;
+export type FileInfo = {
+  hash?: string | null;
+  hashAlgorithm: false | 'sha1' | 'md5' | 'sha256';
+  mimetype: string | null;
+  mtime?: Date | null | undefined;
+  newFilename: string;
+  originalFilename: string | null;
+  path: string;
+  size: number;
+  toJSON(): FileJSON;
+  toString(): string;
+};
 
 export type FilesConfig = Record<string, FileConfig>;
 

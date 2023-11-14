@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.3.27 <small><sup>14-11-2023</sup></small>
+
+- [Update] update typings of `sanitize` util
+
 # 0.3.20 <small><sup>07-11-2023</sup></small>
 
 - [Update] update details provided in fileInfo of uploaded files
