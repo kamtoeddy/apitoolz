@@ -75,7 +75,9 @@ const sortKeys = <T extends ObjectType>(data: T) => {
   }, {} as T);
 };
 
-const one = <T extends ObjectType>(
+type Sanitizable = ObjectType | null | undefined;
+
+const one = <T extends Sanitizable>(
   data: T,
   options: Sanitize.Options<T> = {}
 ) => {
@@ -95,12 +97,12 @@ const one = <T extends ObjectType>(
   return sortKeys(_data) as Partial<T>;
 };
 
-const many = <T extends ObjectType>(
+const many = <T extends Sanitizable>(
   data: T[],
   options: Sanitize.Options<T> = {}
 ) => data.map((dt) => one(dt, options));
 
-export const sanitize = <T extends ObjectType | ObjectType[]>(
+export const sanitize = <T extends Sanitizable | Sanitizable[]>(
   data: T,
   options: Sanitize.Options<T> = {}
 ) => {
